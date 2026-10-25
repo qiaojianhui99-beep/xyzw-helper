@@ -2,7 +2,7 @@
   <div class="status-card consumption-progress">
     <div class="card-header">
       <div class="header-left">
-        <span class="icon">📊</span>
+        <span class="icon" aria-hidden="true"><AppIcon name="chart" :size="16" /></span>
         <span class="title">消耗活动进度</span>
       </div>
     </div>
@@ -66,7 +66,7 @@
           <n-progress
             type="line"
             :percentage="item.percentage"
-            :color="item.isCompleted ? '#52c41a' : '#1890ff'"
+            :color="item.isCompleted ? 'var(--color-success-text)' : '#1890ff'"
             rail-color="rgba(0, 0, 0, 0.06)"
             :height="8"
             :show-indicator="false"
@@ -788,7 +788,7 @@ const feasibleCombos = computed(() => {
   }
 
   .completed-text {
-    color: #52c41a;
+    color: var(--color-success-text);
   }
 }
 .obtained-items {

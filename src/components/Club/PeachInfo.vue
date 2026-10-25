@@ -154,7 +154,7 @@
               <NTag
                 v-if="playerInfo.legacy > 0"
                 :style="{
-                  color: '#fff',
+                  color: 'var(--color-accent-text)',
                   backgroundColor: legacycolor[playerInfo.legacy]?.value,
                 }"
                 size="small"
@@ -365,7 +365,7 @@
           <div
             v-if="playerInfo.heroList"
             class="debug-info"
-            style="font-size: 12px; color: #999; margin-bottom: 10px"
+            style="font-size: 12px; color: var(--color-text-muted); margin-bottom: 10px"
           >
             武将数量: {{ playerInfo.heroList.length }}
           </div>
@@ -407,11 +407,11 @@
             <!-- 添加调试信息 -->
             <div
               v-if="playerInfo.heroList"
-              style="font-size: 12px; color: #999; margin-top: 10px"
+              style="font-size: 12px; color: var(--color-text-muted); margin-top: 10px"
             >
               武将列表为空
             </div>
-            <div v-else style="font-size: 12px; color: #999; margin-top: 10px">
+            <div v-else style="font-size: 12px; color: var(--color-text-muted); margin-top: 10px">
               武将列表未定义
             </div>
           </div>
@@ -1192,7 +1192,7 @@ const columns = [
         {
           style: {
             cursor: "pointer",
-            color: "#1890ff",
+            color: "var(--color-link)",
             textDecoration: "underline",
           },
           onClick: () => fetchTargetInfo(row.id),
@@ -1213,7 +1213,7 @@ const columns = [
     key: "redQuench",
     width: 80,
     align: "center",
-    render: (row) => h("span", { style: { color: "#ff4d4f" } }, row.redQuench),
+    render: (row) => h("span", { style: { color: "var(--color-danger-text)" } }, row.redQuench),
   },
   {
     title: "阵容(红数)[四圣等级]",
@@ -1225,15 +1225,15 @@ const columns = [
 
       heroes.forEach((hero, index) => {
         // 英雄名字
-        nodes.push(h("span", { style: { color: "#40a9ff" } }, hero.heroName));
+        nodes.push(h("span", { style: { color: "var(--color-link)" } }, hero.heroName));
 
         // 红数 (红色)
-        nodes.push(h("span", { style: { color: "#ff4d4f" } }, `(${hero.red})`));
+        nodes.push(h("span", { style: { color: "var(--color-danger-text)" } }, `(${hero.red})`));
 
         // 四圣等级 (绿色)
         if (hero.HolyBeast) {
           nodes.push(
-            h("span", { style: { color: "#52c41a" } }, `[${hero.HBlevel}]`),
+            h("span", { style: { color: "var(--color-success-text)" } }, `[${hero.HBlevel}]`),
           );
         }
 
@@ -1256,7 +1256,7 @@ const columns = [
       // 从配置中查找对应的颜色，默认灰色
       const rule = LINEUP_RULES.find((r) => r.name === type);
       const colorProps = rule?.colorProps || {
-        color: "#f5f5f5",
+        color: "var(--color-text-disabled)",
         textColor: "#666",
       };
 
@@ -1618,7 +1618,7 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .peach-info-card {
-  background: #fff;
+  background: var(--color-surface);
   border-radius: 8px;
   padding: 16px;
   min-height: 400px;
@@ -1644,7 +1644,7 @@ onMounted(() => {
 
     .title {
       font-size: 14px;
-      color: #666;
+      color: var(--color-text-secondary);
     }
   }
 }
@@ -1654,16 +1654,16 @@ onMounted(() => {
   margin: 0 0 16px 0;
   font-size: 20px;
   font-weight: bold;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .header-section {
   text-align: center;
   margin-bottom: 20px;
-  background: linear-gradient(to bottom, #fff5f5, #fff);
+  background: linear-gradient(to bottom, var(--color-danger-soft), var(--color-surface));
   padding: 16px;
   border-radius: 12px;
-  border: 1px solid #ffccc7;
+  border: 1px solid var(--color-danger);
   flex-shrink: 0;
 }
 
@@ -1692,7 +1692,7 @@ onMounted(() => {
 }
 
 .club-logo {
-  border: 4px solid #fff;
+  border: 4px solid var(--color-surface);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   cursor: default;
@@ -1700,7 +1700,7 @@ onMounted(() => {
   &:hover {
     transform: scale(1.1);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    border-color: #1890ff;
+    border-color: var(--color-accent);
   }
 }
 
@@ -1711,12 +1711,12 @@ onMounted(() => {
 .club-name {
   font-size: 18px;
   font-weight: bold;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .club-stats {
   font-size: 14px;
-  color: #ff4d4f;
+  color: var(--color-danger-text);
 
   &.announcement {
     white-space: pre-wrap;
@@ -1729,14 +1729,14 @@ onMounted(() => {
 .vs-badge {
   font-size: 32px;
   font-weight: 900;
-  color: #ff7875;
+  color: var(--color-danger-text);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
   font-style: italic;
 }
 
 .battle-title {
   font-size: 16px;
-  color: #666;
+  color: var(--color-text-secondary);
   margin-top: 10px;
   font-weight: bold;
 }
@@ -1761,10 +1761,10 @@ onMounted(() => {
 .table-title {
   font-size: 16px;
   font-weight: bold;
-  color: #333;
+  color: var(--color-text-primary);
   margin-bottom: 10px;
   padding-left: 8px;
-  border-left: 4px solid #1890ff;
+  border-left: 4px solid var(--color-accent);
 }
 
 :deep(.n-data-table) {
@@ -1772,7 +1772,7 @@ onMounted(() => {
 }
 
 :deep(.n-data-table .n-data-table-th) {
-  background-color: #fafafa;
+  background-color: var(--color-surface-muted);
   font-weight: bold;
 }
 
@@ -1781,7 +1781,7 @@ onMounted(() => {
   height: 32px;
   border-radius: 50% !important;
   object-fit: cover;
-  border: 2px solid #eee;
+  border: 2px solid var(--color-border);
   transition: all 0.2s;
   display: block;
   margin: 0 auto;
@@ -1789,7 +1789,7 @@ onMounted(() => {
   &:hover {
     transform: scale(1.2);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border-color: #1890ff;
+    border-color: var(--color-accent);
   }
 }
 
@@ -1797,14 +1797,14 @@ onMounted(() => {
   width: 32px;
   height: 32px;
   border-radius: 50% !important;
-  background: linear-gradient(135deg, #1890ff 0%, #69c0ff 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%);
+  color: var(--color-accent-text);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
   font-weight: bold;
-  border: 2px solid #eee;
+  border: 2px solid var(--color-border);
   margin: 0 auto;
 }
 
@@ -1819,11 +1819,11 @@ onMounted(() => {
   gap: 16px;
   margin-bottom: 20px;
   padding-bottom: 15px;
-  border-bottom: 1px solid var(--border-light, #eee);
+  border-bottom: 1px solid var(--border-light, var(--color-border));
 }
 
 .player-avatar {
-  border: 2px solid var(--primary-color, #1890ff);
+  border: 2px solid var(--primary-color, var(--color-accent));
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -1836,7 +1836,7 @@ onMounted(() => {
 .player-info-detail p {
   margin: 0 0 4px 0;
   font-size: var(--font-size-sm, 14px);
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary, var(--color-text-secondary));
 }
 
 .action-section {
@@ -1854,7 +1854,7 @@ onMounted(() => {
 
 .fight-count-label {
   font-size: var(--font-size-sm, 14px);
-  color: var(--text-primary, #333);
+  color: var(--text-primary, var(--color-text-primary));
   font-weight: var(--font-weight-medium, 500);
   white-space: nowrap;
 }
@@ -1865,21 +1865,21 @@ onMounted(() => {
 
 .fight-count-hint {
   font-size: var(--font-size-xs, 12px);
-  color: var(--text-secondary, #999);
+  color: var(--text-secondary, var(--color-text-muted));
 }
 
 .fight-count-error {
   font-size: var(--font-size-xs, 12px);
-  color: var(--error-color, #ff4d4f);
+  color: var(--error-color, var(--color-danger-text));
   margin-left: 4px;
 }
 
 .fight-progress {
   margin: 15px 0;
   padding: 15px;
-  background: var(--bg-secondary, #f9f9f9);
+  background: var(--bg-secondary, var(--color-surface-muted));
   border-radius: var(--border-radius-sm, 4px);
-  border: 1px solid var(--border-light, #eee);
+  border: 1px solid var(--border-light, var(--color-border));
 }
 
 .progress-info {
@@ -1892,22 +1892,22 @@ onMounted(() => {
 .progress-title {
   font-size: var(--font-size-sm, 14px);
   font-weight: var(--font-weight-medium, 500);
-  color: var(--text-primary, #333);
+  color: var(--text-primary, var(--color-text-primary));
 }
 
 .progress-stats {
   display: flex;
   gap: 15px;
   font-size: var(--font-size-xs, 12px);
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary, var(--color-text-secondary));
 }
 
 .fight-result {
   margin: 15px 0;
   padding: 15px;
-  background: var(--bg-secondary, #f9f9f9);
+  background: var(--bg-secondary, var(--color-surface-muted));
   border-radius: var(--border-radius-sm, 4px);
-  border: 1px solid var(--border-light, #eee);
+  border: 1px solid var(--border-light, var(--color-border));
 }
 
 .fight-result h4 {
@@ -1930,20 +1930,20 @@ onMounted(() => {
 }
 
 .result-label {
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary, var(--color-text-secondary));
 }
 
 .result-value {
   font-weight: var(--font-weight-medium, 500);
-  color: var(--text-primary, #333);
+  color: var(--text-primary, var(--color-text-primary));
 }
 
 .result-value.win {
-  color: var(--success-color, #52c41a);
+  color: var(--success-color, var(--color-success-text));
 }
 
 .result-value.loss {
-  color: var(--error-color, #ff4d4f);
+  color: var(--error-color, var(--color-danger-text));
 }
 
 .result-actions {
@@ -1958,8 +1958,8 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 12px 20px;
-  background: var(--bg-secondary, #f9f9f9);
-  border-top: 1px solid var(--border-light, #eee);
+  background: var(--bg-secondary, var(--color-surface-muted));
+  border-top: 1px solid var(--border-light, var(--color-border));
 }
 
 /* 武将详情模态框样式 */
@@ -1979,12 +1979,12 @@ onMounted(() => {
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    background: var(--bg-secondary, #f9f9f9);
+    background: var(--bg-secondary, var(--color-surface-muted));
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    border: 2px solid var(--border-light, #eee);
+    border: 2px solid var(--border-light, var(--color-border));
 
     img {
       width: 100%;
@@ -1995,7 +1995,7 @@ onMounted(() => {
     .hero-placeholder {
       font-size: 36px;
       font-weight: var(--font-weight-bold, bold);
-      color: var(--text-secondary, #999);
+      color: var(--text-secondary, var(--color-text-muted));
     }
   }
 
@@ -2014,13 +2014,13 @@ onMounted(() => {
     align-items: center;
     gap: 15px;
     font-size: var(--font-size-sm, 14px);
-    color: var(--text-secondary, #666);
+    color: var(--text-secondary, var(--color-text-secondary));
 
     .stat-item {
       padding: 4px 8px;
-      background: var(--bg-secondary, #f9f9f9);
+      background: var(--bg-secondary, var(--color-surface-muted));
       border-radius: var(--border-radius-sm, 4px);
-      border: 1px solid var(--border-light, #eee);
+      border: 1px solid var(--border-light, var(--color-border));
     }
   }
 
@@ -2032,11 +2032,11 @@ onMounted(() => {
 
       .n-descriptions-item-label {
         font-weight: var(--font-weight-medium, 500);
-        color: var(--text-primary, #333);
+        color: var(--text-primary, var(--color-text-primary));
       }
 
       .n-descriptions-item-content {
-        color: var(--text-secondary, #666);
+        color: var(--text-secondary, var(--color-text-secondary));
       }
     }
   }
@@ -2065,7 +2065,7 @@ onMounted(() => {
 
   .equipment-label {
     font-size: var(--font-size-sm, 14px);
-    color: var(--text-primary, #333);
+    color: var(--text-primary, var(--color-text-primary));
     font-weight: var(--font-weight-medium, 500);
     width: 60px;
   }
@@ -2078,14 +2078,14 @@ onMounted(() => {
   .equipment-slot {
     width: 20px;
     height: 20px;
-    border: 1px solid var(--border-light, #eee);
+    border: 1px solid var(--border-light, var(--color-border));
     border-radius: var(--border-radius-sm, 4px);
-    background: var(--bg-secondary, #f9f9f9);
+    background: var(--bg-secondary, var(--color-surface-muted));
   }
 
   .equipment-slot.red-slot {
-    background: var(--error-color, #ff4d4f);
-    border-color: var(--error-color, #ff4d4f);
+    background: var(--error-color, var(--color-danger));
+    border-color: var(--error-color, var(--color-danger));
   }
 
   /* 鱼灵洗练颜色块 */
@@ -2121,9 +2121,9 @@ onMounted(() => {
 .fight-result {
   margin: 15px 0;
   padding: 15px;
-  background: var(--bg-secondary, #f9f9f9);
+  background: var(--bg-secondary, var(--color-surface-muted));
   border-radius: var(--border-radius-sm, 4px);
-  border: 1px solid var(--border-light, #eee);
+  border: 1px solid var(--border-light, var(--color-border));
 }
 
 .result-header {
@@ -2132,14 +2132,14 @@ onMounted(() => {
   align-items: center;
   margin-bottom: 15px;
   padding-bottom: 10px;
-  border-bottom: 1px solid var(--border-light, #eee);
+  border-bottom: 1px solid var(--border-light, var(--color-border));
 }
 
 .result-title {
   margin: 0;
   font-size: var(--font-size-base, 14px);
   font-weight: var(--font-weight-bold, bold);
-  color: var(--text-primary, #333);
+  color: var(--text-primary, var(--color-text-primary));
 }
 
 .result-summary {
@@ -2156,20 +2156,20 @@ onMounted(() => {
 }
 
 .summary-label {
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary, var(--color-text-secondary));
 }
 
 .summary-value {
   font-weight: var(--font-weight-medium, 500);
-  color: var(--text-primary, #333);
+  color: var(--text-primary, var(--color-text-primary));
 }
 
 .summary-value.win {
-  color: var(--success-color, #52c41a);
+  color: var(--success-color, var(--color-success-text));
 }
 
 .summary-value.loss {
-  color: var(--error-color, #ff4d4f);
+  color: var(--error-color, var(--color-danger-text));
 }
 
 .result-list {
@@ -2179,20 +2179,20 @@ onMounted(() => {
 .battle-result-item {
   margin-bottom: 10px;
   padding: 12px;
-  background: var(--bg-primary, #fff);
+  background: var(--bg-primary, var(--color-surface));
   border-radius: var(--border-radius-sm, 4px);
-  border: 1px solid var(--border-light, #eee);
-  border-left: 4px solid var(--border-light, #eee);
+  border: 1px solid var(--border-light, var(--color-border));
+  border-left: 4px solid var(--border-light, var(--color-border));
   transition: all var(--transition-fast, 0.3s ease);
 }
 
 .battle-result-item.win {
-  border-left-color: var(--success-color, #52c41a);
+  border-left-color: var(--success-color, var(--color-success));
   background: rgba(82, 196, 26, 0.03);
 }
 
 .battle-result-item.loss {
-  border-left-color: var(--error-color, #ff4d4f);
+  border-left-color: var(--error-color, var(--color-danger));
   background: rgba(255, 77, 79, 0.03);
 }
 
@@ -2206,7 +2206,7 @@ onMounted(() => {
 .battle-index {
   font-size: var(--font-size-sm, 14px);
   font-weight: var(--font-weight-medium, 500);
-  color: var(--text-primary, #333);
+  color: var(--text-primary, var(--color-text-primary));
 }
 
 .battle-details {
@@ -2234,26 +2234,26 @@ onMounted(() => {
 .side-name {
   display: block;
   font-weight: var(--font-weight-medium, 500);
-  color: var(--text-primary, #333);
+  color: var(--text-primary, var(--color-text-primary));
   margin-bottom: 3px;
 }
 
 .side-power {
   display: block;
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary, var(--color-text-secondary));
   margin-bottom: 2px;
 }
 
 .side-die {
   display: block;
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary, var(--color-text-secondary));
   font-size: var(--font-size-xs, 12px);
 }
 
 .battle-vs {
   font-size: var(--font-size-sm, 14px);
   font-weight: var(--font-weight-bold, bold);
-  color: var(--text-secondary, #999);
+  color: var(--text-secondary, var(--color-text-muted));
   margin: 0 10px;
 }
 
@@ -2306,16 +2306,16 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: var(--bg-secondary, #f9f9f9);
+  background: var(--bg-secondary, var(--color-surface-muted));
   padding: 12px 16px;
   border-radius: var(--border-radius-sm, 4px);
-  border: 1px solid var(--border-light, #eee);
+  border: 1px solid var(--border-light, var(--color-border));
   transition: all var(--transition-fast, 0.3s ease);
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.1));
-    border-color: var(--primary-color, #1890ff);
+    border-color: var(--primary-color, var(--color-accent));
   }
 }
 
@@ -2336,35 +2336,35 @@ onMounted(() => {
   flex-wrap: wrap;
   gap: 8px;
   font-size: var(--font-size-xs, 12px);
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary, var(--color-text-secondary));
 }
 
 .hero-stats span {
   padding: 2px 6px;
-  background: var(--bg-primary, #fff);
+  background: var(--bg-primary, var(--color-surface));
   border-radius: var(--border-radius-full, 99px);
-  border: 1px solid var(--border-light, #eee);
+  border: 1px solid var(--border-light, var(--color-border));
 }
 
 .hero-stats span.opened {
   background: rgba(82, 196, 26, 0.1);
-  color: var(--success-color, #52c41a);
-  border-color: var(--success-color, #52c41a);
+  color: var(--success-color, var(--color-success-text));
+  border-color: var(--success-color, var(--color-success));
 }
 
 .hero-stats span.closed {
   background: rgba(250, 173, 20, 0.1);
-  color: var(--warning-color, #faad14);
-  border-color: var(--warning-color, #faad14);
+  color: var(--warning-color, var(--color-warning-text));
+  border-color: var(--warning-color, var(--color-warning));
 }
 
 .empty-heroes {
-  background: var(--bg-secondary, #f9f9f9);
+  background: var(--bg-secondary, var(--color-surface-muted));
   padding: 30px;
   border-radius: var(--border-radius-sm, 4px);
-  border: 1px solid var(--border-light, #eee);
+  border: 1px solid var(--border-light, var(--color-border));
   text-align: center;
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary, var(--color-text-secondary));
   font-size: var(--font-size-sm, 14px);
 }
 </style>

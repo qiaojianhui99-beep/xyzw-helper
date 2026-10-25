@@ -80,7 +80,7 @@ const powerRanks = [
     description: "初登江湖，尚显青涩。",
     icon: "🌱",
     class: "rank-beginner",
-    color: "#6b7280",
+    color: "var(--color-text-muted)",
   },
   {
     min: 1000000,
@@ -89,7 +89,7 @@ const powerRanks = [
     description: "已有名声，立足江湖。",
     icon: "⚔️",
     class: "rank-known",
-    color: "#10b981",
+    color: "var(--color-success-text)",
   },
   {
     min: 10000000,
@@ -98,7 +98,7 @@ const powerRanks = [
     description: "身经百战，渐成人物。",
     icon: "🗡️",
     class: "rank-veteran",
-    color: "#3b82f6",
+    color: "var(--color-link)",
   },
   {
     min: 100000000,
@@ -107,7 +107,7 @@ const powerRanks = [
     description: "武艺精进，名震一域。",
     icon: "🏹",
     class: "rank-master",
-    color: "#8b5cf6",
+    color: "var(--color-link)",
   },
   {
     min: 500000000,
@@ -116,7 +116,7 @@ const powerRanks = [
     description: "豪迈英勇，威震四方。",
     icon: "⚡",
     class: "rank-hero",
-    color: "#f59e0b",
+    color: "var(--color-warning-text)",
   },
   {
     min: 2000000000,
@@ -125,7 +125,7 @@ const powerRanks = [
     description: "才智兼备，呼风唤雨。",
     icon: "👑",
     class: "rank-overlord",
-    color: "#ef4444",
+    color: "var(--color-danger-text)",
   },
   {
     min: 4000000000,
@@ -134,7 +134,7 @@ const powerRanks = [
     description: "实力深不可测，世人仰望。",
     icon: "🔱",
     class: "rank-supreme",
-    color: "#ec4899",
+    color: "var(--color-link)",
   },
   {
     min: 6000000000,
@@ -143,7 +143,7 @@ const powerRanks = [
     description: "威势登峰造极，号令天下。",
     icon: "⚜️",
     class: "rank-emperor",
-    color: "#dc2626",
+    color: "var(--color-danger-text)",
   },
   {
     min: 9000000000,
@@ -152,7 +152,7 @@ const powerRanks = [
     description: "超凡入圣，江湖传说。",
     icon: "💎",
     class: "rank-legend",
-    color: "#7c3aed",
+    color: "var(--color-link)",
   },
   {
     min: 15000000000,
@@ -161,7 +161,7 @@ const powerRanks = [
     description: "超越传说，无人能及。",
     icon: "🌟",
     class: "rank-infinite",
-    color: "#fbbf24",
+    color: "var(--color-warning-text)",
   },
 ];
 
@@ -511,73 +511,73 @@ watch(wsStatus, async (newStatus) => {
 
 // 段位特定样式
 .rank-beginner {
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  background: linear-gradient(135deg, var(--color-surface-muted) 0%, var(--color-surface-hover) 100%);
   .progress-fill {
-    background: linear-gradient(90deg, #6b7280, #9ca3af);
+    background: linear-gradient(90deg, var(--color-surface-active), var(--color-surface-hover));
   }
 }
 
 .rank-known {
-  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  background: linear-gradient(135deg, var(--color-success-soft) 0%, var(--color-success-soft) 100%);
   .progress-fill {
-    background: linear-gradient(90deg, #10b981, #34d399);
+    background: linear-gradient(90deg, var(--color-success), var(--color-success));
   }
 }
 
 .rank-veteran {
-  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  background: linear-gradient(135deg, var(--color-accent-soft) 0%, var(--color-accent-soft) 100%);
   .progress-fill {
-    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    background: linear-gradient(90deg, var(--color-accent), var(--color-accent));
   }
 }
 
 .rank-master {
-  background: linear-gradient(135deg, #e9d5ff 0%, #ddd6fe 100%);
+  background: linear-gradient(135deg, var(--color-accent-soft) 0%, var(--color-accent-soft) 100%);
   .progress-fill {
-    background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+    background: linear-gradient(90deg, var(--color-accent), var(--color-accent));
   }
 }
 
 .rank-hero {
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  background: linear-gradient(135deg, var(--color-warning-soft) 0%, var(--color-warning) 100%);
   .progress-fill {
-    background: linear-gradient(90deg, #f59e0b, #fbbf24);
+    background: linear-gradient(90deg, var(--color-warning), var(--color-warning));
   }
 }
 
 .rank-overlord {
-  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  background: linear-gradient(135deg, var(--color-danger-soft) 0%, var(--color-danger-soft) 100%);
   .progress-fill {
-    background: linear-gradient(90deg, #ef4444, #f87171);
+    background: linear-gradient(90deg, var(--color-danger), var(--color-danger));
   }
 }
 
 .rank-supreme {
-  background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+  background: linear-gradient(135deg, var(--color-accent-soft) 0%, var(--color-accent-soft) 100%);
   .progress-fill {
-    background: linear-gradient(90deg, #ec4899, #f472b6);
+    background: linear-gradient(90deg, var(--color-accent), var(--color-accent));
   }
 }
 
 .rank-emperor {
-  background: linear-gradient(135deg, #fee2e2 0%, #dc2626 20%);
+  background: linear-gradient(135deg, var(--color-danger-soft) 0%, var(--color-danger) 20%);
   .progress-fill {
-    background: linear-gradient(90deg, #dc2626, #ef4444);
+    background: linear-gradient(90deg, var(--color-danger), var(--color-danger));
   }
 }
 
 .rank-legend {
-  background: linear-gradient(135deg, #ede9fe 0%, #7c3aed 30%);
+  background: linear-gradient(135deg, var(--color-accent-soft) 0%, var(--color-accent) 30%);
   .progress-fill {
-    background: linear-gradient(90deg, #7c3aed, #8b5cf6);
+    background: linear-gradient(90deg, var(--color-accent), var(--color-accent));
   }
 }
 
 .rank-infinite {
-  background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 30%, #f59e0b 100%);
+  background: linear-gradient(135deg, var(--color-warning-soft) 0%, var(--color-warning) 30%, var(--color-warning) 100%);
   animation: shimmer 3s ease-in-out infinite;
   .progress-fill {
-    background: linear-gradient(90deg, #fbbf24, #f59e0b, #fbbf24);
+    background: linear-gradient(90deg, var(--color-warning), var(--color-warning), var(--color-warning));
     animation: pulse 2s ease-in-out infinite;
   }
 }
@@ -611,7 +611,7 @@ watch(wsStatus, async (newStatus) => {
   );
 
   .role-name {
-    color: #ffffff;
+    color: var(--color-accent-text);
   }
 
   .level-text {
@@ -619,11 +619,11 @@ watch(wsStatus, async (newStatus) => {
   }
 
   .power-value {
-    color: #60a5fa;
+    color: var(--color-link);
   }
 
   .rank-title {
-    color: #ffffff;
+    color: var(--color-accent-text);
   }
 
   .progress-text {
@@ -640,43 +640,43 @@ watch(wsStatus, async (newStatus) => {
 
   // 深色主题段位背景优化
   &.rank-beginner {
-    background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+    background: linear-gradient(135deg, var(--color-surface-active) 0%, var(--color-surface-active) 100%);
   }
 
   &.rank-known {
-    background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+    background: linear-gradient(135deg, var(--color-success) 0%, var(--color-success) 100%);
   }
 
   &.rank-veteran {
-    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%);
   }
 
   &.rank-master {
-    background: linear-gradient(135deg, #581c87 0%, #6b21a8 100%);
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%);
   }
 
   &.rank-hero {
-    background: linear-gradient(135deg, #92400e 0%, #b45309 100%);
+    background: linear-gradient(135deg, var(--color-warning) 0%, var(--color-warning) 100%);
   }
 
   &.rank-overlord {
-    background: linear-gradient(135deg, #991b1b 0%, #dc2626 100%);
+    background: linear-gradient(135deg, var(--color-danger) 0%, var(--color-danger) 100%);
   }
 
   &.rank-supreme {
-    background: linear-gradient(135deg, #be185d 0%, #db2777 100%);
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%);
   }
 
   &.rank-emperor {
-    background: linear-gradient(135deg, #991b1b 0%, #b91c1c 100%);
+    background: linear-gradient(135deg, var(--color-danger) 0%, var(--color-danger) 100%);
   }
 
   &.rank-legend {
-    background: linear-gradient(135deg, #581c87 0%, #6b21a8 100%);
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%);
   }
 
   &.rank-infinite {
-    background: linear-gradient(135deg, #92400e 0%, #d97706 50%, #f59e0b 100%);
+    background: linear-gradient(135deg, var(--color-warning) 0%, var(--color-warning) 50%, var(--color-warning) 100%);
   }
 }
 

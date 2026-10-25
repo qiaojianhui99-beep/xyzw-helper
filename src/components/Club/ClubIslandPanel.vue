@@ -465,7 +465,7 @@ onUnmounted(stopTimer);
   line-height: 1.3;
 }
 .ip-hot {
-  color: #d03050;
+  color: var(--color-danger-text);
 }
 
 /* 所有岛屿 */
@@ -494,7 +494,7 @@ onUnmounted(stopTimer);
   line-height: 1.45;
 }
 .ip-ladder-now {
-  border-color: #f0a020;
+  border-color: var(--color-warning);
   background: rgba(240, 160, 32, 0.12);
 }
 .ip-ladder-dim {
@@ -534,11 +534,11 @@ onUnmounted(stopTimer);
   flex-shrink: 0;
 }
 .ip-rk-top {
-  color: #d03050;
+  color: var(--color-danger-text);
   font-weight: 500;
 }
 .ip-rk-ten {
-  color: #f0a020;
+  color: var(--color-warning-text);
   font-weight: 500;
 }
 .ip-nm {
@@ -552,7 +552,7 @@ onUnmounted(stopTimer);
   width: 62px;
   text-align: right;
   font-variant-numeric: tabular-nums;
-  color: #d03050;
+  color: var(--color-danger-text);
   font-weight: 500;
   flex-shrink: 0;
   white-space: nowrap;

@@ -20,7 +20,7 @@
         class="change-section"
       >
         <h4 class="section-title">
-          <i class="icon-sparkles">✨</i>
+          <i class="icon-sparkles" aria-hidden="true"><AppIcon name="sparkles" :size="14" /></i>
           新功能
         </h4>
         <ul class="change-list">
@@ -35,7 +35,7 @@
         class="change-section"
       >
         <h4 class="section-title">
-          <i class="icon-arrow-up">⬆️</i>
+          <i class="icon-arrow-up" aria-hidden="true"><AppIcon name="arrow-up" :size="14" /></i>
           改进优化
         </h4>
         <ul class="change-list">
@@ -50,7 +50,7 @@
 
       <div v-if="entry.fixes && entry.fixes.length" class="change-section">
         <h4 class="section-title">
-          <i class="icon-bug">🐛</i>
+          <i class="icon-bug" aria-hidden="true"><AppIcon name="bug" :size="14" /></i>
           修复问题
         </h4>
         <ul class="change-list">
@@ -65,7 +65,7 @@
         class="change-section breaking"
       >
         <h4 class="section-title">
-          <i class="icon-warning">⚠️</i>
+          <i class="icon-warning" aria-hidden="true"><AppIcon name="warning" :size="14" /></i>
           重大变更
         </h4>
         <ul class="change-list">
@@ -147,25 +147,25 @@ const getTypeLabel = (type) => {
   font-weight: 700;
   padding: 8px 16px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--color-accent);
+  color: var(--color-accent-text);
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
 .version-badge.badge-major {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, var(--color-accent-soft) 0%, var(--color-danger) 100%);
 }
 
 .version-badge.badge-minor {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%);
 }
 
 .version-badge.badge-patch {
-  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  background: linear-gradient(135deg, var(--color-success) 0%, var(--color-success) 100%);
 }
 
 .version-badge.badge-hotfix {
-  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-warning) 100%);
 }
 
 .changelog-meta {
@@ -188,22 +188,22 @@ const getTypeLabel = (type) => {
 
 .type-tag.tag-major {
   background: rgba(245, 87, 108, 0.1);
-  color: #f5576c;
+  color: var(--color-danger-text);
 }
 
 .type-tag.tag-minor {
   background: rgba(79, 172, 254, 0.1);
-  color: #4facfe;
+  color: var(--color-link);
 }
 
 .type-tag.tag-patch {
   background: rgba(67, 233, 123, 0.1);
-  color: #43e97b;
+  color: var(--color-success-text);
 }
 
 .type-tag.tag-hotfix {
   background: rgba(250, 112, 154, 0.1);
-  color: #fa709a;
+  color: var(--color-link);
 }
 
 .changelog-content {
@@ -227,7 +227,7 @@ const getTypeLabel = (type) => {
 
 .change-section.breaking {
   background: rgba(245, 87, 108, 0.05);
-  border-left: 4px solid #f5576c;
+  border-left: 4px solid var(--color-danger);
 }
 
 .section-title {
@@ -264,25 +264,14 @@ const getTypeLabel = (type) => {
   font-weight: bold;
 }
 
-/* 深色模式适配 */
+/* 局部别名：全部指向全局语义 token（主题由 data-theme 决定） */
 :root {
-  --card-bg: #ffffff;
-  --border-color: #e5e7eb;
-  --bg-color: #f9fafb;
-  --text-primary: #1f2937;
-  --text-secondary: #6b7280;
-  --primary-color: #667eea;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --card-bg: #1f2937;
-    --border-color: #374151;
-    --bg-color: #111827;
-    --text-primary: #f9fafb;
-    --text-secondary: #d1d5db;
-    --primary-color: #818cf8;
-  }
+  --card-bg: var(--color-surface);
+  --border-color: var(--color-border);
+  --bg-color: var(--color-surface-muted);
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --primary-color: var(--color-accent);
 }
 
 /* 响应式设计 */

@@ -410,7 +410,7 @@ defineExpose({ fetchMonthlyActivity });
   cursor: pointer;
   transition: all var(--transition-fast);
   background: var(--primary-color);
-  color: #fff;
+  color: var(--color-accent-text);
   &:hover:not(:disabled) {
     background: var(--primary-color-hover);
     transform: translateY(-1px);
@@ -432,10 +432,10 @@ defineExpose({ fetchMonthlyActivity });
   font-size: var(--font-size-xs);
   margin-left: var(--spacing-xs);
   &.open {
-    color: var(--success-color, #059669);
+    color: var(--success-color, var(--color-success-text));
   }
   &.closed {
-    color: var(--error-color, #dc2626);
+    color: var(--error-color, var(--color-danger-text));
   }
 }
 </style>

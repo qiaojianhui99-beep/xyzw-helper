@@ -786,23 +786,20 @@ onUnmounted(() => {
     color: var(--text-primary);
     text-align: center;
     margin-bottom: var(--spacing-md);
-    font-family:
-      "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Consolas", monospace;
+    font-family: "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Consolas", monospace;
     letter-spacing: 0.1em;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
     background: var(--bg-tertiary);
     padding: 0.75rem 1rem;
     border-radius: 0.5rem;
     border: 1px solid var(--border-light);
-    box-shadow:
-      0 1px 3px rgba(0, 0, 0, 0.1),
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1),
       0 1px 2px rgba(0, 0, 0, 0.06);
     transition: all 0.2s ease-in-out;
 
     &:hover {
       transform: translateY(-1px);
-      box-shadow:
-        0 4px 6px rgba(0, 0, 0, 0.1),
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
         0 2px 4px rgba(0, 0, 0, 0.06);
     }
   }

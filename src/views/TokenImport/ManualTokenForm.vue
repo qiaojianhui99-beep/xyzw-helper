@@ -175,11 +175,11 @@ const handleImport = () => {
   gap: 4px;
   margin-top: 4px;
   font-size: 12px;
-  color: #888;
+  color: var(--color-text-muted);
 }
 
 .cors-tip {
-  color: #e67e22;
+  color: var(--color-warning-text);
 }
 </style>
 

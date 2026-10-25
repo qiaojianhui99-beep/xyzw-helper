@@ -37,21 +37,17 @@ const router = useRouter();
 <style scoped lang="scss">
 .not-found-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-bg);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--spacing-lg);
 }
 
-/* 深色主题下背景 */
-[data-theme="dark"] .not-found-page {
-  background: linear-gradient(135deg, #0f172a 0%, #1f2937 100%);
-}
 
 .error-content {
+  color: var(--color-text-primary);
   text-align: center;
-  color: white;
   max-width: 600px;
 }
 
@@ -61,9 +57,12 @@ const router = useRouter();
 }
 
 .error-number {
+  font-family: var(--font-family-mono);
+  font-variant-numeric: tabular-nums;
   font-size: 12rem;
   font-weight: var(--font-weight-bold);
-  opacity: 0.1;
+  color: var(--color-accent);
+  opacity: 0.12;
   line-height: 1;
 }
 
@@ -71,8 +70,8 @@ const router = useRouter();
   position: absolute;
   top: 50%;
   left: 50%;
+  color: var(--color-icon);
   transform: translate(-50%, -50%);
-  opacity: 0.6;
 }
 
 .error-text {
@@ -86,7 +85,7 @@ const router = useRouter();
 
   p {
     font-size: var(--font-size-lg);
-    opacity: 0.9;
+    color: var(--color-text-secondary);
     margin: 0;
   }
 }

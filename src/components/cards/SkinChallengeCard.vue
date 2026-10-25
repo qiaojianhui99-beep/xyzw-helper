@@ -346,7 +346,7 @@ watch(
   transition: all var(--transition-fast);
 
   &.active {
-    background: #fff;
+    background: var(--color-surface);
     border-color: var(--primary-color);
     box-shadow: var(--shadow-sm);
   }
@@ -413,7 +413,7 @@ watch(
 
 .challenge-btn {
   background: var(--primary-color);
-  color: white;
+  color: var(--color-accent-text);
   border: none;
   border-radius: var(--border-radius-small);
   padding: 4px 12px;

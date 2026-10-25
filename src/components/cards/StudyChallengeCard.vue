@@ -18,7 +18,7 @@
     </template>
     <template #action>
       <a-button v-if="!study.thisWeek" status="primary" @click="startStudy">
-        🎯 一键答题.
+        一键答题.
       </a-button>
       <a-button
         v-if="!study.thisWeek && isSameGameValue(study.status, 'starting')"
@@ -51,7 +51,7 @@
         答题完成
       </a-button>
       <a-button v-if="study.thisWeek" status="success" :disabled="true">
-        ✅ 已完成无需作答
+        已完成无需作答
       </a-button>
     </template>
   </MyCard>

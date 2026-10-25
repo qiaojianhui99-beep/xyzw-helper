@@ -22,23 +22,23 @@
                 align-items: center;
                 gap: 12px;
                 padding: 8px 12px;
-                background-color: #f8f9fa;
+                background-color: var(--color-surface);
                 border-radius: 8px;
-                border: 1px solid #e9ecef;
+                border: 1px solid var(--color-border-subtle);
               "
             >
-              <div style="font-size: 14px; color: #495057">
+              <div style="font-size: 14px; color: var(--color-text-primary)">
                 共 {{ scheduledTasks.length }} 个定时任务
               </div>
               <div
                 v-if="shortestCountdownTask"
-                style="font-size: 14px; font-weight: 500; color: #1677ff"
+                style="font-size: 14px; font-weight: 500; color: var(--color-link)"
               >
                 即将执行：{{ shortestCountdownTask.task.name }} ({{
                   shortestCountdownTask.countdown.formatted
                 }})
               </div>
-              <div v-else style="font-size: 14px; color: #6c757d">
+              <div v-else style="font-size: 14px; color: var(--color-text-secondary)">
                 暂无定时任务
               </div>
               <div style="display: flex; gap: 8px">
@@ -80,9 +80,9 @@
               align-items: center;
               gap: 12px;
               padding: 8px 12px;
-              background-color: #f8f9fa;
+              background-color: var(--color-surface);
               border-radius: 8px;
-              border: 1px solid #e9ecef;
+              border: 1px solid var(--color-border-subtle);
             "
           >
             <n-button
@@ -137,7 +137,7 @@
                     margin-bottom: 12px;
                   "
                 >
-                  <label style="font-weight: 500; color: #333">分组选择</label>
+                  <label style="font-weight: 500; color: var(--color-text-primary)">分组选择</label>
                   <n-button
                     size="small"
                     type="error"
@@ -190,7 +190,7 @@
                 </n-button>
                 <span
                   v-if="selectedGroups.length > 0"
-                  style="font-size: 12px; color: #86909c"
+                  style="font-size: 12px; color: var(--color-text-muted)"
                 >
                   已选择 {{ selectedGroups.length }} 个分组，包含
                   {{ selectedTokens.length }} 个账号
@@ -728,7 +728,7 @@
                     : "执行日志"
                 }}
                 <span
-                  style="margin-left: 12px; font-size: 12px; color: #86909c"
+                  style="margin-left: 12px; font-size: 12px; color: var(--color-text-muted)"
                 >
                   {{ logs.length }}/{{ batchSettings.maxLogEntries || 1000 }}
                 </span>
@@ -966,11 +966,11 @@
             <div
               style="
                 margin-bottom: 12px;
-                border-bottom: 1px solid #eee;
+                border-bottom: 1px solid var(--color-border);
                 padding-bottom: 8px;
               "
             >
-              <div style="font-size: 12px; color: #86909c; margin-bottom: 8px">
+              <div style="font-size: 12px; color: var(--color-text-muted); margin-bottom: 8px">
                 快速选择分组：
               </div>
               <div style="display: flex; gap: 6px; flex-wrap: wrap">
@@ -998,7 +998,7 @@
                 </n-button>
                 <div
                   v-if="tokenGroups.length === 0"
-                  style="font-size: 12px; color: #ccc"
+                  style="font-size: 12px; color: var(--color-text-disabled)"
                 >
                   暂无分组
                 </div>
@@ -1102,7 +1102,7 @@
                 <h4 style="margin: 0; margin-bottom: 8px">
                   {{ template.name }}
                 </h4>
-                <div style="font-size: 12px; color: #86909c">
+                <div style="font-size: 12px; color: var(--color-text-muted)">
                   创建时间: {{ new Date(template.createdAt).toLocaleString() }}
                   <span v-if="template.updatedAt"
                     >, 更新时间:
@@ -1125,7 +1125,7 @@
           </n-card>
           <div
             v-if="filteredTaskTemplates.length === 0"
-            style="text-align: center; padding: 24px; color: #86909c"
+            style="text-align: center; padding: 24px; color: var(--color-text-muted)"
           >
             暂无模板
           </div>
@@ -1159,7 +1159,7 @@
             <span>共 {{ filteredAccountTemplates.length }} 个账号</span>
           </div>
           <div style="display: flex; gap: 8px; align-items: center">
-            <label style="font-size: 12px; color: #86909c">按模板筛选:</label>
+            <label style="font-size: 12px; color: var(--color-text-muted)">按模板筛选:</label>
             <n-select
               v-model:value="selectedTemplateForFilter"
               :options="taskTemplates"
@@ -1208,7 +1208,7 @@
           </n-card>
           <div
             v-if="filteredAccountTemplates.length === 0"
-            style="text-align: center; padding: 24px; color: #86909c"
+            style="text-align: center; padding: 24px; color: var(--color-text-muted)"
           >
             暂无账号数据
           </div>
@@ -1273,10 +1273,10 @@
             <div
               class="recipient-info"
               style="
-                background: #f7f8fa;
+                background: var(--color-surface-muted);
                 padding: 16px;
                 border-radius: 8px;
-                border: 1px solid #e5e7eb;
+                border: 1px solid var(--color-border);
                 display: flex;
                 align-items: flex-start;
                 gap: 16px;
@@ -1292,7 +1292,7 @@
                   height: 80px;
                   border-radius: 50%;
                   overflow: hidden;
-                  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%);
                   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
                   display: flex;
                   align-items: center;
@@ -1369,7 +1369,7 @@
                     margin-bottom: 12px;
                     font-size: 18px;
                     font-weight: bold;
-                    color: #1d2129;
+                    color: var(--color-text-primary);
                     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
                   "
                 >
@@ -1388,7 +1388,7 @@
                       class="info-label"
                       style="
                         font-size: 12px;
-                        color: #86909c;
+                        color: var(--color-text-muted);
                         margin-bottom: 2px;
                       "
                     >
@@ -1396,7 +1396,7 @@
                     </div>
                     <div
                       class="info-value"
-                      style="font-size: 14px; font-weight: 500; color: #1d2129"
+                      style="font-size: 14px; font-weight: 500; color: var(--color-text-primary)"
                     >
                       {{ recipientInfo.roleId }}
                     </div>
@@ -1406,7 +1406,7 @@
                       class="info-label"
                       style="
                         font-size: 12px;
-                        color: #86909c;
+                        color: var(--color-text-muted);
                         margin-bottom: 2px;
                       "
                     >
@@ -1414,7 +1414,7 @@
                     </div>
                     <div
                       class="info-value"
-                      style="font-size: 14px; font-weight: 500; color: #1d2129"
+                      style="font-size: 14px; font-weight: 500; color: var(--color-text-primary)"
                     >
                       {{ recipientInfo.serverName }}
                     </div>
@@ -1424,7 +1424,7 @@
                       class="info-label"
                       style="
                         font-size: 12px;
-                        color: #86909c;
+                        color: var(--color-text-muted);
                         margin-bottom: 2px;
                       "
                     >
@@ -1432,7 +1432,7 @@
                     </div>
                     <div
                       class="info-value"
-                      style="font-size: 16px; font-weight: 600; color: #667eea"
+                      style="font-size: 16px; font-weight: 600; color: var(--color-link)"
                     >
                       {{ recipientInfo.power }} {{ recipientInfo.powerUnit }}
                     </div>
@@ -1442,7 +1442,7 @@
                       class="info-label"
                       style="
                         font-size: 12px;
-                        color: #86909c;
+                        color: var(--color-text-muted);
                         margin-bottom: 2px;
                       "
                     >
@@ -1450,7 +1450,7 @@
                     </div>
                     <div
                       class="info-value"
-                      style="font-size: 14px; font-weight: 500; color: #1d2129"
+                      style="font-size: 14px; font-weight: 500; color: var(--color-text-primary)"
                     >
                       {{ recipientInfo.legionName || "无" }}
                     </div>
@@ -1460,7 +1460,7 @@
                       class="info-label"
                       style="
                         font-size: 12px;
-                        color: #86909c;
+                        color: var(--color-text-muted);
                         margin-bottom: 2px;
                       "
                     >
@@ -1468,7 +1468,7 @@
                     </div>
                     <div
                       class="info-value"
-                      style="font-size: 14px; font-weight: 500; color: #1d2129"
+                      style="font-size: 14px; font-weight: 500; color: var(--color-text-primary)"
                     >
                       {{ recipientInfo.legionId || "无" }}
                     </div>
@@ -1787,7 +1787,7 @@
           style="
             margin-bottom: 16px;
             padding: 12px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--color-border);
             border-radius: 8px;
           "
         >
@@ -1807,19 +1807,19 @@
             </n-switch>
           </div>
           <div style="margin-bottom: 4px">
-            <span style="color: #6b7280">运行类型：</span>
+            <span style="color: var(--color-text-muted)">运行类型：</span>
             <span>{{
               task.runType === "daily" ? "每天固定时间" : "Cron表达式"
             }}</span>
           </div>
           <div style="margin-bottom: 4px">
-            <span style="color: #6b7280">运行时间：</span>
+            <span style="color: var(--color-text-muted)">运行时间：</span>
             <span>{{
               task.runType === "daily" ? task.runTime : task.cronExpression
             }}</span>
           </div>
           <div style="margin-bottom: 4px">
-            <span style="color: #6b7280">下次执行：</span>
+            <span style="color: var(--color-text-muted)">下次执行：</span>
             <span
               :style="{
                 fontWeight: 'bold',
@@ -1836,11 +1836,11 @@
             </span>
           </div>
           <div style="margin-bottom: 4px">
-            <span style="color: #6b7280">选中账号：</span>
+            <span style="color: var(--color-text-muted)">选中账号：</span>
             <span>{{ task.selectedTokens.length }} 个</span>
           </div>
           <div style="margin-bottom: 8px">
-            <span style="color: #6b7280">选中任务：</span>
+            <span style="color: var(--color-text-muted)">选中任务：</span>
             <span>{{ task.selectedTasks.length }} 个</span>
           </div>
           <div style="display: flex; gap: 8px">
@@ -1861,7 +1861,7 @@
         </div>
         <div
           v-if="scheduledTasks.length === 0"
-          style="text-align: center; padding: 24px; color: #6b7280"
+          style="text-align: center; padding: 24px; color: var(--color-text-muted)"
         >
           暂无定时任务
         </div>
@@ -1959,7 +1959,7 @@
                   margin-bottom: 8px;
                 "
               >
-                <div style="font-size: 12px; color: #86909c">
+                <div style="font-size: 12px; color: var(--color-text-muted)">
                   快速选择分组：
                 </div>
                 <n-button
@@ -1973,7 +1973,7 @@
               </div>
               <div
                 v-if="tokenGroups.length === 0"
-                style="font-size: 12px; color: #ccc"
+                style="font-size: 12px; color: var(--color-text-disabled)"
               >
                 暂无分组
               </div>
@@ -2111,7 +2111,7 @@
               :min="1"
               clearable
             />
-            <div style="font-size: 12px; color: #86909c">
+            <div style="font-size: 12px; color: var(--color-text-muted)">
               定时执行“批量申请俱乐部”时会对所有选中账号申请这个俱乐部。
             </div>
           </div>
@@ -2664,9 +2664,9 @@
               margin-bottom: 12px;
               padding: 12px;
               border-radius: 8px;
-              background: #f8f9fa;
-              border: 1px solid #e9ecef;
-              color: #666;
+              background: var(--color-surface);
+              border: 1px solid var(--color-border-subtle);
+              color: var(--color-text-secondary);
             "
           >
             仅会对当前未加入俱乐部的账号发申请，已加入任意俱乐部的账号会自动跳过。
@@ -2688,7 +2688,7 @@
               gap: 16px;
               align-items: flex-start;
               padding: 16px;
-              border: 1px solid #e5e7eb;
+              border: 1px solid var(--color-border);
               border-radius: 10px;
               background: white;
             "
@@ -2701,8 +2701,8 @@
                 height: 64px;
                 border-radius: 50%;
                 object-fit: cover;
-                background: #f3f4f6;
-                border: 1px solid #e5e7eb;
+                background: var(--color-surface-muted);
+                border: 1px solid var(--color-border);
               "
             />
             <div style="flex: 1; min-width: 0">
@@ -2721,7 +2721,7 @@
                 <n-tag type="info">ID: {{ applyLegionPreview.id }}</n-tag>
               </div>
               <div
-                style="display: flex; gap: 16px; flex-wrap: wrap; color: #666"
+                style="display: flex; gap: 16px; flex-wrap: wrap; color: var(--color-text-secondary)"
               >
                 <span>等级: {{ applyLegionPreview.level || 0 }}</span>
                 <span>成员数: {{ applyLegionPreview.memberCount || 0 }}</span>
@@ -2731,7 +2731,7 @@
               </div>
               <div
                 v-if="applyLegionPreview.notice"
-                style="margin-top: 10px; color: #666; line-height: 1.5"
+                style="margin-top: 10px; color: var(--color-text-secondary); line-height: 1.5"
               >
                 公告: {{ applyLegionPreview.notice }}
               </div>
@@ -2804,10 +2804,10 @@
           <!-- 选择包含的账号 -->
           <div
             style="
-              background: #f9f9f9;
+              background: var(--color-surface-muted);
               padding: 12px;
               border-radius: 8px;
-              border: 1px solid #eee;
+              border: 1px solid var(--color-border);
             "
           >
             <div
@@ -2852,7 +2852,7 @@
           style="
             max-height: 500px;
             overflow-y: auto;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--color-border);
             border-radius: 8px;
             padding: 12px;
           "
@@ -2862,10 +2862,10 @@
             :key="group.id"
             style="
               padding: 12px;
-              border: 1px solid #e5e7eb;
+              border: 1px solid var(--color-border);
               border-radius: 6px;
               margin-bottom: 12px;
-              background: #fafafa;
+              background: var(--color-surface-muted);
             "
           >
             <div
@@ -2961,7 +2961,7 @@
                       style="
                         padding: 2px 8px;
                         background: white;
-                        border: 1px solid #ddd;
+                        border: 1px solid var(--color-border-strong);
                         border-radius: 4px;
                         font-size: 12px;
                         display: flex;
@@ -3027,7 +3027,7 @@
 
           <div
             v-if="tokenGroups.length === 0"
-            style="text-align: center; padding: 24px; color: #86909c"
+            style="text-align: center; padding: 24px; color: var(--color-text-muted)"
           >
             暂无分组，请创建一个新分组
           </div>
@@ -6483,7 +6483,7 @@ const stopBatch = () => {
 .log-container {
   flex: 1;
   overflow-y: auto;
-  background: #f5f5f5;
+  background: var(--color-surface-muted);
   padding: 10px;
   border-radius: 4px;
   margin-top: 10px;
@@ -6497,23 +6497,23 @@ const stopBatch = () => {
 }
 
 .log-item.error {
-  color: #d03050;
+  color: var(--color-danger-text);
 }
 
 .log-item.success {
-  color: #18a058;
+  color: var(--color-success-text);
 }
 
 .log-item.warning {
-  color: #f0a020;
+  color: var(--color-warning-text);
 }
 
 .log-item.info {
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .time {
-  color: #999;
+  color: var(--color-text-muted);
   margin-right: 8px;
 }
 
@@ -6539,7 +6539,7 @@ const stopBatch = () => {
 
 .setting-label {
   font-size: 14px;
-  color: #666;
+  color: var(--color-text-secondary);
 }
 
 .setting-switches {
@@ -6553,7 +6553,7 @@ const stopBatch = () => {
   justify-content: space-between;
   align-items: center;
   padding: 8px 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .switch-row:last-child {
@@ -6562,7 +6562,7 @@ const stopBatch = () => {
 
 .switch-label {
   font-size: 14px;
-  color: #666;
+  color: var(--color-text-secondary);
 }
 
 .weird-tower-count-input {
@@ -6574,7 +6574,7 @@ const stopBatch = () => {
   display: inline-flex;
   align-items: center;
   height: 28px;
-  color: #666;
+  color: var(--color-text-secondary);
   font-size: 14px;
 }
 
@@ -6700,9 +6700,9 @@ const stopBatch = () => {
   /* Token分组管理样式 */
   .group-selection-section {
     padding: 12px;
-    background-color: #f5f7fa;
+    background-color: var(--color-surface-muted);
     border-radius: 8px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--color-border);
   }
 
   .group-tag {
@@ -6721,7 +6721,7 @@ const stopBatch = () => {
   }
 
   .group-tag-selected {
-    color: white;
+    color: var(--color-accent-text);
     font-weight: 600;
   }
 

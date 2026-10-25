@@ -259,9 +259,9 @@ const handleUserAction = async (key) => {
 <style scoped lang="scss">
 // 导航栏
 .dashboard-nav {
-  background: var(--bg-primary);
-  border-bottom: 1px solid var(--border-light);
-  padding: 0 var(--spacing-lg);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 0;
   position: sticky;
   top: 0;
   z-index: var(--z-sticky);
@@ -270,8 +270,9 @@ const handleUserAction = async (key) => {
 .nav-container {
   display: flex;
   align-items: center;
-  height: 64px;
-  max-width: 1400px;
+  height: var(--nav-height);
+  max-width: var(--layout-max-width);
+  padding: 0 var(--layout-gutter);
   margin: 0 auto;
 }
 
@@ -291,7 +292,7 @@ const handleUserAction = async (key) => {
 .brand-text {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
-  color: var(--text-primary);
+  color: var(--color-text-primary);
 }
 
 .brand-toggle {
@@ -314,22 +315,27 @@ const handleUserAction = async (key) => {
 
 .nav-item {
   display: flex;
-  align-items: center;
   gap: var(--spacing-xs);
+  align-items: center;
   padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--border-radius-medium);
-  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
   text-decoration: none;
-  transition: all var(--transition-fast);
+  border-radius: var(--radius-md);
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
 
   &:hover {
-    background: var(--bg-tertiary);
-    color: var(--text-primary);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    background: var(--color-surface-hover);
   }
 
   &.active {
-    background: var(--primary-color-light);
-    color: var(--primary-color);
+    color: var(--color-link);
+    background: var(--color-accent-soft);
   }
 }
 
@@ -342,21 +348,26 @@ const handleUserAction = async (key) => {
 
 .user-info {
   display: flex;
-  align-items: center;
   gap: var(--spacing-sm);
-  padding: var(--spacing-sm);
-  border-radius: var(--border-radius-medium);
+  align-items: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
   cursor: pointer;
-  transition: background var(--transition-fast);
+  border-radius: var(--radius-md);
+  transition: background-color var(--duration-fast) var(--ease-out);
 
   &:hover {
-    background: var(--bg-tertiary);
+    background: var(--color-surface-hover);
   }
 }
 
 .username {
+  max-width: 12ch;
+  overflow: hidden;
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  color: var(--text-primary);
+  color: var(--color-text-primary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @media (max-width: 768px) {
@@ -395,23 +406,31 @@ const handleUserAction = async (key) => {
 
 .drawer-item {
   display: flex;
-  align-items: center;
   gap: var(--spacing-sm);
+  align-items: center;
   padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--border-radius-medium);
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
   text-decoration: none;
+  border-radius: var(--radius-md);
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+
+  &:hover {
+    color: var(--color-text-primary);
+    background: var(--color-surface-hover);
+  }
 }
 
 .drawer-item.router-link-active {
-  background: var(--primary-color-light);
-  color: var(--primary-color);
+  color: var(--color-link);
+  background: var(--color-accent-soft);
 }
 
 /* 禁用样式：灰化、鼠标禁止、无hover效果 */
 .nav-item.disabled {
-  background: #cccccc;
-  color: #999999;
+  background: var(--color-surface-hover);
+  color: var(--color-text-muted);
   cursor: not-allowed; /* 鼠标样式：禁止 */
   pointer-events: none; /* 可选：直接禁用所有鼠标事件（比阻止click更彻底） */
 }

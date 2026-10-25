@@ -192,12 +192,12 @@ const columns = computed(() => {
               width: "32px",
               height: "32px",
               borderRadius: "50%",
-              background: "#f0f0f0",
+              background: "var(--color-surface-muted)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               fontSize: "14px",
-              color: "#999",
+              color: "var(--color-text-muted)",
               margin: "0 auto",
             },
           },
@@ -226,7 +226,7 @@ const columns = computed(() => {
               {
                 style: {
                   fontWeight: "500",
-                  color: "#1890ff",
+                  color: "var(--color-link)",
                   lineHeight: "1.2",
                 },
               },
@@ -237,7 +237,7 @@ const columns = computed(() => {
               {
                 style: {
                   fontSize: "12px",
-                  color: "#999",
+                  color: "var(--color-text-muted)",
                   lineHeight: "1.2",
                   marginTop: "2px",
                 },
@@ -279,7 +279,7 @@ const columns = computed(() => {
                   style: {
                     fontSize: "16px",
                     fontWeight: "bold",
-                    color: "#333",
+                    color: "var(--color-text-primary)",
                   },
                 },
                 "俱乐部怪异塔信息",
@@ -594,8 +594,8 @@ onMounted(() => {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--color-accent);
+  color: var(--color-accent-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -616,8 +616,8 @@ onMounted(() => {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--color-accent);
+  color: var(--color-accent-text);
   display: flex;
   align-items: center;
   justify-content: center;

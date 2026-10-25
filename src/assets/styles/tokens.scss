@@ -1,0 +1,349 @@
+/* =============================================================
+   XYZW Console — 设计 token 层（唯一来源 of truth）
+   -------------------------------------------------------------
+   规则：
+   1. 所有内容层颜色必须走这里的语义 token，禁止在组件里写裸 hex。
+   2. 每个 token 在 light（:root）与 dark（html[data-theme="dark"], html.dark）
+      两套主题下**各自显式赋值**，不依赖继承。
+   3. 主题机制不改：仍然由 `data-theme="dark"` + `.dark` 类切换
+      （见 src/composables/useTheme.js 与 src/main.js 的 applyTheme()）。
+   4. 强调色全站只有 --color-accent 一个（蓝），状态色只承担语义，不承担品牌。
+   5. 旧 token 名（--primary-color / --text-primary / --bg-primary …）在文件末尾
+      以别名方式保留，指回新 token —— 老组件不改一行样式也自动跟着主题走。
+   校准：见 design-system/xyzw-console/MASTER.md
+   ============================================================= */
+
+:root {
+  color-scheme: light;
+
+  /* ---------- 背景 / 表面层级（light） ---------- */
+  --color-bg: #e9edf2; /* 页面背景 */
+  --color-surface: #ffffff; /* 卡片、面板 */
+  --color-surface-raised: #ffffff; /* 浮层、弹窗、下拉（配 lg 阴影 + 描边） */
+  --color-surface-muted: #f3f5f8; /* 表头、斑马纹、代码块 */
+  --color-surface-hover: #edf1f6; /* 行悬停 / 图标按钮悬停 */
+  --color-surface-active: #e4e9f1; /* 按下态表面 */
+  --color-overlay: rgba(13, 17, 23, 0.55); /* 遮罩层 */
+
+  /* ---------- 文字（light） ---------- */
+  --color-text-primary: #14181f; /* 正文 17.8:1 on surface */
+  --color-text-secondary: #4a5563; /* 次要 7.6:1 */
+  --color-text-muted: #5f6975; /* 弱化 5.4:1，可用于说明文字 */
+  --color-text-disabled: #9aa3af; /* 禁用态（豁免 4.5，仅需可辨认） */
+  --color-text-inverse: #ffffff; /* 深底上的文字 */
+
+  /* ---------- 描边（light） ---------- */
+  --color-border: #d8dee7; /* 分隔线（装饰性，不承担识别） */
+  --color-border-strong: #8a929f; /* 输入框/控件边界 3.1:1 ✅ */
+  --color-border-subtle: #e6eaf0; /* 极弱分隔 */
+
+  /* ---------- 强调色（light，全站唯一品牌色） ---------- */
+  --color-accent: #2b54d4; /* 主按钮底 / 选中态 —— 白字 6.3:1 ✅ */
+  --color-accent-hover: #1f41ac; /* hover —— 白字 8.7:1 ✅ */
+  --color-accent-active: #17327f; /* active */
+  --color-accent-disabled: #b9c4e4; /* 禁用底 */
+  --color-accent-text: #ffffff; /* 强调色上的文字 */
+  --color-accent-soft: #e7ecfb; /* 强调色浅底（选中行/标签） */
+  --color-accent-soft-hover: #dbe3f9;
+  --color-link: #2b54d4; /* 链接文字 6.3:1 ✅ */
+  --color-link-hover: #1f41ac;
+  --color-focus-ring: rgba(43, 84, 212, 0.35);
+
+  /* ---------- 语义状态（light） ---------- */
+  --color-success: #0a7a4c; /* 填充，配白字 5.4:1 ✅ */
+  --color-success-text: #0a6b45; /* 文字 6.6:1 ✅ */
+  --color-success-soft: rgba(10, 122, 76, 0.1);
+  --color-warning: #b45309; /* 填充，配白字 5.0:1 ✅ */
+  --color-warning-text: #8a5200; /* 文字 6.4:1 ✅ */
+  --color-warning-soft: rgba(180, 83, 9, 0.1);
+  --color-danger: #c83a52; /* 填充，配白字 5.0:1 ✅ */
+  --color-danger-text: #b32641; /* 文字 6.4:1 ✅ */
+  --color-danger-soft: rgba(200, 58, 82, 0.1);
+  --color-info: #1a5fbd; /* 填充，配白字 6.2:1 ✅ */
+  --color-info-text: #1a5fbd;
+  --color-info-soft: rgba(26, 95, 189, 0.1);
+
+  /* 名次徽章金/银/铜底上的文字色（内容语义色底 → 必须用深字） */
+  --color-rank-text: #1c1605;
+
+  /* ---------- 图标（light，独立可控，默认跟随次要文字） ---------- */
+  --color-icon: #4a5563;
+  --color-icon-muted: #6b7583;
+  --color-icon-on-accent: #ffffff;
+
+  /* ---------- 字体 ---------- */
+  --font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
+    Helvetica, Arial, sans-serif;
+  --font-family-heading: var(--font-family);
+  --font-family-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
+  --font-feature-numeric: "tnum" 1, "lnum" 1; /* 数值列等宽，避免跳列 */
+
+  /* 字号阶梯 */
+  --font-size-2xs: 11px;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 32px;
+  --font-size-4xl: 40px;
+
+  /* 字重 */
+  --font-weight-regular: 400;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* 行高（正文 ≥1.5） */
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.4;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.7;
+
+  /* ---------- 间距（4 的倍数） ---------- */
+  --spacing-2xs: 2px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+
+  /* ---------- 圆角（按钮 8，卡片 12，弹窗 16） ---------- */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-full: 999px; /* 仅徽章/状态点/头像 */
+
+  /* ---------- 阴影（light：靠阴影表达层级） ---------- */
+  --shadow-xs: 0 1px 1px rgba(16, 24, 40, 0.04);
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 1px rgba(16, 24, 40, 0.04);
+  --shadow-md: 0 2px 8px rgba(16, 24, 40, 0.08), 0 1px 2px rgba(16, 24, 40, 0.04);
+  --shadow-lg: 0 12px 32px -8px rgba(16, 24, 40, 0.18), 0 2px 6px rgba(16, 24, 40, 0.06);
+  --shadow-focus: 0 0 0 3px var(--color-focus-ring);
+
+  /* ---------- 动效（150–300ms） ---------- */
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 280ms;
+  --duration-slower: 400ms;
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: 150ms var(--ease-out);
+  --transition-normal: 200ms var(--ease-out);
+  --transition-slow: 280ms var(--ease-out);
+
+  /* ---------- 布局 ---------- */
+  --layout-max-width: 1200px;
+  --layout-gutter: 24px;
+  --nav-height: 64px;
+
+  /* ---------- 层级 ---------- */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-toast: 1080;
+}
+
+/* =============================================================
+   DARK —— 带色调的近黑（#0d0f13），不用纯黑；
+   层级用「更亮的 surface + 描边」表达，不只靠阴影。
+   ============================================================= */
+html[data-theme="dark"],
+html.dark {
+  color-scheme: dark;
+
+  --color-bg: #0d0f13;
+  --color-surface: #181c24;
+  --color-surface-raised: #222833;
+  --color-surface-muted: #1e232c;
+  --color-surface-hover: #252b36;
+  --color-surface-active: #2c333f;
+  --color-overlay: rgba(3, 5, 8, 0.72);
+
+  --color-text-primary: #e9ecf2; /* 14.4:1 on surface */
+  --color-text-secondary: #a9b3c1; /* 8.0:1 */
+  --color-text-muted: #8f99a8; /* 5.6:1 */
+  --color-text-disabled: #5b6472; /* 禁用态 */
+  --color-text-inverse: #0d0f13;
+
+  --color-border: #2c333f;
+  --color-border-strong: #616a79; /* 控件边界 3.1:1 ✅ */
+  --color-border-subtle: #232a34;
+
+  --color-accent: #3b63e0; /* 白字 5.2:1 ✅，对表面 3.4:1 ✅ */
+  --color-accent-hover: #4a6fe0; /* 白字 4.52:1 ✅ */
+  --color-accent-active: #2f52c4; /* 白字 6.72:1 ✅ */
+  --color-accent-disabled: #2a3350;
+  --color-accent-text: #ffffff;
+  --color-accent-soft: #1b2340;
+  --color-accent-soft-hover: #232c4f;
+  --color-link: #9cb4ff; /* 8.6:1 ✅ */
+  --color-link-hover: #b9cbff;
+  --color-focus-ring: rgba(122, 151, 240, 0.45);
+
+  --color-success: #12a06a;
+  --color-success-text: #4ade80; /* 10.2:1 ✅ */
+  --color-success-soft: rgba(74, 222, 128, 0.14);
+  --color-warning: #c2810f;
+  --color-warning-text: #fbbf24; /* 10.6:1 ✅ */
+  --color-warning-soft: rgba(251, 191, 36, 0.14);
+  --color-danger: #d9485f;
+  --color-danger-text: #f87171; /* 6.4:1 ✅ */
+  --color-danger-soft: rgba(248, 113, 113, 0.14);
+  --color-info: #3b82f6;
+  --color-info-text: #93c5fd; /* 9.9:1 ✅ */
+  --color-info-soft: rgba(147, 197, 253, 0.14);
+
+  --color-rank-text: #101318;
+
+  --color-icon: #a9b3c1;
+  --color-icon-muted: #8f99a8;
+  --color-icon-on-accent: #ffffff;
+
+  /* 深色下阴影加深，并用描边兜底层级 */
+  --shadow-xs: 0 1px 1px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 2px 10px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 16px 40px -12px rgba(0, 0, 0, 0.7);
+  --shadow-focus: 0 0 0 3px var(--color-focus-ring);
+}
+
+/* =============================================================
+   兼容别名层
+   -------------------------------------------------------------
+   历史上的 token 名（--primary-color / --text-secondary / --bg-primary …）
+   在 40+ 个组件里被引用。这里全部指向新语义 token：
+   一行样式都不用改，组件就自动变成双主题安全。
+   ⚠️ 新代码请直接用 --color-* 名。
+   ============================================================= */
+:root {
+  /* 文字 */
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --text-tertiary: var(--color-text-muted);
+  --text-muted: var(--color-text-muted);
+  --text-disabled: var(--color-text-disabled);
+  --text-light: var(--color-text-secondary);
+  --text-accent: var(--color-link);
+
+  /* 背景 */
+  --bg-primary: var(--color-surface);
+  --bg-secondary: var(--color-surface-muted);
+  --bg-tertiary: var(--color-surface-hover);
+  --bg-color: var(--color-bg);
+  --bg-hover: var(--color-surface-hover);
+  --bg-overlay: var(--color-overlay);
+
+  /* 描边 */
+  --border-light: var(--color-border);
+  --border-medium: var(--color-border-strong);
+  --border-dark: var(--color-border-strong);
+  --border-color: var(--color-border);
+  --border-hover: var(--color-border-strong);
+
+  /* 品牌 / 强调 */
+  --primary-color: var(--color-accent);
+  --primary-color-hover: var(--color-accent-hover);
+  --primary-color-active: var(--color-accent-active);
+  --primary-color-light: var(--color-accent-soft);
+  --primary-color-rgb: 43, 84, 212;
+  --secondary-color: var(--color-accent-hover);
+  --secondary-color-hover: var(--color-accent-hover);
+  --color-primary: var(--color-accent);
+  --color-primary-hover: var(--color-accent-hover);
+  --color-primary-active: var(--color-accent-active);
+  --color-primary-disabled: var(--color-accent-disabled);
+  --color-background: var(--color-bg);
+
+  /* 状态 */
+  --success-color: var(--color-success);
+  --success-color-text: var(--color-success-text);
+  --success-color-rgb: 10, 122, 76;
+  --warning-color: var(--color-warning);
+  --warning-color-text: var(--color-warning-text);
+  --warning-color-rgb: 180, 83, 9;
+  --error-color: var(--color-danger);
+  --error-color-text: var(--color-danger-text);
+  --error-color-rgb: 200, 58, 82;
+  --color-error: var(--color-danger);
+  --color-danger: var(--color-danger);
+  --color-danger-text: var(--color-danger-text);
+  --info-color: var(--color-info);
+  --info-color-light: var(--color-info-soft);
+  --info-color-hover: var(--color-info-text);
+  --info-color-rgb: 26, 95, 189;
+
+  /* 阴影 */
+  --shadow-light: var(--shadow-sm);
+  --shadow-small: var(--shadow-sm);
+  --shadow-medium: var(--shadow-md);
+  --shadow-large: var(--shadow-lg);
+  --shadow-heavy: var(--shadow-lg);
+
+  /* 圆角 */
+  --border-radius-xs: var(--radius-xs);
+  --border-radius-sm: var(--radius-sm);
+  --border-radius-small: var(--radius-sm);
+  --border-radius-md: var(--radius-md);
+  --border-radius-medium: var(--radius-md);
+  --border-radius-large: var(--radius-lg);
+  --border-radius-xl: var(--radius-xl);
+  --border-radius-full: var(--radius-full);
+  --border-radius: var(--radius-md);
+
+  /* 字号补充 */
+  --font-size-base: var(--font-size-md);
+  --font-mono: var(--font-family-mono);
+}
+
+/* 亚状态色在深色下需要换值（别名指向的状态色已随主题切换，这里只处理
+   需要按主题调整的 rgba 别名） */
+html[data-theme="dark"],
+html.dark {
+  --primary-color-rgb: 59, 99, 224;
+  --success-color-rgb: 18, 160, 106;
+  --warning-color-rgb: 194, 129, 15;
+  --error-color-rgb: 217, 72, 95;
+  --info-color-rgb: 59, 130, 246;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --font-size-2xs: 11px;
+    --font-size-xs: 12px;
+    --font-size-sm: 13px;
+    --font-size-md: 15px;
+    --font-size-lg: 16px;
+    --font-size-xl: 18px;
+    --font-size-2xl: 22px;
+    --font-size-3xl: 28px;
+    --font-size-4xl: 32px;
+
+    --spacing-lg: 16px;
+    --spacing-xl: 24px;
+    --spacing-2xl: 32px;
+    --spacing-3xl: 48px;
+
+    --layout-gutter: 16px;
+    --nav-height: 56px;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --font-size-md: 14px;
+  }
+}

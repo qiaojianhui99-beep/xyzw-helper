@@ -264,7 +264,7 @@ onMounted(() => {
 <style scoped lang="scss">
 .login-page {
   min-height: 100dvh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -273,10 +273,6 @@ onMounted(() => {
   padding-bottom: calc(var(--spacing-md) + env(safe-area-inset-bottom));
 }
 
-/* 深色主题下背景 */
-[data-theme="dark"] .login-page {
-  background: linear-gradient(135deg, #0f172a 0%, #1f2937 100%);
-}
 
 .login-container {
   display: grid;
@@ -288,18 +284,11 @@ onMounted(() => {
 }
 
 .login-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius-xl);
   padding: var(--spacing-2xl);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-/* 深色主题下登录卡片 */
-[data-theme="dark"] .login-card {
-  background: rgba(17, 24, 39, 0.85);
-  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-lg);
 }
 
 .card-header {
@@ -388,7 +377,7 @@ onMounted(() => {
 
 // 功能展示区域
 .features-showcase {
-  color: white;
+  color: var(--color-text-primary);
   padding: var(--spacing-xl);
 }
 
@@ -404,7 +393,7 @@ onMounted(() => {
 
   p {
     font-size: var(--font-size-lg);
-    opacity: 0.9;
+    color: var(--color-text-secondary);
     margin: 0;
   }
 }
@@ -419,22 +408,23 @@ onMounted(() => {
   display: flex;
   gap: var(--spacing-lg);
   padding: var(--spacing-lg);
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius-large);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all var(--transition-normal);
+  transition:
+    border-color var(--duration-base) var(--ease-out),
+    background-color var(--duration-base) var(--ease-out);
 
   &:hover {
-    transform: translateX(8px);
-    background: rgba(255, 255, 255, 0.15);
+    background: var(--color-surface-hover);
+    border-color: var(--color-border-strong);
   }
 }
 
 .feature-icon {
-  width: 48px;
-  height: 48px;
-  color: white;
+  width: 40px;
+  height: 40px;
+  color: var(--color-accent);
   flex-shrink: 0;
 
   :deep(svg) {
@@ -453,8 +443,8 @@ onMounted(() => {
   }
 
   p {
-    opacity: 0.8;
     line-height: var(--line-height-relaxed);
+    color: var(--color-text-secondary);
     margin: 0;
   }
 }
@@ -473,7 +463,7 @@ onMounted(() => {
 .decoration-circle {
   position: absolute;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-accent-soft);
   animation: float 6s ease-in-out infinite;
 }
 

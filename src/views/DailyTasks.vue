@@ -676,24 +676,21 @@ watch(
 <style scoped lang="scss">
 .daily-tasks-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: linear-gradient(135deg, var(--color-surface-muted) 0%, var(--color-accent-soft) 100%);
 }
 
 /* 深色主题下背景 */
 [data-theme="dark"] .daily-tasks-page {
-  background: linear-gradient(135deg, #0f172a 0%, #1f2937 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%);
 }
 
 .page-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-accent);
   padding: var(--spacing-xl) 0;
-  color: white;
+  color: var(--color-accent-text);
 }
 
-/* 深色主题下头部渐变 */
-[data-theme="dark"] .page-header {
-  background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
-}
+
 
 .header-content {
   display: flex;

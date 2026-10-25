@@ -899,7 +899,7 @@
             <div class="club-column own-column style-2">
               <div class="style2-header">
                 <div class="style2-title">
-                  <span class="trophy-icon">🏆</span>
+                  <span class="trophy-icon" aria-hidden="true"><AppIcon name="trophy" :size="20" /></span>
                   <div class="title-text">
                     <h2>{{ battleRecords.ownClub.name }}</h2>
                     <div class="date-text">我方战绩</div>
@@ -1080,7 +1080,7 @@
             <div class="club-column opponent-column style-2">
               <div class="style2-header">
                 <div class="style2-title">
-                  <span class="trophy-icon">🏆</span>
+                  <span class="trophy-icon" aria-hidden="true"><AppIcon name="trophy" :size="20" /></span>
                   <div class="title-text">
                     <h2>{{ battleRecords.opponentClub.name }}</h2>
                     <div class="date-text">敌方战绩</div>
@@ -2103,17 +2103,17 @@ onMounted(() => {
 
 .ranking-item:nth-of-type(2) .rank-number {
   background: #ffd700;
-  color: #000;
+  color: var(--color-rank-text);
 }
 
 .ranking-item:nth-of-type(3) .rank-number {
-  background: #c0c0c0;
-  color: #000;
+  background: var(--color-surface-hover);
+  color: var(--color-text-primary);
 }
 
 .ranking-item:nth-of-type(4) .rank-number {
   background: #cd7f32;
-  color: #000;
+  color: var(--color-rank-text);
 }
 
 .player-avatar {
@@ -2128,8 +2128,8 @@ onMounted(() => {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--color-accent);
+  color: var(--color-accent-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2250,8 +2250,8 @@ onMounted(() => {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
   flex-shrink: 0;
-  background: #696969;
-  color: #fff;
+  background: var(--color-surface-active);
+  color: var(--color-accent-text);
 }
 
 .god-ranking-header > .god-rank-number {
@@ -2263,17 +2263,17 @@ onMounted(() => {
 
 .god-ranking-item:nth-of-type(2) .god-rank-number {
   background: #ffd700;
-  color: #000;
+  color: var(--color-rank-text);
 }
 
 .god-ranking-item:nth-of-type(3) .god-rank-number {
-  background: #c0c0c0;
-  color: #000;
+  background: var(--color-surface-hover);
+  color: var(--color-text-primary);
 }
 
 .god-ranking-item:nth-of-type(4) .god-rank-number {
   background: #cd7f32;
-  color: #000;
+  color: var(--color-rank-text);
 }
 
 .player-id {
@@ -2395,39 +2395,39 @@ onMounted(() => {
 
 .club-column {
   flex: 1;
-  background: #fff;
+  background: var(--color-surface);
   border-radius: 8px;
   overflow: hidden;
 }
 
 .own-column {
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-border);
 }
 
 .opponent-column {
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-border);
 }
 
 /* Style 1 */
 .style-1-wrapper {
-  background: #fff;
+  background: var(--color-surface);
   padding: 20px;
-  color: #333;
+  color: var(--color-text-primary);
   font-family: Arial, sans-serif;
 }
 
 .style1-header {
   padding: 10px;
   text-align: center;
-  color: #fff;
+  color: var(--color-accent-text);
 }
 
 .own-header {
-  background: #800080;
+  background: var(--color-accent);
 }
 
 .opponent-header {
-  background: #d32f2f; /* Red for opponent */
+  background: var(--color-danger); /* Red for opponent */
 }
 
 .style1-header h3 {
@@ -2455,36 +2455,36 @@ onMounted(() => {
 }
 
 .style1-table th {
-  background: #f0f0f0;
-  color: #333;
+  background: var(--color-surface-muted);
+  color: var(--color-text-primary);
   padding: 6px;
   text-align: center;
   font-weight: bold;
-  border-bottom: 2px solid #ddd;
+  border-bottom: 2px solid var(--color-border-strong);
 }
 
 .own-column .style1-table th {
-  background: #aa50aa;
-  color: #fff;
+  background: var(--color-accent);
+  color: var(--color-accent-text);
   border-bottom: none;
 }
 
 .opponent-column .style1-table th {
-  background: #e55555;
-  color: #fff;
+  background: var(--color-danger);
+  color: var(--color-accent-text);
   border-bottom: none;
 }
 
 .style1-table td {
   padding: 5px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border);
   text-align: center;
   vertical-align: middle;
   height: 32px;
 }
 
 .style1-table tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: var(--color-surface-muted);
 }
 
 .col-rank {
@@ -2512,12 +2512,12 @@ onMounted(() => {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #ccc;
+  background: var(--color-surface-hover);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 10px;
-  color: #fff;
+  color: var(--color-accent-text);
 }
 
 .style1-summary-block {
@@ -2530,7 +2530,7 @@ onMounted(() => {
 }
 
 .overall-card .summary-item {
-  border-right: 1px solid #f0f0f0;
+  border-right: 1px solid var(--color-border-subtle);
 }
 
 .overall-card .summary-item:nth-child(2n) {
@@ -2545,10 +2545,10 @@ onMounted(() => {
 }
 
 .summary-card {
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border-strong);
   border-radius: 4px;
   overflow: hidden;
-  background: #fff;
+  background: var(--color-surface);
 }
 
 .summary-title {
@@ -2556,29 +2556,29 @@ onMounted(() => {
   text-align: center;
   font-weight: bold;
   font-size: 13px;
-  color: #fff;
+  color: var(--color-accent-text);
 }
 
 .own-column .summary-title {
-  background: #aa50aa;
+  background: var(--color-accent);
 }
 .opponent-column .summary-title {
-  background: #e55555;
+  background: var(--color-danger);
 }
 
 /* Lighter ranking titles for Style 1 */
 .own-column .style1-summary-row .summary-title {
-  background: #aa50aa;
+  background: var(--color-accent);
 }
 .opponent-column .style1-summary-row .summary-title {
-  background: #e55555;
+  background: var(--color-danger);
 }
 
 .summary-item {
   display: flex;
   justify-content: space-between;
   padding: 6px 10px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border-subtle);
   font-size: 12px;
   font-weight: bold;
 }
@@ -2588,7 +2588,7 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 6px 10px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border-subtle);
   font-size: 13px;
 }
 
@@ -2617,37 +2617,37 @@ onMounted(() => {
 
 /* Style 1 */
 .style-1-wrapper {
-  background: #eef2f7;
+  background: var(--color-accent-soft);
   padding: 20px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   border-radius: 8px;
 }
 
 .style-1-wrapper .battle-header {
-  background: #fff;
-  border-bottom: 1px solid #ddd;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border-strong);
 }
 
 /* Style 2 */
 .style-2-wrapper {
-  background: #eef2f7;
+  background: var(--color-accent-soft);
   padding: 20px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   border-radius: 8px;
 }
 
 .style-2-wrapper .battle-header {
-  background: #fff;
-  border-bottom: 1px solid #ddd;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border-strong);
 }
 
 .style2-header {
   display: flex;
   justify-content: center;
   margin-bottom: 15px;
-  background: #fff;
+  background: var(--color-surface);
   padding: 10px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .style2-title {
@@ -2662,14 +2662,14 @@ onMounted(() => {
 
 .title-text h2 {
   font-size: 16px;
-  color: #333;
+  color: var(--color-text-primary);
   margin: 0;
   font-weight: 800;
 }
 
 .date-text {
   font-size: 12px;
-  color: #888;
+  color: var(--color-text-muted);
   margin-top: 2px;
 }
 
@@ -2691,7 +2691,7 @@ onMounted(() => {
 
 .stat-card-mini {
   flex: 1;
-  background: #f8f9fa;
+  background: var(--color-surface);
   padding: 10px;
   border-radius: 8px;
   text-align: center;
@@ -2702,28 +2702,28 @@ onMounted(() => {
 
 .stat-label-mini {
   font-size: 11px;
-  color: #888;
+  color: var(--color-text-muted);
   margin-bottom: 2px;
 }
 
 .stat-value-mini {
   font-size: 14px;
   font-weight: 800;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .warning-text {
-  color: #ff9800;
+  color: var(--color-warning-text);
 }
 .danger-text {
-  color: #f44336;
+  color: var(--color-danger-text);
 }
 .purple-text {
-  color: #9c27b0;
+  color: var(--color-link);
 }
 
 .style2-table-wrapper {
-  background: #fff;
+  background: var(--color-surface);
   padding: 0;
   overflow-x: auto;
 }
@@ -2734,15 +2734,15 @@ onMounted(() => {
 }
 
 .style2-table thead {
-  background: #4285f4;
+  background: var(--color-accent);
 }
 
 .opponent-column .style2-table thead {
-  background: #e53935;
+  background: var(--color-danger);
 }
 
 .style2-table th {
-  color: #fff;
+  color: var(--color-accent-text);
   padding: 8px 4px;
   text-align: center;
   font-size: 12px;
@@ -2756,15 +2756,15 @@ onMounted(() => {
 
 .style2-table td {
   padding: 6px 4px;
-  border-bottom: 1px solid #f1f1f1;
+  border-bottom: 1px solid var(--color-border-subtle);
   vertical-align: middle;
   text-align: center;
   font-size: 12px;
-  color: #444;
+  color: var(--color-text-primary);
 }
 
 .style2-table tr:hover {
-  background: #f8fbff;
+  background: var(--color-accent-soft);
 }
 
 .medal-icon {
@@ -2772,7 +2772,7 @@ onMounted(() => {
 }
 .rank-num-plain {
   font-weight: bold;
-  color: #888;
+  color: var(--color-text-muted);
 }
 
 .player-cell {
@@ -2785,7 +2785,7 @@ onMounted(() => {
 
 .player-name-s2 {
   font-weight: 600;
-  color: #333;
+  color: var(--color-text-primary);
   font-size: 11px;
   white-space: nowrap;
   overflow: hidden;
@@ -2804,12 +2804,12 @@ onMounted(() => {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: #ccc;
+  background: var(--color-surface-hover);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 10px;
-  color: #fff;
+  color: var(--color-accent-text);
 }
 
 .bar-cell {
@@ -2826,10 +2826,10 @@ onMounted(() => {
   font-size: 11px;
 }
 .bar-val.red {
-  color: #ff5252;
+  color: var(--color-danger-text);
 }
 .bar-val.gray {
-  color: #9e9e9e;
+  color: var(--color-text-secondary);
 }
 .bar-val.orange {
   color: #ffab40;
@@ -2838,7 +2838,7 @@ onMounted(() => {
 .progress-bg {
   flex: 1;
   height: 4px;
-  background: #f0f0f0;
+  background: var(--color-surface-muted);
   border-radius: 2px;
   overflow: hidden;
   min-width: 30px;
@@ -2849,18 +2849,18 @@ onMounted(() => {
   border-radius: 2px;
 }
 .progress-fill.red {
-  background: #ff5252;
+  background: var(--color-danger);
 }
 .progress-fill.orange {
   background: #ffab40;
 }
 .progress-fill.gray {
-  background: #9e9e9e;
+  background: var(--color-surface-hover);
 }
 
 .kd-val {
   font-weight: bold;
-  color: #4caf50;
+  color: var(--color-success-text);
 }
 
 @media (max-width: 768px) {
@@ -2879,10 +2879,10 @@ onMounted(() => {
 
 /* Style 2 Color Overrides */
 .own-column.style-2 .summary-title {
-  background: #4285f4;
+  background: var(--color-accent);
 }
 
 .opponent-column.style-2 .summary-title {
-  background: #e53935;
+  background: var(--color-danger);
 }
 </style>

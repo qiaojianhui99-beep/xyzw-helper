@@ -504,7 +504,7 @@
           <div v-else-if="currentStyle === 'style2'" class="style-2">
             <div class="style2-header">
               <div class="style2-title">
-                <span class="trophy-icon">🏆</span>
+                <span class="trophy-icon" aria-hidden="true"><AppIcon name="trophy" :size="20" /></span>
                 <div class="title-text">
                   <h2>{{ club.name || "俱乐部" }} 盐场月报</h2>
                   <div class="date-text">{{ currentMonthDisplay }}</div>
@@ -582,7 +582,7 @@
                 <div v-else class="mvp-avatar-placeholder">
                   {{ monthlyMvpPlayer.name?.charAt(0) || "?" }}
                 </div>
-                <div class="mvp-crown">👑</div>
+                <div class="mvp-crown" aria-hidden="true"><AppIcon name="trophy" :size="18" /></div>
                 <div class="mvp-name">{{ monthlyMvpPlayer.name }}</div>
                 <div class="mvp-label">本月 MVP</div>
               </div>
@@ -591,7 +591,7 @@
             <div class="style2-rankings-grid">
               <div class="rank-card-s2 red-border">
                 <div class="rank-card-title-s2">
-                  <span class="icon">⚔️</span> 击杀前三
+                  <span class="icon" aria-hidden="true"><AppIcon name="sword" :size="14" /></span> 击杀前三
                 </div>
                 <div class="rank-list-s2">
                   <div
@@ -615,7 +615,7 @@
 
               <div class="rank-card-s2 orange-border">
                 <div class="rank-card-title-s2">
-                  <span class="icon">💣</span> 攻城前三
+                  <span class="icon" aria-hidden="true"><AppIcon name="target" :size="14" /></span> 攻城前三
                 </div>
                 <div class="rank-list-s2">
                   <div
@@ -641,7 +641,7 @@
 
               <div class="rank-card-s2 green-border">
                 <div class="rank-card-title-s2">
-                  <span class="icon">📊</span> KD 前三
+                  <span class="icon" aria-hidden="true"><AppIcon name="chart" :size="14" /></span> KD 前三
                 </div>
                 <div class="rank-list-s2">
                   <div
@@ -665,7 +665,7 @@
 
               <div class="rank-card-s2 gray-border">
                 <div class="rank-card-title-s2">
-                  <span class="icon">💀</span> 死亡前三
+                  <span class="icon" aria-hidden="true"><AppIcon name="warning" :size="14" /></span> 死亡前三
                 </div>
                 <div class="rank-list-s2">
                   <div
@@ -691,7 +691,7 @@
 
               <div class="rank-card-s2 purple-border">
                 <div class="rank-card-title-s2">
-                  <span class="icon">💊</span> 复活丹前三
+                  <span class="icon" aria-hidden="true"><AppIcon name="heart" :size="14" /></span> 复活丹前三
                 </div>
                 <div class="rank-list-s2">
                   <div
@@ -717,7 +717,7 @@
 
               <div class="rank-card-s2 blue-border">
                 <div class="rank-card-title-s2">
-                  <span class="icon">🛡️</span> 生存前三
+                  <span class="icon" aria-hidden="true"><AppIcon name="shield" :size="14" /></span> 生存前三
                 </div>
                 <div class="rank-list-s2">
                   <div
@@ -1482,23 +1482,23 @@ onMounted(() => {
   font-weight: var(--font-weight-bold);
 
   &.win {
-    color: #059669;
+    color: var(--color-success-text);
   }
 
   &.loss {
-    color: #dc2626;
+    color: var(--color-danger-text);
   }
 
   &.siege {
-    color: #d97706;
+    color: var(--color-warning-text);
   }
 
   &.KD {
-    color: #858585;
+    color: var(--color-text-secondary);
   }
 
   &.Sscore {
-    color: #fa79ce;
+    color: var(--color-link);
   }
 }
 
@@ -1599,8 +1599,8 @@ onMounted(() => {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--color-accent);
+  color: var(--color-accent-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1634,23 +1634,23 @@ onMounted(() => {
   background: transparent;
 
   &.win {
-    color: #059669;
+    color: var(--color-success-text);
   }
 
   &.loss {
-    color: #dc2626;
+    color: var(--color-danger-text);
   }
 
   &.siege {
-    color: #d97706;
+    color: var(--color-warning-text);
   }
 
   &.KD {
-    color: #858585;
+    color: var(--color-text-secondary);
   }
 
   &.Sscore {
-    color: #fa79ce;
+    color: var(--color-link);
   }
 }
 
@@ -1698,9 +1698,9 @@ onMounted(() => {
 
 /* ================== 样式一 (Style 1) ================== */
 .style-1 {
-  background: #fff;
+  background: var(--color-surface);
   padding: var(--spacing-md);
-  color: #333;
+  color: var(--color-text-primary);
   font-family: Arial, sans-serif;
 }
 
@@ -1710,8 +1710,8 @@ onMounted(() => {
   margin-bottom: 20px;
   font-weight: bold;
   padding: 10px;
-  background: #f3f3f3;
-  border-bottom: 3px solid #800080;
+  background: var(--color-surface);
+  border-bottom: 3px solid var(--color-accent);
 }
 
 .style1-content {
@@ -1732,8 +1732,8 @@ onMounted(() => {
 }
 
 .style1-table th {
-  background: #800080;
-  color: #fff;
+  background: var(--color-accent);
+  color: var(--color-accent-text);
   padding: 8px;
   text-align: center;
   font-weight: bold;
@@ -1741,14 +1741,14 @@ onMounted(() => {
 
 .style1-table td {
   padding: 6px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border);
   text-align: center;
   vertical-align: middle;
   height: 36px;
 }
 
 .style1-table tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: var(--color-surface-muted);
 }
 
 .col-rank {
@@ -1774,8 +1774,8 @@ onMounted(() => {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: #ccc;
-  color: #fff;
+  background: var(--color-surface-hover);
+  color: var(--color-accent-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1795,28 +1795,28 @@ onMounted(() => {
 }
 
 .summary-card {
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border-strong);
   border-radius: 4px;
   overflow: hidden;
 }
 
 .summary-title {
-  background: #800080;
-  color: #fff;
+  background: var(--color-accent);
+  color: var(--color-accent-text);
   padding: 8px;
   font-weight: bold;
   text-align: center;
 }
 
 .purple-header .summary-title {
-  background: #800080;
+  background: var(--color-accent);
 }
 
 .summary-item {
   display: flex;
   justify-content: space-between;
   padding: 8px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border);
   font-size: 13px;
 }
 
@@ -1824,7 +1824,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   padding: 8px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border);
   font-size: 13px;
 }
 
@@ -1851,8 +1851,8 @@ onMounted(() => {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #ccc;
-  color: #fff;
+  background: var(--color-surface-hover);
+  color: var(--color-accent-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1871,18 +1871,18 @@ onMounted(() => {
 
 /* ================== 样式二 (Style 2) ================== */
 .style-2 {
-  background: #f0f2f5;
+  background: var(--color-surface-muted);
   padding: 20px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .style2-header {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--color-accent);
+  color: var(--color-accent-text);
   padding: 20px;
   border-radius: 12px;
   margin-bottom: 20px;
@@ -1900,7 +1900,7 @@ onMounted(() => {
 .title-text h2 {
   margin: 0;
   font-size: 24px;
-  color: white;
+  color: var(--color-accent-text);
 }
 .date-text {
   opacity: 0.9;
@@ -1929,7 +1929,7 @@ onMounted(() => {
 
 .stat-card-mini {
   flex: 1;
-  background: white;
+  background: var(--color-surface);
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -1937,28 +1937,28 @@ onMounted(() => {
 }
 .stat-label-mini {
   font-size: 12px;
-  color: #888;
+  color: var(--color-text-muted);
   margin-bottom: 5px;
 }
 .stat-value-mini {
   font-size: 18px;
   font-weight: bold;
-  color: #333;
+  color: var(--color-text-primary);
 }
 .danger-text {
-  color: #f5222d;
+  color: var(--color-danger-text);
 }
 .warning-text {
-  color: #fa8c16;
+  color: var(--color-warning-text);
 }
 .purple-text {
-  color: #722ed1;
+  color: var(--color-link);
 }
 
 .dashboard-mvp {
   flex: 1;
-  background: linear-gradient(180deg, #fff 0%, #fffbf0 100%);
-  border: 2px solid #ffd591;
+  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-warning-soft) 100%);
+  border: 2px solid var(--color-warning);
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -1973,20 +1973,20 @@ onMounted(() => {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  border: 3px solid #ffd591;
+  border: 3px solid var(--color-warning);
   object-fit: cover;
 }
 .mvp-avatar-placeholder {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: #ffd591;
-  color: #fff;
+  background: var(--color-warning-soft);
+  color: var(--color-accent-text);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 30px;
-  border: 3px solid #d48806;
+  border: 3px solid var(--color-warning);
 }
 .mvp-crown {
   font-size: 30px;
@@ -1998,12 +1998,12 @@ onMounted(() => {
   font-size: 16px;
   font-weight: bold;
   margin-top: 10px;
-  color: #d48806;
+  color: var(--color-warning-text);
 }
 .mvp-label {
   font-size: 12px;
-  background: #d48806;
-  color: white;
+  background: var(--color-warning);
+  color: var(--color-accent-text);
   padding: 2px 8px;
   border-radius: 10px;
   margin-top: 5px;
@@ -2017,29 +2017,29 @@ onMounted(() => {
 }
 
 .rank-card-s2 {
-  background: white;
+  background: var(--color-surface);
   border-radius: 8px;
   padding: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  border-top: 3px solid #ccc;
+  border-top: 3px solid var(--color-border-strong);
 }
 .red-border {
-  border-top-color: #f5222d;
+  border-top-color: var(--color-danger);
 }
 .orange-border {
-  border-top-color: #fa8c16;
+  border-top-color: var(--color-warning);
 }
 .green-border {
-  border-top-color: #52c41a;
+  border-top-color: var(--color-success);
 }
 .gray-border {
-  border-top-color: #8c8c8c;
+  border-top-color: var(--color-border-strong);
 }
 .purple-border {
-  border-top-color: #722ed1;
+  border-top-color: var(--color-accent);
 }
 .blue-border {
-  border-top-color: #1890ff;
+  border-top-color: var(--color-accent);
 }
 
 .rank-card-title-s2 {
@@ -2063,7 +2063,7 @@ onMounted(() => {
 .rank-num-s2 {
   width: 20px;
   font-weight: bold;
-  color: #888;
+  color: var(--color-text-muted);
 }
 .rank-player-s2 {
   flex: 1;
@@ -2086,26 +2086,26 @@ onMounted(() => {
   font-weight: bold;
 }
 .rank-val-s2.red {
-  color: #f5222d;
+  color: var(--color-danger-text);
 }
 .rank-val-s2.orange {
-  color: #fa8c16;
+  color: var(--color-warning-text);
 }
 .rank-val-s2.green {
-  color: #52c41a;
+  color: var(--color-success-text);
 }
 .rank-val-s2.gray {
-  color: #8c8c8c;
+  color: var(--color-text-secondary);
 }
 .rank-val-s2.purple {
-  color: #722ed1;
+  color: var(--color-link);
 }
 .rank-val-s2.blue {
-  color: #1890ff;
+  color: var(--color-link);
 }
 
 .style2-table-wrapper {
-  background: #fff;
+  background: var(--color-surface);
   padding: 0;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -2119,11 +2119,11 @@ onMounted(() => {
 }
 
 .style2-table thead {
-  background: #4285f4;
+  background: var(--color-accent);
 }
 
 .style2-table th {
-  color: #fff;
+  color: var(--color-accent-text);
   padding: 12px 8px;
   text-align: center;
   font-size: 13px;
@@ -2139,22 +2139,22 @@ onMounted(() => {
 
 .style2-table td {
   padding: 10px 8px;
-  border-bottom: 1px solid #f1f1f1;
+  border-bottom: 1px solid var(--color-border-subtle);
   vertical-align: middle;
   text-align: center;
   font-size: 13px;
-  color: #444;
+  color: var(--color-text-primary);
 }
 
 .style2-table tr:hover {
-  background: #f8fbff;
+  background: var(--color-accent-soft);
 }
 
 .medal-icon {
   font-size: 18px;
 }
 .rank-num-plain {
-  color: #888;
+  color: var(--color-text-muted);
   padding-left: 5px;
 }
 
@@ -2174,8 +2174,8 @@ onMounted(() => {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: #e6f7ff;
-  color: #1890ff;
+  background: var(--color-info-soft);
+  color: var(--color-link);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2199,18 +2199,18 @@ onMounted(() => {
   text-align: left;
 }
 .bar-val.red {
-  color: #f5222d;
+  color: var(--color-danger-text);
 }
 .bar-val.gray {
-  color: #8c8c8c;
+  color: var(--color-text-secondary);
 }
 .bar-val.orange {
-  color: #fa8c16;
+  color: var(--color-warning-text);
 }
 
 .progress-bg {
   height: 4px;
-  background: #f5f5f5;
+  background: var(--color-surface-muted);
   border-radius: 2px;
   overflow: hidden;
 }
@@ -2219,18 +2219,18 @@ onMounted(() => {
   border-radius: 2px;
 }
 .progress-fill.red {
-  background: #f5222d;
+  background: var(--color-danger);
 }
 .progress-fill.gray {
-  background: #8c8c8c;
+  background: var(--color-surface-hover);
 }
 .progress-fill.orange {
-  background: #fa8c16;
+  background: var(--color-warning);
 }
 
 .kd-val {
   font-weight: bold;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 /* Responsive adjustments for Style 1 & 2 */

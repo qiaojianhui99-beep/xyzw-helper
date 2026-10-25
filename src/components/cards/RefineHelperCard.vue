@@ -1263,32 +1263,32 @@ h4 {
 /* 孔位颜色样式 */
 .slot.color-1 {
   background: rgba(255, 255, 255, 0.1);
-  border-left-color: #ffffff;
+  border-left-color: var(--color-surface);
 }
 
 .slot.color-2 {
   background: rgba(76, 175, 80, 0.1);
-  border-left-color: #4caf50;
+  border-left-color: var(--color-success);
 }
 
 .slot.color-3 {
   background: rgba(33, 150, 243, 0.1);
-  border-left-color: #2196f3;
+  border-left-color: var(--color-accent);
 }
 
 .slot.color-4 {
   background: rgba(156, 39, 176, 0.1);
-  border-left-color: #9c27b0;
+  border-left-color: var(--color-accent);
 }
 
 .slot.color-5 {
   background: rgba(255, 152, 0, 0.1);
-  border-left-color: #ff9800;
+  border-left-color: var(--color-warning);
 }
 
 .slot.color-6 {
   background: rgba(244, 67, 54, 0.1);
-  border-left-color: #f44336;
+  border-left-color: var(--color-danger);
 }
 
 /* 锁定状态下的颜色样式 */

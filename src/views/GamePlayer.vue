@@ -25,7 +25,7 @@ function goBack() {
   position: fixed;
   inset: 0;
   z-index: 1;
-  background: #000;
+  background: var(--color-surface-active);
 }
 
 .iframe-wrapper {
@@ -49,7 +49,7 @@ function goBack() {
   left: 8px;
   z-index: 200;
   background: rgba(0, 0, 0, 0.5);
-  color: #fff;
+  color: var(--color-accent-text);
   border: none;
   padding: 6px 12px;
   border-radius: 6px;

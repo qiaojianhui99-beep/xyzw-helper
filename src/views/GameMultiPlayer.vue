@@ -445,8 +445,8 @@ onUnmounted(() => {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  color: #e5e7eb;
-  background: #080b12;
+  color: var(--color-text-primary);
+  background: var(--color-bg);
 }
 
 .multi-game-toolbar {
@@ -458,8 +458,8 @@ onUnmounted(() => {
   padding: 8px 12px;
   overflow-x: auto;
   white-space: nowrap;
-  border-bottom: 1px solid #273244;
-  background: #111827;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
 }
 
 .toolbar-button,
@@ -468,10 +468,10 @@ onUnmounted(() => {
 .close-button,
 .empty-card button,
 .frame-error button {
-  border: 1px solid #475569;
+  border: 1px solid var(--color-border-strong);
   border-radius: 6px;
-  color: #f8fafc;
-  background: #1e293b;
+  color: var(--color-link);
+  background: var(--color-accent);
   cursor: pointer;
 }
 
@@ -485,41 +485,41 @@ onUnmounted(() => {
 .close-button:hover,
 .empty-card button:hover,
 .frame-error button:hover {
-  background: #334155;
+  background: var(--color-accent);
 }
 
 .toolbar-title {
-  color: #f8fafc;
+  color: var(--color-link);
   font-size: 16px;
 }
 
 .toolbar-count {
-  color: #93c5fd;
+  color: var(--color-link);
 }
 
 .toolbar-skipped {
-  color: #fbbf24;
+  color: var(--color-warning-text);
 }
 
 .toolbar-warning {
   margin-left: auto;
-  color: #94a3b8;
+  color: var(--color-text-muted);
   font-size: 12px;
 }
 
 .crash-help-trigger {
   flex: none;
   padding: 3px 7px;
-  border: 1px solid #92400e;
+  border: 1px solid var(--color-warning);
   border-radius: 6px;
-  color: #fbbf24;
-  background: #451a03;
+  color: var(--color-warning-text);
+  background: var(--color-warning);
   cursor: help;
 }
 
 .crash-help-trigger:hover,
 .crash-help-trigger:focus-visible {
-  background: #78350f;
+  background: var(--color-warning);
   outline: none;
 }
 
@@ -533,7 +533,7 @@ onUnmounted(() => {
 }
 
 .crash-help-content a {
-  color: #2563eb;
+  color: var(--color-link);
   text-decoration: underline;
 }
 .game-strip {
@@ -554,9 +554,9 @@ onUnmounted(() => {
   min-width: 0;
   height: auto;
   overflow: hidden;
-  border: 1px solid #334155;
+  border: 1px solid var(--color-accent);
   border-radius: 8px;
-  background: #000;
+  background: var(--color-surface-active);
   box-shadow: 0 10px 28px rgb(0 0 0 / 35%);
 }
 
@@ -567,13 +567,13 @@ onUnmounted(() => {
   gap: 8px;
   height: 36px;
   padding: 4px 8px;
-  background: #172033;
+  background: var(--color-accent);
 }
 
 .account-name {
   min-width: 0;
   overflow: hidden;
-  color: #f8fafc;
+  color: var(--color-link);
   font-weight: 600;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -585,15 +585,15 @@ onUnmounted(() => {
 }
 
 .frame-status.is-loading {
-  color: #fbbf24;
+  color: var(--color-warning-text);
 }
 
 .frame-status.is-ready {
-  color: #4ade80;
+  color: var(--color-success-text);
 }
 
 .frame-status.is-fatal {
-  color: #f87171;
+  color: var(--color-danger-text);
 }
 
 .move-button {
@@ -610,8 +610,8 @@ onUnmounted(() => {
 }
 
 .move-button:disabled {
-  color: #64748b;
-  background: #111827;
+  color: var(--color-text-secondary);
+  background: var(--color-accent);
   cursor: not-allowed;
   opacity: 0.65;
 }
@@ -625,14 +625,14 @@ onUnmounted(() => {
 .close-button {
   flex: none;
   padding: 3px 7px;
-  border-color: #7f1d1d;
-  color: #fecaca;
-  background: #450a0a;
+  border-color: var(--color-danger);
+  color: var(--color-danger-text);
+  background: var(--color-danger);
   font-size: 12px;
 }
 
 .close-button:hover {
-  background: #7f1d1d;
+  background: var(--color-danger);
 }
 
 .game-frame-shell {
@@ -655,12 +655,12 @@ onUnmounted(() => {
   place-content: center;
   justify-items: center;
   gap: 8px;
-  color: #fecaca;
+  color: var(--color-danger-text);
   background: rgb(15 23 42 / 92%);
 }
 
 .frame-error span {
-  color: #94a3b8;
+  color: var(--color-text-muted);
   font-size: 13px;
 }
 
@@ -679,20 +679,20 @@ onUnmounted(() => {
   max-width: 480px;
   padding: 32px;
   text-align: center;
-  border: 1px solid #334155;
+  border: 1px solid var(--color-accent);
   border-radius: 12px;
-  background: #111827;
+  background: var(--color-accent);
 }
 
 .empty-card h1 {
   margin: 0 0 12px;
-  color: #f8fafc;
+  color: var(--color-link);
   font-size: 22px;
 }
 
 .empty-card p {
   margin: 0 0 20px;
-  color: #94a3b8;
+  color: var(--color-text-muted);
 }
 
 .empty-card button {

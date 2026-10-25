@@ -316,7 +316,7 @@ onMounted(async () => {
 }
 
 .main-container {
-  max-width: 1400px;
+  max-width: var(--layout-max-width);
   margin: 0 auto;
 }
 
@@ -330,7 +330,7 @@ onMounted(async () => {
   border-radius: var(--border-radius-xl);
   padding: var(--spacing-2xl);
   margin-bottom: var(--spacing-xl);
-  color: white;
+  color: var(--color-accent-text);
 }
 
 .welcome-content {

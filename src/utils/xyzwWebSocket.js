@@ -503,6 +503,12 @@ export class XyzwWebSocketClient {
     this.showMsg = false;
     this.connected = false;
     this.isReconnecting = false; // 重连状态标志
+    this.intentionalClose = false;
+    this.reconnectAttempt = 0;
+    this.maxReconnectAttempts = 8;
+    this._openedOnce = false;
+    this._pendingReconnect = false;
+    this._queueBusy = false;
 
     this.promises = Object.create(null);
     this.registry = registerDefaultCommands(
@@ -527,6 +533,8 @@ export class XyzwWebSocketClient {
       this.isReconnecting = false;
     }
     if (this.socket) this.disconnect();
+    // disconnect() marks the old socket intentional; the new one must recover on its own.
+    this.intentionalClose = false;
     const socket = new WebSocket(this.url);
     this.socket = socket;
     this.serverTime = undefined;
@@ -537,6 +545,10 @@ export class XyzwWebSocketClient {
       if (this.socket !== socket) return;
       wsLogger.info("连接成功");
       this.connected = true;
+      this._openedOnce = true;
+      this.reconnectAttempt = 0;
+      this.isReconnecting = false;
+      this._pendingReconnect = false;
       // 启动心跳机制
       this._setupHeartbeat();
       // 启动消息队列处理
@@ -611,9 +623,7 @@ export class XyzwWebSocketClient {
                     : typeof packet?.seq === "number"
                       ? packet.seq
                       : undefined;
-                if (typeof incomingSeq === "number" && incomingSeq >= 0) {
-                  this.ack = incomingSeq;
-                }
+                this._noteServerSeq(incomingSeq);
 
                 if (this.showMsg) {
                   // 收到Blob消息
@@ -659,9 +669,7 @@ export class XyzwWebSocketClient {
               : typeof packet.seq === "number"
                 ? packet.seq
                 : undefined;
-          if (typeof incomingSeq === "number" && incomingSeq >= 0) {
-            this.ack = incomingSeq;
-          }
+          this._noteServerSeq(incomingSeq);
 
           if (actualPacket.body && this.shouldDecodeBody(actualPacket.body)) {
             try {
@@ -717,21 +725,85 @@ export class XyzwWebSocketClient {
         wasClean: evt.wasClean,
         timestamp: new Date().toISOString(),
       });
-      this.connected = false;
-      this._clearTimers();
-      if (this.onDisconnect) this.onDisconnect(evt);
-      if (this.sendCache) {
-        $CacheManager.delCache(this.url);
-      }
+      this._handleTransportClosed(evt);
     };
 
     socket.onerror = (error) => {
       if (this.socket !== socket) return;
+      // error is followed by close. Do not drop the session or its heartbeat here.
       wsLogger.error("WebSocket 错误:", error);
-      this.connected = false;
-      this._clearTimers();
       if (this.onError) this.onError(error);
     };
+  }
+
+  /**
+   * Keep the highest server sequence. A heartbeat or seq 0 must not rewind ack,
+   * or the server rejects the next command and closes the socket.
+   * @param {number | undefined} seq Sequence advertised by the server.
+   */
+  _noteServerSeq(seq) {
+    if (typeof seq === "number" && seq > this.ack) this.ack = seq;
+  }
+
+  /** True when this close was not requested and the session had already opened. */
+  _shouldAutoReconnect(evt) {
+    if (this.intentionalClose) return false;
+    if (this.reconnectAttempt >= this.maxReconnectAttempts) return false;
+    if (!this._openedOnce) return false;
+    const reason = String(evt?.reason || "").toLowerCase();
+    return !/token|expired|other login|kick|replaced|conflict|登录|过期/.test(
+      reason,
+    );
+  }
+
+  /** Clean up a socket that is already detached, then reconnect if it should. */
+  _handleTransportClosed(evt) {
+    wsLogger.info(
+      `WebSocket 连接关闭: ${evt?.code ?? ""} ${evt?.reason || ""}`,
+    );
+    this.connected = false;
+    const willReconnect = this._shouldAutoReconnect(evt);
+    this._pendingReconnect = willReconnect;
+    this._clearTimers();
+    if (this.onDisconnect) this.onDisconnect(evt);
+    if (this.sendCache && typeof $CacheManager.delCache === "function") {
+      $CacheManager.delCache(this.url);
+    }
+    if (willReconnect) this.scheduleReconnect();
+  }
+
+  /** Back off and open a new socket. Does not replay commands cleared on close. */
+  scheduleReconnect() {
+    if (this.intentionalClose || this.reconnectTimer) return;
+    if (this.reconnectAttempt >= this.maxReconnectAttempts) {
+      this.isReconnecting = false;
+      this._pendingReconnect = false;
+      wsLogger.warn("重连次数已用尽，停止自动重连");
+      if (this.onReconnectGiveUp) this.onReconnectGiveUp();
+      return;
+    }
+    const delay = Math.min(15000, 1000 * 2 ** this.reconnectAttempt);
+    this.reconnectAttempt += 1;
+    this.isReconnecting = true;
+    this._pendingReconnect = true;
+    wsLogger.info(
+      `准备第 ${this.reconnectAttempt} 次重连，${delay}ms 后开始`,
+    );
+    const reconnectTimer = setTimeout(() => {
+      if (this.reconnectTimer !== reconnectTimer) return;
+      this.reconnectTimer = null;
+      if (this.intentionalClose) {
+        this.isReconnecting = false;
+        return;
+      }
+      try {
+        this.init();
+      } catch (error) {
+        wsLogger.error("重连失败", error);
+        this.scheduleReconnect();
+      }
+    }, delay);
+    this.reconnectTimer = reconnectTimer;
   }
 
   /** 注册消息回调 */
@@ -825,46 +897,41 @@ export class XyzwWebSocketClient {
     }
   }
 
-  /** 重连（防重复连接版本） */
+  /** 重连（防重复连接版本）。不会把这次关闭标成用户主动断开。 */
   reconnect() {
-    // 防止重复重连
-    if (this.isReconnecting) {
+    if (this.isReconnecting || this.reconnectTimer) {
       wsLogger.debug("重连已在进行中，跳过此次重连请求");
       return;
     }
-
     wsLogger.info("开始WebSocket重连...");
-
-    // 先取消旧会话的等待请求与队列，再安排新的重连。
-    this.disconnect();
-    this.isReconnecting = true;
-
-    // 延迟重连，避免过于频繁
-    const reconnectTimer = setTimeout(() => {
-      if (this.reconnectTimer !== reconnectTimer) return;
-      this.reconnectTimer = null;
+    this.intentionalClose = false;
+    if (this.socket) {
+      const socket = this.socket;
+      this.socket = null;
+      this.connected = false;
+      this._clearTimers();
       try {
-        this.init();
-      } finally {
-        // 无论成功或失败都重置重连状态
-        const resetTimer = setTimeout(() => {
-          if (this.reconnectResetTimer !== resetTimer) return;
-          this.reconnectResetTimer = null;
-          this.isReconnecting = false;
-        }, 2000); // 2秒后允许下次重连
-        this.reconnectResetTimer = resetTimer;
+        socket.close();
+      } catch {
+        // The close event is ignored because this.socket was already cleared.
       }
-    }, 1000);
-    this.reconnectTimer = reconnectTimer;
+    }
+    this.scheduleReconnect();
   }
 
-  /** 断开连接 */
+  /** 用户或上层主动断开。之后的 close 不会自动重连。 */
   disconnect() {
+    this.intentionalClose = true;
+    this._pendingReconnect = false;
     const socket = this.socket;
     this.socket = null;
     this.connected = false;
     this._clearTimers();
-    socket?.close();
+    try {
+      socket?.close();
+    } catch {
+      // Already closed.
+    }
   }
 
   /** debounceSend */
@@ -895,10 +962,16 @@ export class XyzwWebSocketClient {
     if (!this.connected) {
       wsLogger.warn(`WebSocket 未连接，消息已入队: ${cmd}`);
       // 防止频繁重连
-      if (!this.dialogStatus && !this.isReconnecting) {
+      if (
+        this._openedOnce &&
+        !this.dialogStatus &&
+        !this.isReconnecting &&
+        !this.intentionalClose &&
+        !this.reconnectTimer
+      ) {
         this.dialogStatus = true;
         wsLogger.info("自动触发重连...");
-        this.reconnect();
+        this.scheduleReconnect();
         const dialogTimer = setTimeout(() => {
           if (this.dialogResetTimer !== dialogTimer) return;
           this.dialogResetTimer = null;
@@ -968,10 +1041,28 @@ export class XyzwWebSocketClient {
     });
   }
 
-  /** 发送心跳 */
+  /** 发送心跳。直接写到 socket，避免被任务队列堵住后被服务器踢下线。 */
   sendHeartbeat() {
-    wsLogger.verbose("发送心跳消息");
-    this.send("heart_beat", {}, { respKey: "_sys/ack" });
+    this._emitHeartbeat();
+  }
+
+  _emitHeartbeat() {
+    const socket = this.socket;
+    if (
+      !this.connected ||
+      !socket ||
+      socket.readyState !== WebSocket.OPEN
+    ) {
+      return;
+    }
+    try {
+      const raw = this.registry.build("heart_beat", this.ack, 0, {});
+      const bin = this.registry.encodePacket(raw);
+      socket.send(bin);
+      wsLogger.verbose("发送心跳消息");
+    } catch (error) {
+      wsLogger.warn("心跳发送失败", error);
+    }
   }
 
   /** 获取角色信息 */
@@ -1034,7 +1125,7 @@ export class XyzwWebSocketClient {
 
     const socket = this.socket;
     this.sendQueueTimer = setInterval(async () => {
-      if (!this.sendQueue.length) return;
+      if (this._queueBusy || !this.sendQueue.length) return;
       if (
         this.socket !== socket ||
         !this.connected ||
@@ -1042,10 +1133,17 @@ export class XyzwWebSocketClient {
       )
         return;
 
+      this._queueBusy = true;
       const task = this.sendQueue.shift();
-      if (!task) return;
+      if (!task) {
+        this._queueBusy = false;
+        return;
+      }
       const request = task.request;
-      if (request && this.promises[request.seq] !== request) return;
+      if (request && this.promises[request.seq] !== request) {
+        this._queueBusy = false;
+        return;
+      }
       // Server sequences must be contiguous: cancelled or failed unsent commands use no number.
       const wireSeq =
         task.cmd === "heart_beat" && !request ? 0 : this.wireSeq + 1;
@@ -1127,6 +1225,8 @@ export class XyzwWebSocketClient {
       } catch (error) {
         if (request) this._rejectRequest(request.seq, error);
         wsLogger.error(`发送消息失败: ${task.cmd}`, error);
+      } finally {
+        this._queueBusy = false;
       }
     }, 50);
   }

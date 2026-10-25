@@ -1,0 +1,16 @@
+# Docker 构建上下文忽略项（构建只需要源码 + 依赖清单，产物在容器内重新生成）
+node_modules
+dist
+.git
+.github
+.vscode
+release
+test-results
+coverage
+*.log
+.DS_Store
+.claude
+design-system
+docs
+assets
+seep-kit

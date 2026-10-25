@@ -1,11 +1,15 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import * as stateHelpers from "../src/utils/dailyTaskState.js";
+import * as presetTeamInfoHelpers from "../src/utils/presetTeamInfo.js";
 import { loadModule } from "./helpers/loadModule.js";
 
 const { DailyTaskRunner } = await loadModule(
   new URL("../src/utils/dailyTaskRunner.js", import.meta.url),
-  { "@/utils/dailyTaskState": stateHelpers },
+  {
+    "@/utils/dailyTaskState": stateHelpers,
+    "@/utils/presetTeamInfo": presetTeamInfoHelpers,
+  },
 );
 const definitions = [
   [1, 1, 1],
@@ -648,4 +652,116 @@ test("pending counts include distinct supplemental failures without counting a f
   assert.equal(result.failed, 2);
   assert.equal(result.remainingTasks, 1);
   assert.equal(result.incomplete, 2);
+});
+
+test("a numeric-string formation id is still recognised as the current formation", async () => {
+  const f = fixture();
+  const send = f.store.sendMessageWithPromise;
+  f.store.sendMessageWithPromise = async (...args) => {
+    if (args[1] === "presetteam_getinfo")
+      return { presetTeamInfo: { useTeamId: "2", presetTeamInfo: {} } };
+    return send(...args);
+  };
+  const logs = [];
+  const runner = f.runner();
+  runner.callbacks = { onLog: (entry) => logs.push(entry.message) };
+  const switched = await runner.switchToFormationIfNeeded(
+    "account-a",
+    2,
+    "BOSS阵容",
+  );
+  assert.equal(switched, false);
+  assert.equal(
+    f.calls.filter((c) => c.cmd === "presetteam_saveteam").length,
+    0,
+  );
+  assert.ok(logs.some((log) => log.includes("当前已是BOSS阵容2，无需切换")));
+});
+
+test("a formation id nested below presetTeamInfo is still resolved", async () => {
+  const f = fixture();
+  const send = f.store.sendMessageWithPromise;
+  f.store.sendMessageWithPromise = async (...args) => {
+    if (args[1] === "presetteam_getinfo")
+      return { presetTeamInfo: { presetTeamInfo: { useTeamId: 3 } } };
+    return send(...args);
+  };
+  const switched = await f
+    .runner()
+    .switchToFormationIfNeeded("account-a", 3, "BOSS阵容");
+  assert.equal(switched, false);
+  assert.equal(
+    f.calls.filter((c) => c.cmd === "presetteam_saveteam").length,
+    0,
+  );
+});
+
+test("an unreadable formation payload no longer aborts the rest of the daily run", async () => {
+  const f = fixture();
+  const logs = [];
+  let getinfoRequests = 0;
+  const send = f.store.sendMessageWithPromise;
+  f.store.sendMessageWithPromise = async (...args) => {
+    if (args[1] === "presetteam_getinfo") {
+      getinfoRequests++;
+      return { presetTeamInfo: {} };
+    }
+    return send(...args);
+  };
+  const result = await f.runner().run(
+    "account-a",
+    { onLog: (entry) => logs.push(entry.message) },
+    { ...settings, bossTimes: 1 },
+  );
+  assert.equal(
+    f.calls.filter((c) => c.cmd === "presetteam_saveteam").length,
+    0,
+  );
+  assert.equal(
+    f.calls.filter((c) => c.cmd === "fight_startlegionboss").length,
+    1,
+  );
+  assert.ok(
+    logs.some((log) => log.includes("阵容响应结构未直接给出当前阵容")),
+    "logs should expose the raw payload shape for diagnosis",
+  );
+  assert.ok(
+    logs.some((log) => log.includes("无法确认当前阵容，跳过BOSS阵容切换")),
+  );
+  assert.equal(
+    getinfoRequests,
+    4,
+    "each formation check should re-query once before giving up",
+  );
+  assert.ok(
+    logs.some((log) => log.includes("重新获取阵容信息仍未解析出当前阵容")),
+  );
+  assert.equal(result.failed, 0);
+});
+
+test("a rejected formation switch is reported but the boss step still runs", async () => {
+  const f = fixture();
+  const logs = [];
+  const send = f.store.sendMessageWithPromise;
+  f.store.sendMessageWithPromise = async (...args) => {
+    if (args[1] === "presetteam_getinfo")
+      return { presetTeamInfo: { useTeamId: 1 } };
+    if (args[1] === "presetteam_saveteam")
+      throw new Error("服务器错误: 200400 - 操作太快");
+    return send(...args);
+  };
+  const result = await f.runner().run(
+    "account-a",
+    { onLog: (entry) => logs.push(entry.message) },
+    { ...settings, bossTimes: 1, bossFormation: 2 },
+  );
+  assert.ok(
+    logs.some((log) => log.includes("切换到BOSS阵容2失败")),
+    "the switch failure should be logged as a warning",
+  );
+  assert.equal(
+    f.calls.filter((c) => c.cmd === "fight_startlegionboss").length,
+    1,
+  );
+  assert.equal(result.failed, 0);
 });

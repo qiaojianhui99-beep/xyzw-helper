@@ -130,7 +130,7 @@ const columns = computed(() => {
             h(
               "span",
               {
-                style: { fontSize: "16px", fontWeight: "bold", color: "#333" },
+                style: { fontSize: "16px", fontWeight: "bold", color: "var(--color-text-primary)" },
               },
               "俱乐部历史盐场战绩",
             ),
@@ -563,8 +563,8 @@ onMounted(() => {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--color-accent);
+  color: var(--color-accent-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -608,17 +608,17 @@ onMounted(() => {
 
   &.win {
     background: rgba(16, 185, 129, 0.1);
-    color: #059669;
+    color: var(--color-success-text);
   }
 
   &.loss {
     background: rgba(239, 68, 68, 0.1);
-    color: #dc2626;
+    color: var(--color-danger-text);
   }
 
   &.siege {
     background: rgba(245, 158, 11, 0.1);
-    color: #d97706;
+    color: var(--color-warning-text);
   }
 }
 
@@ -646,11 +646,11 @@ onMounted(() => {
   border-left: 3px solid transparent;
 
   &.battle-win {
-    border-left-color: #10b981;
+    border-left-color: var(--color-success);
   }
 
   &.battle-loss {
-    border-left-color: #ef4444;
+    border-left-color: var(--color-danger);
   }
 }
 

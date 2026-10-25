@@ -88,7 +88,9 @@ const connectionStatus = computed(() => {
 const connectionStatusText = computed(() => {
   if (!tokenStore.selectedToken) return "未选择Token";
   const status = tokenStore.getWebSocketStatus(tokenStore.selectedToken.id);
-  return status === "connected" ? "已连接" : "未连接";
+  if (status === "connected") return "已连接";
+  if (status === "connecting") return "重连中";
+  return "未连接";
 });
 
 const connectionClass = computed(() => {
@@ -228,13 +230,13 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .game-features-page {
   min-height: 100dvh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: linear-gradient(135deg, var(--color-surface-muted) 0%, var(--color-accent-soft) 100%);
   padding-bottom: calc(var(--spacing-md) + env(safe-area-inset-bottom));
 }
 
 /* 深色主题下背景 */
 [data-theme="dark"] .game-features-page {
-  background: linear-gradient(135deg, #0f172a 0%, #1f2937 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%);
 }
 
 // 页面头部
@@ -357,35 +359,35 @@ onUnmounted(() => {
 
   // 不同功能的主题色
   &.team-challenge {
-    border-left-color: #2080f0;
+    border-left-color: var(--color-accent);
   }
 
   &.daily-tasks {
-    border-left-color: #f0a020;
+    border-left-color: var(--color-warning);
   }
 
   &.salt-robot {
-    border-left-color: #18a058;
+    border-left-color: var(--color-success);
   }
 
   &.idle-time {
-    border-left-color: #d03050;
+    border-left-color: var(--color-danger);
   }
 
   &.power-switch {
-    border-left-color: #7c3aed;
+    border-left-color: var(--color-accent);
   }
 
   &.club-ranking {
-    border-left-color: #f59e0b;
+    border-left-color: var(--color-warning);
   }
 
   &.club-checkin {
-    border-left-color: #10b981;
+    border-left-color: var(--color-success);
   }
 
   &.tower-challenge {
-    border-left-color: #6366f1;
+    border-left-color: var(--color-accent);
   }
 }
 

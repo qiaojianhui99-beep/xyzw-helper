@@ -252,10 +252,10 @@ const handleImport = async () => {
 
 .dropzone-content {
   width: 100%;
-  border: 1px dashed #fcc;
+  border: 1px dashed var(--color-danger);
   border-radius: 8px;
   text-align: center;
-  color: #888;
+  color: var(--color-text-muted);
   padding: 40px 20px;
   font-size: 12px;
 }

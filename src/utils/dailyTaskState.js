@@ -98,7 +98,7 @@ export async function fillHangUpTime({
     check();
     const status = tokenStore.getWebSocketStatus?.(tokenId);
     if (
-      (status && status !== "connected") ||
+      (status && status !== "connected" && status !== "connecting") ||
       (snapshotClient &&
         snapshotClient !== tokenStore.wsConnections?.[tokenId]?.client)
     ) {

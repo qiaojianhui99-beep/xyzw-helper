@@ -192,7 +192,7 @@ function getTypeColor(type) {
     吴国: "#f59e0b",
     群雄: "#ef4444",
   };
-  return colorMap[type] || "#8b5cf6";
+  return colorMap[type] || "var(--color-link)";
 }
 
 // 提取默认队伍信息
@@ -731,7 +731,7 @@ const startDreamHelper = async () => {
 
     .hero-name {
       padding: 4px 8px;
-      border-left: 3px solid #8b5cf6;
+      border-left: 3px solid var(--color-accent);
       font-size: var(--font-size-sm);
     }
   }

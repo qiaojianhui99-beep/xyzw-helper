@@ -66,6 +66,10 @@ export function createConnectionManager({ tokenStore, batchSettings, addLog }) {
     const status = tokenStore.getWebSocketStatus(tokenId);
     let connected = status === "connected";
 
+    if (!connected && status === "connecting") {
+      connected = await waitForConnection(tokenId);
+    }
+
     if (!connected) {
       // 等待连接槽位，限制并发连接数
       await waitForConnectionSlot();

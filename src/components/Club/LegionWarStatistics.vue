@@ -680,10 +680,9 @@ onUnmounted(() => {
   padding: 8px;
 
   .legion-war-statistics-card {
-    background: #fff;
+    background: var(--color-surface);
     border-radius: 8px;
-    box-shadow:
-      0 1px 2px -2px rgba(0, 0, 0, 0.08),
+    box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.08),
       0 3px 6px 0 rgba(0, 0, 0, 0.06),
       0 5px 12px 4px rgba(0, 0, 0, 0.04);
 
@@ -698,7 +697,7 @@ onUnmounted(() => {
     .access-denied-info {
       margin-top: 16px;
       text-align: left;
-      color: #666;
+      color: var(--color-text-secondary);
 
       p {
         margin: 4px 0;
@@ -710,7 +709,7 @@ onUnmounted(() => {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid var(--color-border);
       flex-wrap: wrap;
       gap: 12px;
 
@@ -728,12 +727,12 @@ onUnmounted(() => {
           h2 {
             margin: 0;
             font-size: 18px;
-            color: #333;
+            color: var(--color-text-primary);
           }
           p {
             margin: 4px 0 0;
             font-size: 12px;
-            color: #999;
+            color: var(--color-text-muted);
           }
         }
       }
@@ -741,8 +740,8 @@ onUnmounted(() => {
 
     .function-section {
       padding: 12px 16px;
-      background: #f9f9f9;
-      border-bottom: 1px solid #eee;
+      background: var(--color-surface-muted);
+      border-bottom: 1px solid var(--color-border);
 
       .function-left {
         display: flex;
@@ -757,7 +756,7 @@ onUnmounted(() => {
 
           .stat-label {
             font-size: 12px;
-            color: #666;
+            color: var(--color-text-secondary);
           }
         }
       }
@@ -772,7 +771,7 @@ onUnmounted(() => {
         justify-content: center;
         align-items: center;
         height: 300px;
-        color: #999;
+        color: var(--color-text-muted);
 
         .loading-container {
           display: flex;
@@ -787,7 +786,7 @@ onUnmounted(() => {
 
 :deep(.my-legion-row) {
   td {
-    background-color: #f0fdf4 !important;
+    background-color: var(--color-success-soft) !important;
   }
 }
 

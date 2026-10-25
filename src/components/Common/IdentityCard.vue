@@ -29,7 +29,7 @@
               <n-tag
                 v-if="roleInfo.legacy > 0"
                 :style="{
-                  color: '#fff',
+                  color: 'var(--color-accent-text)',
                   backgroundColor: legacycolor[roleInfo.legacy]?.value,
                   marginLeft: '8px',
                 }"
@@ -83,7 +83,7 @@
             <h3>身份牌</h3>
             <p>角色与战力概览</p>
           </div>
-          <button class="close-btn" @click="emit('close')">✕</button>
+          <button class="close-btn" aria-label="关闭" @click="emit('close')"><AppIcon name="close" :size="16" /></button>
         </div>
         <div
           v-if="hasRole"
@@ -105,7 +105,7 @@
                 <n-tag
                   v-if="roleInfo.legacy > 0"
                   :style="{
-                    color: '#fff',
+                    color: 'var(--color-accent-text)',
                     backgroundColor: legacycolor[roleInfo.legacy]?.value,
                     marginLeft: '8px',
                   }"
@@ -735,7 +735,7 @@ watch(() => roleInfo.value, initializeAvatar, { deep: true });
 .strap-tape {
   width: 22px;
   height: 56px;
-  background: linear-gradient(180deg, #f59e0b, #fbbf24);
+  background: linear-gradient(180deg, var(--color-warning), var(--color-warning));
   border-radius: 6px;
   box-shadow: inset 0 -4px rgba(0, 0, 0, 0.15);
 }
@@ -743,7 +743,7 @@ watch(() => roleInfo.value, initializeAvatar, { deep: true });
 .strap-buckle {
   width: 36px;
   height: 18px;
-  background: #6b4f2a;
+  background: var(--color-warning);
   border-radius: 9px;
   box-shadow: inset 0 -2px rgba(0, 0, 0, 0.2);
 }
@@ -907,43 +907,43 @@ watch(() => roleInfo.value, initializeAvatar, { deep: true });
 }
 
 .rank-beginner .role-profile-header {
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  background: linear-gradient(135deg, var(--color-surface-muted) 0%, var(--color-surface-hover) 100%);
 }
 
 .rank-known .role-profile-header {
-  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  background: linear-gradient(135deg, var(--color-success-soft) 0%, var(--color-success-soft) 100%);
 }
 
 .rank-veteran .role-profile-header {
-  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  background: linear-gradient(135deg, var(--color-accent-soft) 0%, var(--color-accent-soft) 100%);
 }
 
 .rank-master .role-profile-header {
-  background: linear-gradient(135deg, #e9d5ff 0%, #ddd6fe 100%);
+  background: linear-gradient(135deg, var(--color-accent-soft) 0%, var(--color-accent-soft) 100%);
 }
 
 .rank-hero .role-profile-header {
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  background: linear-gradient(135deg, var(--color-warning-soft) 0%, var(--color-warning) 100%);
 }
 
 .rank-overlord .role-profile-header {
-  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  background: linear-gradient(135deg, var(--color-danger-soft) 0%, var(--color-danger-soft) 100%);
 }
 
 .rank-supreme .role-profile-header {
-  background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+  background: linear-gradient(135deg, var(--color-accent-soft) 0%, var(--color-accent-soft) 100%);
 }
 
 .rank-emperor .role-profile-header {
-  background: linear-gradient(135deg, #fee2e2 0%, #dc2626 20%);
+  background: linear-gradient(135deg, var(--color-danger-soft) 0%, var(--color-danger) 20%);
 }
 
 .rank-legend .role-profile-header {
-  background: linear-gradient(135deg, #ede9fe 0%, #7c3aed 30%);
+  background: linear-gradient(135deg, var(--color-accent-soft) 0%, var(--color-accent) 30%);
 }
 
 .rank-infinite .role-profile-header {
-  background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 30%, #f59e0b 100%);
+  background: linear-gradient(135deg, var(--color-warning-soft) 0%, var(--color-warning) 30%, var(--color-warning) 100%);
 }
 
 .resources {

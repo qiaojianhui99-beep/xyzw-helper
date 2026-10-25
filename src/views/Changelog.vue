@@ -5,7 +5,7 @@
       <div class="page-header">
         <div class="header-content">
           <h1 class="page-title">
-            <i class="icon-history">📜</i>
+            <i class="icon-history" aria-hidden="true"><AppIcon name="history" :size="18" /></i>
             更新日志
           </h1>
           <p class="page-description">查看系统的最新更新和改进内容</p>
@@ -33,28 +33,28 @@
       <!-- 统计信息 -->
       <div class="stats-grid">
         <div class="stat-card">
-          <div class="stat-icon">🚀</div>
+          <div class="stat-icon" aria-hidden="true"><AppIcon name="rocket" :size="20" /></div>
           <div class="stat-content">
             <div class="stat-value">{{ stats.totalVersions }}</div>
             <div class="stat-label">总版本数</div>
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon">✨</div>
+          <div class="stat-icon" aria-hidden="true"><AppIcon name="sparkles" :size="20" /></div>
           <div class="stat-content">
             <div class="stat-value">{{ stats.totalFeatures }}</div>
             <div class="stat-label">新功能</div>
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon">🐛</div>
+          <div class="stat-icon" aria-hidden="true"><AppIcon name="bug" :size="20" /></div>
           <div class="stat-content">
             <div class="stat-value">{{ stats.totalFixes }}</div>
             <div class="stat-label">修复问题</div>
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon">⬆️</div>
+          <div class="stat-icon" aria-hidden="true"><AppIcon name="arrow-up" :size="20" /></div>
           <div class="stat-content">
             <div class="stat-value">{{ stats.totalImprovements }}</div>
             <div class="stat-label">优化改进</div>
@@ -74,7 +74,7 @@
 
         <!-- 空状态 -->
         <div v-if="filteredChangelogs.length === 0" class="empty-state">
-          <div class="empty-icon">📭</div>
+          <div class="empty-icon" aria-hidden="true"><AppIcon name="box" :size="28" /></div>
           <p class="empty-text">暂无该类型的更新日志</p>
           <button class="reset-filter-btn" @click="selectedType = 'all'">
             重置筛选
@@ -85,7 +85,7 @@
       <!-- 订阅更新 -->
       <div class="subscribe-section">
         <div class="subscribe-card">
-          <div class="subscribe-icon">🔔</div>
+          <div class="subscribe-icon" aria-hidden="true"><AppIcon name="send" :size="22" /></div>
           <div class="subscribe-content">
             <h3 class="subscribe-title">订阅更新通知</h3>
             <p class="subscribe-desc">第一时间获取系统更新信息</p>
@@ -244,7 +244,7 @@ onMounted(() => {
 
 .filter-btn.active {
   background: var(--primary-color);
-  color: white;
+  color: var(--color-accent-text);
   border-color: var(--primary-color);
 }
 
@@ -320,7 +320,7 @@ onMounted(() => {
 .reset-filter-btn {
   padding: 10px 24px;
   background: var(--primary-color);
-  color: white;
+  color: var(--color-accent-text);
   border: none;
   border-radius: 8px;
   font-size: 14px;
@@ -339,7 +339,7 @@ onMounted(() => {
 }
 
 .subscribe-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-accent);
   border-radius: 12px;
   padding: 32px;
   display: flex;
@@ -359,7 +359,7 @@ onMounted(() => {
 .subscribe-title {
   font-size: 20px;
   font-weight: 700;
-  color: white;
+  color: var(--color-accent-text);
   margin: 0 0 8px 0;
 }
 
@@ -371,8 +371,8 @@ onMounted(() => {
 
 .subscribe-btn {
   padding: 12px 32px;
-  background: white;
-  color: #667eea;
+  background: var(--color-surface);
+  color: var(--color-link);
   border: none;
   border-radius: 8px;
   font-size: 14px;
@@ -402,25 +402,14 @@ onMounted(() => {
   transform: translateY(-20px);
 }
 
-/* CSS 变量 */
+/* CSS 变量：全部指向全局语义 token（主题由 data-theme 决定） */
 :root {
-  --bg-color: #f3f4f6;
-  --card-bg: #ffffff;
-  --border-color: #e5e7eb;
-  --text-primary: #1f2937;
-  --text-secondary: #6b7280;
-  --primary-color: #667eea;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-color: #111827;
-    --card-bg: #1f2937;
-    --border-color: #374151;
-    --text-primary: #f9fafb;
-    --text-secondary: #d1d5db;
-    --primary-color: #818cf8;
-  }
+  --bg-color: var(--color-surface-muted);
+  --card-bg: var(--color-surface);
+  --border-color: var(--color-border);
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --primary-color: var(--color-accent);
 }
 
 /* 响应式设计 */

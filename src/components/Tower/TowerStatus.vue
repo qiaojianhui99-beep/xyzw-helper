@@ -81,21 +81,21 @@
                 <path
                   d="M12 1.6 22 6.2 12 10.8 2 6.2Z"
                   fill="url(#goldFace)"
-                  stroke="#B07600"
+                  stroke="var(--color-warning-text)"
                   stroke-width="1.1"
                   stroke-linejoin="round"
                 />
                 <path
                   d="M2 6.2V17.8L12 22.4V10.8Z"
-                  fill="#F9A825"
-                  stroke="#B07600"
+                  fill="var(--color-warning-text)"
+                  stroke="var(--color-warning-text)"
                   stroke-width="1.1"
                   stroke-linejoin="round"
                 />
                 <path
                   d="M22 6.2V17.8L12 22.4V10.8Z"
-                  fill="#EFB218"
-                  stroke="#B07600"
+                  fill="var(--color-warning-text)"
+                  stroke="var(--color-warning-text)"
                   stroke-width="1.1"
                   stroke-linejoin="round"
                 />
@@ -476,23 +476,23 @@ onMounted(() => {
   padding: var(--spacing-sm) var(--spacing-md);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius-medium);
   cursor: pointer;
   transition: all var(--transition-fast);
-  background: #fff;
-  color: #e11d48;
+  background: var(--color-surface);
+  color: var(--color-danger-text);
 
   &:hover {
-    background: #e11d48;
-    color: white;
-    border-color: #e11d48;
+    background: var(--color-danger);
+    color: var(--color-accent-text);
+    border-color: var(--color-danger);
   }
 }
 
 // 使用GameStatus中的统一卡片样式
 .tower-status {
-  border-left: 4px solid #6366f1; // 咸将塔专用颜色
+  border-left: 4px solid var(--color-accent); // 咸将塔专用颜色
   display: flex;
   flex-direction: column;
   min-height: 240px; // 继续缩小整体高度
@@ -541,13 +541,12 @@ onMounted(() => {
   margin-left: 4px;
   font-size: var(--font-size-xs, 12px);
   font-weight: var(--font-weight-medium);
-  color: #fff;
-  background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%);
+  color: var(--color-accent-text);
+  background: linear-gradient(135deg, var(--color-warning) 0%, var(--color-danger) 100%);
   border: none;
   border-radius: var(--border-radius-small, 6px);
   cursor: pointer;
-  transition:
-    opacity 0.2s,
+  transition: opacity 0.2s,
     transform 0.15s;
   white-space: nowrap;
   line-height: 20px;
@@ -582,7 +581,7 @@ onMounted(() => {
 .buy-energy-dialog {
   width: 100%;
   max-width: 360px;
-  background: var(--bg-primary, #fff);
+  background: var(--bg-primary, var(--color-surface));
   border-radius: var(--border-radius-large, 12px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
   overflow: hidden;
@@ -593,7 +592,7 @@ onMounted(() => {
   align-items: center;
   justify-content: space-between;
   padding: var(--spacing-md) var(--spacing-lg);
-  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  border-bottom: 1px solid var(--border-color, var(--color-border));
 }
 
 .buy-energy-dialog .dialog-header h3 {
@@ -613,8 +612,7 @@ onMounted(() => {
   border: none;
   border-radius: var(--border-radius-small, 6px);
   cursor: pointer;
-  transition:
-    background 0.2s,
+  transition: background 0.2s,
     color 0.2s;
 }
 
@@ -658,7 +656,7 @@ onMounted(() => {
   font-weight: var(--font-weight-medium);
   color: var(--text-primary);
   background: var(--bg-tertiary);
-  border: 1px solid var(--border-color, #e5e7eb);
+  border: 1px solid var(--border-color, var(--color-border));
   border-radius: var(--border-radius-small, 6px);
   cursor: pointer;
   transition: background 0.2s;
@@ -676,14 +674,14 @@ onMounted(() => {
   font-weight: var(--font-weight-medium);
   text-align: center;
   color: var(--text-primary);
-  background: var(--bg-primary, #fff);
-  border: 1px solid var(--border-color, #e5e7eb);
+  background: var(--bg-primary, var(--color-surface));
+  border: 1px solid var(--border-color, var(--color-border));
   border-radius: var(--border-radius-small, 6px);
   outline: none;
 }
 
 .num-input:focus {
-  border-color: #fc4a1a;
+  border-color: var(--color-danger);
   box-shadow: 0 0 0 2px rgba(252, 74, 26, 0.15);
 }
 
@@ -700,15 +698,15 @@ onMounted(() => {
   font-weight: var(--font-weight-medium);
   color: var(--text-secondary);
   background: var(--bg-tertiary);
-  border: 1px solid var(--border-color, #e5e7eb);
+  border: 1px solid var(--border-color, var(--color-border));
   border-radius: var(--border-radius-small, 6px);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .quick-btn:hover {
-  color: #fc4a1a;
-  border-color: #fc4a1a;
+  color: var(--color-danger-text);
+  border-color: var(--color-danger);
 }
 
 .dialog-hint {
@@ -716,7 +714,7 @@ onMounted(() => {
   color: var(--text-secondary);
   text-align: center;
   padding-top: var(--spacing-xs);
-  border-top: 1px dashed var(--border-color, #e5e7eb);
+  border-top: 1px dashed var(--border-color, var(--color-border));
 }
 
 .dialog-hint .gold-icon {
@@ -740,15 +738,14 @@ onMounted(() => {
   font-weight: var(--font-weight-medium);
   border-radius: var(--border-radius-small, 6px);
   cursor: pointer;
-  transition:
-    opacity 0.2s,
+  transition: opacity 0.2s,
     transform 0.15s;
 }
 
 .btn-cancel {
   color: var(--text-secondary);
   background: var(--bg-tertiary);
-  border: 1px solid var(--border-color, #e5e7eb);
+  border: 1px solid var(--border-color, var(--color-border));
 }
 
 .btn-cancel:hover {
@@ -756,8 +753,8 @@ onMounted(() => {
 }
 
 .btn-confirm {
-  color: #fff;
-  background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%);
+  color: var(--color-accent-text);
+  background: linear-gradient(135deg, var(--color-warning) 0%, var(--color-danger) 100%);
   border: none;
 }
 
@@ -818,11 +815,11 @@ onMounted(() => {
   transition: all var(--transition-fast);
 
   &.active {
-    background: #6366f1;
-    color: white;
+    background: var(--color-accent);
+    color: var(--color-accent-text);
 
     &:hover {
-      background: #5855eb;
+      background: var(--color-accent);
     }
   }
 
@@ -847,7 +844,7 @@ onMounted(() => {
 
   &:hover {
     background: var(--warning-color);
-    color: white;
+    color: var(--color-accent-text);
   }
 }
 

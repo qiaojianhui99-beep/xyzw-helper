@@ -632,7 +632,7 @@ onBeforeUnmount(() => {
 <style scoped lang="scss">
 // 使用GameStatus中的统一卡片样式
 .daily-task {
-  border-left: 4px solid #f0a020; // 每日任务专用颜色
+  border-left: 4px solid var(--color-warning); // 每日任务专用颜色
   display: flex;
   flex-direction: column;
   min-height: 240px; // 继续缩小整体高度
@@ -716,7 +716,7 @@ onBeforeUnmount(() => {
 
   &:hover {
     background: var(--primary-color);
-    color: white;
+    color: var(--color-accent-text);
     transform: rotate(90deg);
   }
 }
@@ -727,7 +727,7 @@ onBeforeUnmount(() => {
   border: none;
   border-radius: var(--border-radius-medium);
   background: var(--primary-color);
-  color: white;
+  color: var(--color-accent-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
@@ -738,8 +738,8 @@ onBeforeUnmount(() => {
   }
 
   &:disabled {
-    background: #e5e7eb;
-    color: #9ca3af;
+    background: var(--color-surface-hover);
+    color: var(--color-text-muted);
     cursor: not-allowed;
   }
 }
@@ -917,7 +917,7 @@ onBeforeUnmount(() => {
   }
 
   &.warning {
-    color: #f59e0b;
+    color: var(--color-warning-text);
   }
 }
 

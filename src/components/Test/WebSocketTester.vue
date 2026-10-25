@@ -508,25 +508,25 @@ onUnmounted(() => {
 .message-log {
   max-height: 400px;
   overflow-y: auto;
-  border: 1px solid #e0e0e6;
+  border: 1px solid var(--color-border-subtle);
   border-radius: 4px;
   padding: 12px;
-  background-color: #fafafa;
+  background-color: var(--color-surface-muted);
 }
 
 .message-item {
   margin-bottom: 12px;
   padding: 8px;
   border-radius: 4px;
-  background-color: white;
+  background-color: var(--color-surface);
 }
 
 .message-sent {
-  border-left: 3px solid #2080f0;
+  border-left: 3px solid var(--color-accent);
 }
 
 .message-received {
-  border-left: 3px solid #18a058;
+  border-left: 3px solid var(--color-success);
 }
 
 .message-header {
@@ -545,7 +545,7 @@ onUnmounted(() => {
 
 .no-messages {
   text-align: center;
-  color: #999;
+  color: var(--color-text-muted);
   padding: 20px;
 }
 </style>

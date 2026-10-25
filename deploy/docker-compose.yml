@@ -1,0 +1,61 @@
+# XYZW Web Helper —— Docker Compose 部署
+#
+# 用法（在项目根目录）：
+#   docker compose -f deploy/docker-compose.yml up -d --build
+#   docker compose -f deploy/docker-compose.yml logs -f
+#   docker compose -f deploy/docker-compose.yml down
+#
+# 默认映射 8080；要改端口就改下面的 "8080:80" 左边。
+# 前面再接一层宿主机 nginx / Cloudflare / 宝塔反代做 HTTPS 都可以，
+# 容器自身只监听 80。
+
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: xyzw-web-helper:latest
+    container_name: xyzw-web-helper
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # /api/proxy 解码代理（可选但建议开）。
+  # 与 web 共享网络命名空间，所以它监听 127.0.0.1:3001 就等于 nginx 的本机端口，
+  # nginx 里那句 proxy_pass http://127.0.0.1:3001 才能成立。
+  # 不需要“URL 导入 / 一键刷新 Token”功能的话，删掉这一段、nginx 侧返回 502 即可。
+  proxy:
+    image: node:24-alpine
+    container_name: xyzw-web-helper-proxy
+    network_mode: "service:web"
+    working_dir: /app
+    command: ["node", "/app/server.mjs"]
+    volumes:
+      - ./proxy-service:/app:ro
+    environment:
+      PORT: "3001"
+      HOST: "127.0.0.1"
+      # 1 = 允许代理到内网地址（例如同机的 Python Token 服务 127.0.0.1:5000）
+      ALLOW_PRIVATE: "0"
+      # 可选：逗号分隔的域名白名单，留空不限
+      ALLOW_HOSTS: ""
+      TIMEOUT: "20000"
+    depends_on:
+      - web
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"

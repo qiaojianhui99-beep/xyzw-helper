@@ -269,7 +269,7 @@
               <n-tag
                 v-if="playerInfo.legacy > 0"
                 :style="{
-                  color: '#fff',
+                  color: 'var(--color-accent-text)',
                   backgroundColor: legacycolor[playerInfo.legacy]?.value,
                 }"
                 size="small"
@@ -482,7 +482,7 @@
           <div
             v-if="playerInfo.heroList"
             class="debug-info"
-            style="font-size: 12px; color: #999; margin-bottom: 10px"
+            style="font-size: 12px; color: var(--color-text-muted); margin-bottom: 10px"
           >
             武将数量: {{ playerInfo.heroList.length }}
           </div>
@@ -524,11 +524,11 @@
             <!-- 添加调试信息 -->
             <div
               v-if="playerInfo.heroList"
-              style="font-size: 12px; color: #999; margin-top: 10px"
+              style="font-size: 12px; color: var(--color-text-muted); margin-top: 10px"
             >
               武将列表为空
             </div>
-            <div v-else style="font-size: 12px; color: #999; margin-top: 10px">
+            <div v-else style="font-size: 12px; color: var(--color-text-muted); margin-top: 10px">
               武将列表未定义
             </div>
           </div>
@@ -2451,7 +2451,7 @@ onMounted(() => {});
 
       &.export-btn {
         background: var(--primary-color);
-        color: white;
+        color: var(--color-accent-text);
 
         &:hover {
           background: var(--primary-color-hover);
@@ -2465,7 +2465,7 @@ onMounted(() => {});
 
         &:hover {
           background: var(--info-color-hover);
-          color: white;
+          color: var(--color-accent-text);
         }
       }
     }
@@ -2491,7 +2491,7 @@ onMounted(() => {});
     align-items: center;
 
     .announcement-text {
-      color: white;
+      color: var(--color-accent-text);
       font-size: var(--font-size-sm);
       font-weight: var(--font-weight-medium);
       text-align: center;
@@ -2504,7 +2504,7 @@ onMounted(() => {});
 // 联盟分类标签栏
 .alliance-tabs-section {
   display: flex;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-accent);
   padding: var(--spacing-xs);
   gap: var(--spacing-xs);
   flex-shrink: 0;
@@ -2519,7 +2519,7 @@ onMounted(() => {});
     border-radius: var(--border-radius-md);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
-    color: white;
+    color: var(--color-accent-text);
     cursor: pointer;
     transition: all var(--transition-fast);
     background: rgba(255, 255, 255, 0.15);
@@ -2531,7 +2531,7 @@ onMounted(() => {});
     }
 
     &.active {
-      background: white;
+      background: var(--color-surface);
       color: var(--primary-color);
       box-shadow: var(--shadow-medium);
       transform: translateY(-2px);
@@ -2545,7 +2545,7 @@ onMounted(() => {});
       }
 
       &.active {
-        background: white;
+        background: var(--color-surface);
         color: var(--primary-color);
       }
     }
@@ -2563,7 +2563,7 @@ onMounted(() => {});
 
       .alliance-tab.active & {
         background: var(--primary-color);
-        color: white;
+        color: var(--color-accent-text);
       }
     }
   }
@@ -2712,7 +2712,7 @@ onMounted(() => {});
 
       &.alliance-xi {
         .alliance-tag {
-          background: #9c27b0;
+          background: var(--color-accent);
         }
       }
 
@@ -2766,7 +2766,7 @@ onMounted(() => {});
           justify-content: center;
           font-weight: bold;
           font-size: var(--font-size-base);
-          color: white;
+          color: var(--color-accent-text);
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
           margin: 0 6px;
 
@@ -2783,7 +2783,7 @@ onMounted(() => {});
           }
 
           &.silver {
-            background: linear-gradient(135deg, #c0c0c0 0%, #a9a9a9 100%);
+            background: linear-gradient(135deg, var(--color-surface-hover) 0%, var(--color-surface-hover) 100%);
 
             &::before {
               content: "2";
@@ -2817,7 +2817,7 @@ onMounted(() => {});
           border-radius: var(--border-radius-full);
           font-size: var(--font-size-xs);
           font-weight: var(--font-weight-bold);
-          color: white;
+          color: var(--color-accent-text);
           text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
           transition: all var(--transition-fast);
 
@@ -2857,7 +2857,7 @@ onMounted(() => {});
             var(--primary-color) 0%,
             var(--primary-color-light) 100%
           );
-          color: white;
+          color: var(--color-accent-text);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -2992,7 +2992,7 @@ onMounted(() => {});
             var(--primary-color) 0%,
             var(--primary-color-light) 100%
           );
-          color: white;
+          color: var(--color-accent-text);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -3019,8 +3019,8 @@ onMounted(() => {});
           display: flex;
           align-items: center;
           gap: 2px;
-          background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-          color: white;
+          background: linear-gradient(135deg, var(--color-danger), var(--color-danger));
+          color: var(--color-accent-text);
           padding: 2px 6px;
           border-radius: var(--border-radius-full);
           font-size: var(--font-size-xs);
@@ -3128,7 +3128,7 @@ onMounted(() => {});
             var(--primary-color-light) 0%,
             var(--primary-color) 100%
           );
-          color: white;
+          color: var(--color-accent-text);
           border-radius: var(--border-radius-full);
           font-weight: var(--font-weight-bold);
           font-size: var(--font-size-sm);

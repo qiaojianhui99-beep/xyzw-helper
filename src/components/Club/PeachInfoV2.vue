@@ -231,7 +231,7 @@
               <NTag
                 v-if="playerInfo.legacy > 0"
                 :style="{
-                  color: '#fff',
+                  color: 'var(--color-accent-text)',
                   backgroundColor: legacycolor[playerInfo.legacy]?.value,
                 }"
                 size="small"
@@ -442,7 +442,7 @@
           <div
             v-if="playerInfo.heroList"
             class="debug-info"
-            style="font-size: 12px; color: #999; margin-bottom: 10px"
+            style="font-size: 12px; color: var(--color-text-muted); margin-bottom: 10px"
           >
             武将数量: {{ playerInfo.heroList.length }}
           </div>
@@ -484,11 +484,11 @@
             <!-- 添加调试信息 -->
             <div
               v-if="playerInfo.heroList"
-              style="font-size: 12px; color: #999; margin-top: 10px"
+              style="font-size: 12px; color: var(--color-text-muted); margin-top: 10px"
             >
               武将列表为空
             </div>
-            <div v-else style="font-size: 12px; color: #999; margin-top: 10px">
+            <div v-else style="font-size: 12px; color: var(--color-text-muted); margin-top: 10px">
               武将列表未定义
             </div>
           </div>
@@ -817,7 +817,7 @@ const lineupStats = computed(() => {
     name,
     count,
     colorProps: LINEUP_RULES.find((r) => r.name === name)?.colorProps || {
-      color: "#e8e8e8",
+      color: "var(--color-text-disabled)",
       textColor: "#444",
     },
   })).sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, "zh"));
@@ -1556,7 +1556,7 @@ const columns = [
         {
           style: {
             cursor: "pointer",
-            color: "#1890ff",
+            color: "var(--color-link)",
             textDecoration: "underline",
           },
           onClick: () => fetchTargetInfo(row.id),
@@ -1577,7 +1577,7 @@ const columns = [
     key: "redQuench",
     width: 80,
     align: "center",
-    render: (row) => h("span", { style: { color: "#ff4d4f" } }, row.redQuench),
+    render: (row) => h("span", { style: { color: "var(--color-danger-text)" } }, row.redQuench),
   },
   {
     title: "珍卡",
@@ -1722,7 +1722,7 @@ const columns = [
       // 从配置中查找对应的颜色，默认灰色
       const rule = LINEUP_RULES.find((r) => r.name === type);
       const colorProps = rule?.colorProps || {
-        color: "#e8e8e8",
+        color: "var(--color-text-disabled)",
         textColor: "#444",
       };
 
@@ -1742,17 +1742,17 @@ const columns = [
     render: (row) => {
       const sim = battleSimResults.value[row.id];
       if (!sim)
-        return h("span", { style: { color: "#ccc", fontSize: "12px" } }, "—");
+        return h("span", { style: { color: "var(--color-text-disabled)", fontSize: "12px" } }, "—");
       if (sim.status === "pending")
         return h(
           "span",
-          { style: { color: "#aaa", fontSize: "12px" } },
+          { style: { color: "var(--color-text-muted)", fontSize: "12px" } },
           "等待中",
         );
       if (sim.status === "fighting")
         return h(
           "span",
-          { style: { color: "#1890ff", fontSize: "12px" } },
+          { style: { color: "var(--color-link)", fontSize: "12px" } },
           "战斗中…",
         );
       if (sim.status === "timeout")
@@ -2169,7 +2169,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
 <style scoped lang="scss">
 .peach-info-card {
-  background: #fff;
+  background: var(--color-surface);
   border-radius: 8px;
   padding: 16px;
   min-height: 400px;
@@ -2178,7 +2178,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   flex-direction: column;
   box-sizing: border-box;
   overflow: hidden;
-  /* flex 子项默认 min-width:auto，会被 1400px 的表格内容撑宽，这里显式压回去 */
+  /* flex 子项默认 min-width: auto，会被 1400px 的表格内容撑宽，这里显式压回去 */
   min-width: 0;
   max-width: 100%;
 }
@@ -2227,7 +2227,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
     .title {
       font-size: 14px;
-      color: #666;
+      color: var(--color-text-secondary);
     }
 
     .peach-date-dropdown {
@@ -2250,8 +2250,8 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
       z-index: 30;
       width: 238px;
       padding: 10px;
-      background: #ffffff;
-      border: 1px solid #d9d9d9;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
       border-radius: 6px;
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
     }
@@ -2267,9 +2267,9 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
       button {
         width: 26px;
         height: 26px;
-        border: 1px solid #d9d9d9;
+        border: 1px solid var(--color-border);
         border-radius: 4px;
-        background: #ffffff;
+        background: var(--color-surface);
         cursor: pointer;
       }
     }
@@ -2283,7 +2283,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
     .peach-calendar-weekdays {
       margin-bottom: 4px;
-      color: #6b7280;
+      color: var(--color-text-muted);
       font-size: 12px;
       text-align: center;
     }
@@ -2292,22 +2292,22 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
       height: 28px;
       border: 1px solid transparent;
       border-radius: 4px;
-      background: #ffffff;
-      color: #1f2937;
+      background: var(--color-surface);
+      color: var(--color-text-primary);
       cursor: pointer;
 
       &.outside {
-        color: #c0c4cc;
+        color: var(--color-text-muted);
       }
 
       &.selected {
-        background: #1677ff;
-        color: #ffffff;
+        background: var(--color-accent);
+        color: var(--color-accent-text);
       }
 
       &.disabled {
-        color: #c0c4cc;
-        background: #f5f5f5;
+        color: var(--color-text-muted);
+        background: var(--color-surface-muted);
         cursor: not-allowed;
       }
     }
@@ -2319,16 +2319,16 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   margin: 0 0 16px 0;
   font-size: 20px;
   font-weight: bold;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .header-section {
   text-align: center;
   margin-bottom: 20px;
-  background: linear-gradient(to bottom, #f0f7ff, #fff);
+  background: linear-gradient(to bottom, var(--color-accent-soft), var(--color-surface));
   padding: 16px;
   border-radius: 12px;
-  border: 1px solid #d6e8f7;
+  border: 1px solid var(--color-accent);
   flex-shrink: 0;
 }
 
@@ -2360,16 +2360,15 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   /* 渐变从外→内（外淡内强），制造向VS冲击的视觉效果 */
   background: linear-gradient(
     to right,
-    #d6ecf8 0%,
-    #b8d9f5 50%,
-    #8ec5ed 80%,
-    #72b8e8 100%
+    var(--color-accent-soft) 0%,
+    var(--color-accent-soft) 50%,
+    var(--color-accent) 80%,
+    var(--color-accent) 100%
   );
   border: 1px solid rgba(42, 127, 184, 0.3);
   border-radius: 20px 0 0 20px;
   padding: 14px 28px 14px 18px;
-  box-shadow:
-    inset -10px 0 20px rgba(42, 127, 184, 0.22),
+  box-shadow: inset -10px 0 20px rgba(42, 127, 184, 0.22),
     4px 0 14px rgba(42, 127, 184, 0.15);
   position: relative;
 }
@@ -2379,16 +2378,15 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   /* 渐变从外→内（外淡内强），制造向VS冲击的视觉效果 */
   background: linear-gradient(
     to left,
-    #f8d6d4 0%,
-    #f5b8b5 50%,
-    #ed8e8c 80%,
-    #e8726f 100%
+    var(--color-danger-soft) 0%,
+    var(--color-danger-soft) 50%,
+    var(--color-danger) 80%,
+    var(--color-danger) 100%
   );
   border: 1px solid rgba(193, 84, 79, 0.3);
   border-radius: 0 20px 20px 0;
   padding: 14px 18px 14px 28px;
-  box-shadow:
-    inset 10px 0 20px rgba(193, 84, 79, 0.22),
+  box-shadow: inset 10px 0 20px rgba(193, 84, 79, 0.22),
     -4px 0 14px rgba(193, 84, 79, 0.15);
   position: relative;
 }
@@ -2423,7 +2421,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 }
 
 .club-logo-inline {
-  border: 2px solid #fff;
+  border: 2px solid var(--color-surface);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   flex-shrink: 0;
 }
@@ -2442,18 +2440,18 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 .club-name {
   font-size: 18px;
   font-weight: bold;
-  color: #2c3e50;
+  color: var(--color-link);
 }
 
 .club-server {
   font-size: 18px;
   font-weight: bold;
-  color: #2c3e50;
+  color: var(--color-link);
 }
 
 .club-stats {
   font-size: 14px;
-  color: #5a7a9a;
+  color: var(--color-link);
 
   &.announcement {
     white-space: pre-wrap;
@@ -2465,29 +2463,29 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
 /* 分色：ID 和人数/战力行 */
 .club-id-text {
-  color: #7a8b99;
+  color: var(--color-text-secondary);
   font-size: 12px;
 }
 
 .club-power-text {
-  color: #5a7a9a;
+  color: var(--color-link);
 }
 
 .club-announce-text {
-  color: #8a9aaa;
+  color: var(--color-text-secondary);
   font-size: 13px;
 }
 
 /* 我方服号和名字：蓝色系 */
 .own-server,
 .own-name {
-  color: #2a7fb8;
+  color: var(--color-link);
 }
 
 /* 对手服号和名字：暖橙色系 */
 .opp-server,
 .opp-name {
-  color: #c1544f;
+  color: var(--color-danger-text);
 }
 
 .vs-badge {
@@ -2503,13 +2501,12 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   border-radius: 50%;
   background: linear-gradient(
     135deg,
-    #1a6ba0 0%,
-    #2a7fb8 40%,
-    #c1544f 60%,
-    #a03030 100%
+    var(--color-accent) 0%,
+    var(--color-accent) 40%,
+    var(--color-danger) 60%,
+    var(--color-danger) 100%
   );
-  box-shadow:
-    0 0 0 3px #fff,
+  box-shadow: 0 0 0 3px #fff,
     0 0 0 5px rgba(42, 127, 184, 0.4),
     0 4px 20px rgba(0, 0, 0, 0.25);
   font-family: "Arial Black", "Impact", "Segoe UI Black", sans-serif;
@@ -2540,26 +2537,24 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 }
 
 .vs-v {
-  color: #e8f4ff;
+  color: var(--color-link);
   font-size: 30px;
-  text-shadow:
-    0 0 8px rgba(255, 255, 255, 0.6),
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.6),
     1px 2px 4px rgba(0, 0, 0, 0.4);
   z-index: 1;
 }
 
 .vs-s {
-  color: #ffe8e8;
+  color: var(--color-danger-text);
   font-size: 30px;
-  text-shadow:
-    0 0 8px rgba(255, 200, 200, 0.6),
+  text-shadow: 0 0 8px rgba(255, 200, 200, 0.6),
     1px 2px 4px rgba(0, 0, 0, 0.4);
   z-index: 1;
 }
 
 .battle-title {
   font-size: 16px;
-  color: #666;
+  color: var(--color-text-secondary);
   margin-top: 10px;
   font-weight: bold;
 }
@@ -2600,10 +2595,10 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 .table-title {
   font-size: 16px;
   font-weight: bold;
-  color: #333;
+  color: var(--color-text-primary);
   margin-bottom: 10px;
   padding-left: 8px;
-  border-left: 4px solid #1890ff;
+  border-left: 4px solid var(--color-accent);
 }
 
 .lineup-stats {
@@ -2618,14 +2613,14 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 .enroll-count {
   font-size: 14px;
   font-weight: normal;
-  color: #666;
+  color: var(--color-text-secondary);
   margin-left: 6px;
 }
 
 .lineup-stats-label {
   font-size: 14px;
   font-weight: bold;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 :deep(.n-data-table) {
@@ -2633,15 +2628,15 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 }
 
 :deep(.n-data-table .n-data-table-th) {
-  background-color: #f0f7ff;
+  background-color: var(--color-accent-soft);
   font-weight: bold;
-  color: #2a7fb8;
+  color: var(--color-link);
 }
 
 :deep(.member-id-cell) {
   font-family: "Consolas", "Monaco", monospace;
   font-size: 14px;
-  color: #666;
+  color: var(--color-text-secondary);
   user-select: all;
 }
 
@@ -2658,25 +2653,25 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 }
 
 :deep(.sim-win-rate) {
-  color: #2a7fb8;
+  color: var(--color-link);
   font-weight: bold;
   white-space: nowrap;
 }
 
 :deep(.sim-full-rate) {
-  color: #389e0d;
+  color: var(--color-success-text);
   font-size: 11px;
   white-space: nowrap;
 }
 
 :deep(.sim-lose) {
-  color: #c1544f;
+  color: var(--color-danger-text);
   font-weight: bold;
   font-size: 12px;
 }
 
 :deep(.sim-timeout) {
-  color: #d48806;
+  color: var(--color-warning-text);
   font-size: 12px;
   font-weight: bold;
 }
@@ -2731,7 +2726,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 }
 
 :deep(.lineup-pearl-empty) {
-  color: #d9d9d9;
+  color: var(--color-text-disabled);
 }
 
 :deep(.lineup-cell) {
@@ -2746,15 +2741,15 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 }
 
 :deep(.lineup-fish-name) {
-  color: #52c41a;
+  color: var(--color-success-text);
 }
 
 :deep(.lineup-pearl-sep) {
-  color: #bfbfbf;
+  color: var(--color-text-muted);
 }
 
 :deep(.lineup-pearl-skill) {
-  color: #faad14;
+  color: var(--color-warning-text);
 }
 
 :deep(.n-data-table-td) {
@@ -2773,11 +2768,11 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 }
 
 :deep(.lineup-hero-name) {
-  color: #40a9ff;
+  color: var(--color-link);
 }
 
 :deep(.lineup-hero-red) {
-  color: #ff4d4f;
+  color: var(--color-danger-text);
 }
 
 :deep(.lineup-hero-hb) {
@@ -2785,18 +2780,18 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 }
 
 :deep(.lineup-separator) {
-  color: #bfbfbf;
+  color: var(--color-text-muted);
   white-space: nowrap;
 }
 
 :deep(.toy-name) {
-  color: #c084fc;
+  color: var(--color-link);
   font-size: 12px;
   font-weight: 600;
 }
 
 :deep(.toy-none) {
-  color: #d9d9d9;
+  color: var(--color-text-disabled);
   font-size: 12px;
 }
 
@@ -2832,25 +2827,25 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
 :deep(.pet-level) {
   font-size: 11px;
-  color: #8c8c8c;
+  color: var(--color-text-secondary);
 }
 
 :deep(.pet-none) {
-  color: #d9d9d9;
+  color: var(--color-text-disabled);
   font-size: 12px;
 }
 
 :deep(.legacy-none) {
-  color: #d9d9d9;
+  color: var(--color-text-disabled);
   font-size: 12px;
 }
 
 /* 四圣等级：填充背景的小标签 */
 :deep(.hb-badge) {
   display: inline-block;
-  background: #f6ffed;
-  border: 1px solid #b7eb8f;
-  color: #389e0d;
+  background: var(--color-success-soft);
+  border: 1px solid var(--color-success);
+  color: var(--color-success-text);
   font-size: 11px;
   font-weight: bold;
   line-height: 1.4;
@@ -2865,7 +2860,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   height: 32px;
   border-radius: 50% !important;
   object-fit: cover;
-  border: 2px solid #eee;
+  border: 2px solid var(--color-border);
   transition: all 0.2s;
   display: block;
   margin: 0 auto;
@@ -2873,7 +2868,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   &:hover {
     transform: scale(1.2);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border-color: #1890ff;
+    border-color: var(--color-accent);
   }
 }
 
@@ -2881,14 +2876,14 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   width: 32px;
   height: 32px;
   border-radius: 50% !important;
-  background: linear-gradient(135deg, #1890ff 0%, #69c0ff 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%);
+  color: var(--color-accent-text);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
   font-weight: bold;
-  border: 2px solid #eee;
+  border: 2px solid var(--color-border);
   margin: 0 auto;
 }
 
@@ -2903,11 +2898,11 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   gap: 16px;
   margin-bottom: 20px;
   padding-bottom: 15px;
-  border-bottom: 1px solid var(--border-light, #eee);
+  border-bottom: 1px solid var(--border-light, var(--color-border));
 }
 
 .player-avatar {
-  border: 2px solid var(--primary-color, #1890ff);
+  border: 2px solid var(--primary-color, var(--color-accent));
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -2920,7 +2915,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 .player-info-detail p {
   margin: 0 0 4px 0;
   font-size: var(--font-size-sm, 14px);
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary, var(--color-text-secondary));
 }
 
 .action-section {
@@ -2938,7 +2933,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
 .fight-count-label {
   font-size: var(--font-size-sm, 14px);
-  color: var(--text-primary, #333);
+  color: var(--text-primary, var(--color-text-primary));
   font-weight: var(--font-weight-medium, 500);
   white-space: nowrap;
 }
@@ -2949,21 +2944,21 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
 .fight-count-hint {
   font-size: var(--font-size-xs, 12px);
-  color: var(--text-secondary, #999);
+  color: var(--text-secondary, var(--color-text-muted));
 }
 
 .fight-count-error {
   font-size: var(--font-size-xs, 12px);
-  color: var(--error-color, #ff4d4f);
+  color: var(--error-color, var(--color-danger-text));
   margin-left: 4px;
 }
 
 .fight-progress {
   margin: 15px 0;
   padding: 15px;
-  background: var(--bg-secondary, #f9f9f9);
+  background: var(--bg-secondary, var(--color-surface-muted));
   border-radius: var(--border-radius-sm, 4px);
-  border: 1px solid var(--border-light, #eee);
+  border: 1px solid var(--border-light, var(--color-border));
 }
 
 .progress-info {
@@ -2976,22 +2971,22 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 .progress-title {
   font-size: var(--font-size-sm, 14px);
   font-weight: var(--font-weight-medium, 500);
-  color: var(--text-primary, #333);
+  color: var(--text-primary, var(--color-text-primary));
 }
 
 .progress-stats {
   display: flex;
   gap: 15px;
   font-size: var(--font-size-xs, 12px);
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary, var(--color-text-secondary));
 }
 
 .fight-result {
   margin: 15px 0;
   padding: 15px;
-  background: var(--bg-secondary, #f9f9f9);
+  background: var(--bg-secondary, var(--color-surface-muted));
   border-radius: var(--border-radius-sm, 4px);
-  border: 1px solid var(--border-light, #eee);
+  border: 1px solid var(--border-light, var(--color-border));
 }
 
 .fight-result h4 {
@@ -3014,20 +3009,20 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 }
 
 .result-label {
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary, var(--color-text-secondary));
 }
 
 .result-value {
   font-weight: var(--font-weight-medium, 500);
-  color: var(--text-primary, #333);
+  color: var(--text-primary, var(--color-text-primary));
 }
 
 .result-value.win {
-  color: var(--success-color, #52c41a);
+  color: var(--success-color, var(--color-success-text));
 }
 
 .result-value.loss {
-  color: var(--error-color, #ff4d4f);
+  color: var(--error-color, var(--color-danger-text));
 }
 
 .result-actions {
@@ -3042,8 +3037,8 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   justify-content: space-between;
   align-items: center;
   padding: 12px 20px;
-  background: var(--bg-secondary, #f9f9f9);
-  border-top: 1px solid var(--border-light, #eee);
+  background: var(--bg-secondary, var(--color-surface-muted));
+  border-top: 1px solid var(--border-light, var(--color-border));
 }
 
 /* 武将详情模态框样式 */
@@ -3063,12 +3058,12 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    background: var(--bg-secondary, #f9f9f9);
+    background: var(--bg-secondary, var(--color-surface-muted));
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    border: 2px solid var(--border-light, #eee);
+    border: 2px solid var(--border-light, var(--color-border));
 
     img {
       width: 100%;
@@ -3079,7 +3074,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
     .hero-placeholder {
       font-size: 36px;
       font-weight: var(--font-weight-bold, bold);
-      color: var(--text-secondary, #999);
+      color: var(--text-secondary, var(--color-text-muted));
     }
   }
 
@@ -3098,13 +3093,13 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
     align-items: center;
     gap: 15px;
     font-size: var(--font-size-sm, 14px);
-    color: var(--text-secondary, #666);
+    color: var(--text-secondary, var(--color-text-secondary));
 
     .stat-item {
       padding: 4px 8px;
-      background: var(--bg-secondary, #f9f9f9);
+      background: var(--bg-secondary, var(--color-surface-muted));
       border-radius: var(--border-radius-sm, 4px);
-      border: 1px solid var(--border-light, #eee);
+      border: 1px solid var(--border-light, var(--color-border));
     }
   }
 
@@ -3116,11 +3111,11 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
       .n-descriptions-item-label {
         font-weight: var(--font-weight-medium, 500);
-        color: var(--text-primary, #333);
+        color: var(--text-primary, var(--color-text-primary));
       }
 
       .n-descriptions-item-content {
-        color: var(--text-secondary, #666);
+        color: var(--text-secondary, var(--color-text-secondary));
       }
     }
   }
@@ -3149,7 +3144,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
   .equipment-label {
     font-size: var(--font-size-sm, 14px);
-    color: var(--text-primary, #333);
+    color: var(--text-primary, var(--color-text-primary));
     font-weight: var(--font-weight-medium, 500);
     width: 60px;
   }
@@ -3162,14 +3157,14 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   .equipment-slot {
     width: 20px;
     height: 20px;
-    border: 1px solid var(--border-light, #eee);
+    border: 1px solid var(--border-light, var(--color-border));
     border-radius: var(--border-radius-sm, 4px);
-    background: var(--bg-secondary, #f9f9f9);
+    background: var(--bg-secondary, var(--color-surface-muted));
   }
 
   .equipment-slot.red-slot {
-    background: var(--error-color, #ff4d4f);
-    border-color: var(--error-color, #ff4d4f);
+    background: var(--error-color, var(--color-danger));
+    border-color: var(--error-color, var(--color-danger));
   }
 
   /* 鱼灵洗练颜色块 */
@@ -3205,9 +3200,9 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 .fight-result {
   margin: 15px 0;
   padding: 15px;
-  background: var(--bg-secondary, #f9f9f9);
+  background: var(--bg-secondary, var(--color-surface-muted));
   border-radius: var(--border-radius-sm, 4px);
-  border: 1px solid var(--border-light, #eee);
+  border: 1px solid var(--border-light, var(--color-border));
 }
 
 .result-header {
@@ -3216,14 +3211,14 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   align-items: center;
   margin-bottom: 15px;
   padding-bottom: 10px;
-  border-bottom: 1px solid var(--border-light, #eee);
+  border-bottom: 1px solid var(--border-light, var(--color-border));
 }
 
 .result-title {
   margin: 0;
   font-size: var(--font-size-base, 14px);
   font-weight: var(--font-weight-bold, bold);
-  color: var(--text-primary, #333);
+  color: var(--text-primary, var(--color-text-primary));
 }
 
 .result-summary {
@@ -3240,20 +3235,20 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 }
 
 .summary-label {
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary, var(--color-text-secondary));
 }
 
 .summary-value {
   font-weight: var(--font-weight-medium, 500);
-  color: var(--text-primary, #333);
+  color: var(--text-primary, var(--color-text-primary));
 }
 
 .summary-value.win {
-  color: var(--success-color, #52c41a);
+  color: var(--success-color, var(--color-success-text));
 }
 
 .summary-value.loss {
-  color: var(--error-color, #ff4d4f);
+  color: var(--error-color, var(--color-danger-text));
 }
 
 .result-list {
@@ -3263,20 +3258,20 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 .battle-result-item {
   margin-bottom: 10px;
   padding: 12px;
-  background: var(--bg-primary, #fff);
+  background: var(--bg-primary, var(--color-surface));
   border-radius: var(--border-radius-sm, 4px);
-  border: 1px solid var(--border-light, #eee);
-  border-left: 4px solid var(--border-light, #eee);
+  border: 1px solid var(--border-light, var(--color-border));
+  border-left: 4px solid var(--border-light, var(--color-border));
   transition: all var(--transition-fast, 0.3s ease);
 }
 
 .battle-result-item.win {
-  border-left-color: var(--success-color, #52c41a);
+  border-left-color: var(--success-color, var(--color-success));
   background: rgba(82, 196, 26, 0.03);
 }
 
 .battle-result-item.loss {
-  border-left-color: var(--error-color, #ff4d4f);
+  border-left-color: var(--error-color, var(--color-danger));
   background: rgba(255, 77, 79, 0.03);
 }
 
@@ -3290,7 +3285,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 .battle-index {
   font-size: var(--font-size-sm, 14px);
   font-weight: var(--font-weight-medium, 500);
-  color: var(--text-primary, #333);
+  color: var(--text-primary, var(--color-text-primary));
 }
 
 .battle-details {
@@ -3318,26 +3313,26 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 .side-name {
   display: block;
   font-weight: var(--font-weight-medium, 500);
-  color: var(--text-primary, #333);
+  color: var(--text-primary, var(--color-text-primary));
   margin-bottom: 3px;
 }
 
 .side-power {
   display: block;
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary, var(--color-text-secondary));
   margin-bottom: 2px;
 }
 
 .side-die {
   display: block;
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary, var(--color-text-secondary));
   font-size: var(--font-size-xs, 12px);
 }
 
 .battle-vs {
   font-size: var(--font-size-sm, 14px);
   font-weight: var(--font-weight-bold, bold);
-  color: var(--text-secondary, #999);
+  color: var(--text-secondary, var(--color-text-muted));
   margin: 0 10px;
 }
 
@@ -3390,16 +3385,16 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: var(--bg-secondary, #f9f9f9);
+  background: var(--bg-secondary, var(--color-surface-muted));
   padding: 12px 16px;
   border-radius: var(--border-radius-sm, 4px);
-  border: 1px solid var(--border-light, #eee);
+  border: 1px solid var(--border-light, var(--color-border));
   transition: all var(--transition-fast, 0.3s ease);
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.1));
-    border-color: var(--primary-color, #1890ff);
+    border-color: var(--primary-color, var(--color-accent));
   }
 }
 
@@ -3420,35 +3415,35 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   flex-wrap: wrap;
   gap: 8px;
   font-size: var(--font-size-xs, 12px);
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary, var(--color-text-secondary));
 }
 
 .hero-stats span {
   padding: 2px 6px;
-  background: var(--bg-primary, #fff);
+  background: var(--bg-primary, var(--color-surface));
   border-radius: var(--border-radius-full, 99px);
-  border: 1px solid var(--border-light, #eee);
+  border: 1px solid var(--border-light, var(--color-border));
 }
 
 .hero-stats span.opened {
   background: rgba(82, 196, 26, 0.1);
-  color: var(--success-color, #52c41a);
-  border-color: var(--success-color, #52c41a);
+  color: var(--success-color, var(--color-success-text));
+  border-color: var(--success-color, var(--color-success));
 }
 
 .hero-stats span.closed {
   background: rgba(250, 173, 20, 0.1);
-  color: var(--warning-color, #faad14);
-  border-color: var(--warning-color, #faad14);
+  color: var(--warning-color, var(--color-warning-text));
+  border-color: var(--warning-color, var(--color-warning));
 }
 
 .empty-heroes {
-  background: var(--bg-secondary, #f9f9f9);
+  background: var(--bg-secondary, var(--color-surface-muted));
   padding: 30px;
   border-radius: var(--border-radius-sm, 4px);
-  border: 1px solid var(--border-light, #eee);
+  border: 1px solid var(--border-light, var(--color-border));
   text-align: center;
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary, var(--color-text-secondary));
   font-size: var(--font-size-sm, 14px);
 }
 </style>

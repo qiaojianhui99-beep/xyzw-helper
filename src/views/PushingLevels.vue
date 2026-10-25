@@ -558,7 +558,7 @@ function toggleGroup(group) {
 function groupChipStyle(group) {
   const selected = selectedGroupIds.value.includes(group.id);
   return selected
-    ? { backgroundColor: group.color, borderColor: group.color, color: "#fff" }
+    ? { backgroundColor: group.color, borderColor: group.color, color: "var(--color-accent-text)" }
     : { borderColor: group.color, color: group.color };
 }
 
@@ -1423,7 +1423,7 @@ onBeforeUnmount(() => {
   height: 100%;
   min-height: 0;
   padding: 16px;
-  background: #f6f8fb;
+  background: var(--color-accent-soft);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -1438,14 +1438,14 @@ onBeforeUnmount(() => {
 
 .pl-header h2 {
   margin: 0;
-  color: #1f2937;
+  color: var(--color-text-primary);
   font-size: 22px;
   font-weight: 700;
 }
 
 .pl-header p {
   margin: 2px 0 0;
-  color: #667085;
+  color: var(--color-text-secondary);
   font-size: 13px;
 }
 
@@ -1465,7 +1465,7 @@ onBeforeUnmount(() => {
 }
 
 .retry-label {
-  color: #667085;
+  color: var(--color-text-secondary);
   font-size: 13px;
 }
 
@@ -1497,7 +1497,7 @@ onBeforeUnmount(() => {
   border: 1px solid;
   border-radius: 999px;
   padding: 2px 8px;
-  background: #fff;
+  background: var(--color-surface);
   font-size: 11px;
   cursor: pointer;
   line-height: 1.4;
@@ -1533,28 +1533,27 @@ onBeforeUnmount(() => {
   gap: 6px;
   padding: 5px 10px;
   border-radius: 6px;
-  border: 1px solid #e4e7ec;
-  background: #fff;
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-surface);
   font-size: 12px;
   line-height: 1.4;
-  transition:
-    border-color 0.2s,
+  transition: border-color 0.2s,
     background 0.2s;
   cursor: pointer;
   min-height: 0;
 }
 
 .token-cell:hover {
-  border-color: #98a2b3;
+  border-color: var(--color-border);
 }
 
 .token-cell.selected {
-  background: #eef2ff;
-  border-color: #c7d2fe;
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent);
 }
 
 .token-server {
-  color: #667085;
+  color: var(--color-text-secondary);
   font-weight: 500;
   max-width: 140px;
   overflow: hidden;
@@ -1563,11 +1562,11 @@ onBeforeUnmount(() => {
 }
 
 .token-sep {
-  color: #98a2b3;
+  color: var(--color-text-muted);
 }
 
 .token-name {
-  color: #101828;
+  color: var(--color-link);
   font-weight: 600;
   flex: 1;
   min-width: 0;
@@ -1580,7 +1579,7 @@ onBeforeUnmount(() => {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #d0d5dd;
+  background: var(--color-surface-muted);
   display: inline-block;
   flex-shrink: 0;
   border: 1px solid rgba(0, 0, 0, 0.05);
@@ -1593,19 +1592,19 @@ onBeforeUnmount(() => {
 }
 
 .status-gray {
-  background: #d0d5dd;
+  background: var(--color-surface-muted);
 }
 
 .status-green {
-  background: #12b76a;
+  background: var(--color-success);
 }
 
 .status-red {
-  background: #f04438;
+  background: var(--color-danger);
 }
 
 .status-blue {
-  background: #2e90fa;
+  background: var(--color-accent);
   box-shadow: 0 0 0 3px rgba(46, 144, 250, 0.2);
   animation: pulse 1.2s ease-in-out infinite;
 }
@@ -1628,12 +1627,12 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  color: #344054;
+  color: var(--color-link);
   font-size: 11px;
 }
 
 .torch-label {
-  color: #667085;
+  color: var(--color-text-secondary);
 }
 
 .torch-select,
@@ -1647,7 +1646,7 @@ onBeforeUnmount(() => {
 
 .status-text {
   font-size: 13px;
-  color: #666;
+  color: var(--color-text-secondary);
   white-space: nowrap;
 }
 
@@ -1659,11 +1658,11 @@ onBeforeUnmount(() => {
 
 .running-card {
   min-height: 160px;
-  border: 1px solid #e4e7ec;
+  border: 1px solid var(--color-border-subtle);
 }
 
 .running-card.active {
-  border-color: #12b76a;
+  border-color: var(--color-success);
 }
 
 .running-head {
@@ -1692,17 +1691,17 @@ onBeforeUnmount(() => {
 .waiting-line,
 .countdown-text,
 .card-actions {
-  color: #667085;
+  color: var(--color-text-secondary);
   font-size: 12px;
   line-height: 1.6;
 }
 
 .level-line {
-  color: #344054;
+  color: var(--color-link);
 }
 
 .torch-line {
-  color: #b54708;
+  color: var(--color-warning-text);
   font-weight: 500;
 }
 
@@ -1718,7 +1717,7 @@ onBeforeUnmount(() => {
 }
 
 .countdown-text {
-  color: #1d2939;
+  color: var(--color-link);
   font-weight: 600;
   white-space: nowrap;
 }
@@ -1756,7 +1755,7 @@ onBeforeUnmount(() => {
 }
 
 .log-filter-label {
-  color: #667085;
+  color: var(--color-text-secondary);
   font-size: 12px;
   flex-shrink: 0;
 }
@@ -1766,7 +1765,7 @@ onBeforeUnmount(() => {
 }
 
 .log-filter-count {
-  color: #98a2b3;
+  color: var(--color-text-muted);
   font-size: 11px;
 }
 
@@ -1784,20 +1783,20 @@ onBeforeUnmount(() => {
   gap: 8px;
   padding: 3px 6px;
   border-radius: 4px;
-  color: #344054;
+  color: var(--color-link);
 }
 
 .log-item.success {
-  color: #047857;
+  color: var(--color-success-text);
 }
 
 .log-item.warning {
-  color: #b54708;
+  color: var(--color-warning-text);
 }
 
 .log-item.error {
-  background: #fff1f3;
-  color: #b42318;
+  background: var(--color-danger-soft);
+  color: var(--color-danger-text);
 }
 
 .log-name,

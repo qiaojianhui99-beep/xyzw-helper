@@ -1,5 +1,14 @@
 # CLAUDE.md
 
+> ⚠️ **先读 `AGENTS.md` 与 `docs/` 下三份文档（PROJECT-OVERVIEW / OPEN-CLOSED-RULES / REGRESSION-CHECKLIST）。**
+> 本项目已建立架构契约护栏：改动前后必须 `npm run verify` 全绿（契约 → lint 零警告 → 单测）。
+> 既有路由 path、localStorage 键名、store 方法名、utils 导出、命令默认 body、BON 编解码、批量默认参数
+> 一律视为对外契约，只能新增，不能悄悄修改或删除。
+>
+> 本文下方部分内容已与代码脱节（`connectWebSocket`、`disconnectAllWebSockets`、`queuedTokens`、
+> `activeConnectionCount`、`getEstimatedWaitTime`、`refreshToken` 不在 store 上；批量并发默认是 2 不是 10）。
+> 勘误表见 `docs/PROJECT-OVERVIEW.md` 第 9 节，冲突时以那份文档和实际代码为准。
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview

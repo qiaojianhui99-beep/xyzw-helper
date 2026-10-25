@@ -1,5 +1,11 @@
 <template>
-  <n-button circle size="medium" class="theme-toggle" @click="toggleTheme">
+  <n-button
+    circle
+    size="medium"
+    class="theme-toggle"
+    aria-label="切换深色/浅色主题"
+    @click="toggleTheme"
+  >
     <template #icon>
       <n-icon v-if="isDark">
         <Sunny />
@@ -20,10 +26,15 @@ const { isDark, toggleTheme } = useTheme();
 
 <style scoped lang="scss">
 .theme-toggle {
-  transition: all 0.3s ease;
+  color: var(--color-icon);
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
 
   &:hover {
-    transform: scale(1.1);
+    color: var(--color-text-primary);
+    background: var(--color-surface-hover);
   }
 }
 </style>

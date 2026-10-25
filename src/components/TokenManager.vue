@@ -563,7 +563,7 @@ const clearAllTokens = () => {
 
 <style scoped lang="scss">
 .token-manager {
-  background: white;
+  background: var(--color-surface);
   border-radius: var(--border-radius-large);
   padding: var(--spacing-lg);
   margin: var(--spacing-lg) 0;

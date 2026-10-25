@@ -59,7 +59,9 @@ export function createTasksHangUp(deps) {
           const check = () => {
             if (
               shouldStop.value ||
-              tokenStore.getWebSocketStatus(tokenId) !== "connected"
+              !["connected", "connecting"].includes(
+                tokenStore.getWebSocketStatus(tokenId),
+              )
             ) {
               const error = new Error(
                 "任务已停止或连接已断开，等待重新读取服务器状态",

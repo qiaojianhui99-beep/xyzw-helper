@@ -126,17 +126,17 @@
         size="small"
         style="margin-bottom: 12px"
       >
-        <NTabPane name="overview" tab="🏆 总览" />
-        <NTabPane name="schedule" tab="🗓 赛程" />
-        <NTabPane name="bet" tab="🎯 竞猜" />
-        <NTabPane name="vote" tab="📣 助威" />
+        <NTabPane name="overview" tab="总览" />
+        <NTabPane name="schedule" tab="赛程" />
+        <NTabPane name="bet" tab="竞猜" />
+        <NTabPane name="vote" tab="助威" />
       </NTabs>
 
       <!-- ==================== 总览 ==================== -->
       <div v-show="activeSubTab === 'overview'" class="tab-content">
         <div class="season-banner">
           <div class="banner-left">
-            <div class="banner-title">🐉 逐鹿盐山</div>
+            <div class="banner-title">逐鹿盐山</div>
             <div class="banner-sub">
               {{ formatSeason(season) }} · 第 {{ selectedRound || "-" }} 期
               <NTag v-if="selectedRoundEnded" size="tiny" round type="default"
@@ -217,7 +217,7 @@
       <!-- ==================== 赛程（当前 + 历史） ==================== -->
       <div v-show="activeSubTab === 'schedule'" class="tab-content">
         <NCard
-          :title="`🗓 第${selectedRound || '-'}期赛程`"
+          :title="`第${selectedRound || '-'}期赛程`"
           size="small"
           style="margin-bottom: 12px"
         >
@@ -251,7 +251,7 @@
           </div>
         </NCard>
 
-        <NCard title="📚 历史赛程">
+        <NCard title="历史赛程">
           <NEmpty
             v-if="scheduleGroups.length === 0 && !fetchingSchedule"
             description="暂无赛程数据"
@@ -343,7 +343,7 @@
           秒后再试；间隔由自适应限流学习得到，连续成功后会自动缩短。
         </NAlert>
         <NCard
-          :title="`🎯 ${currentBetTitle}`"
+          :title="`${currentBetTitle}`"
           size="small"
           style="margin-bottom: 12px"
         >
@@ -360,7 +360,7 @@
               class="stage-group-card"
             >
               <template #header>
-                <span class="stage-group-title">🏅 {{ grp.stageName }}</span>
+                <span class="stage-group-title">{{ grp.stageName }}</span>
                 <NTag
                   :type="guessStatusTag(grp.state)"
                   size="tiny"
@@ -499,7 +499,7 @@
           </NSpace>
         </NCard>
 
-        <NCard title="📚 历史竞猜记录">
+        <NCard title="历史竞猜记录">
           <NEmpty
             v-if="betList.length === 0"
             description="暂无历史竞猜数据"
@@ -532,7 +532,7 @@
           秒后再试；间隔由自适应限流学习得到，连续成功后会自动缩短。
         </NAlert>
         <NCard
-          :title="`📣 ${currentRoundTitle}`"
+          :title="`${currentRoundTitle}`"
           size="small"
           style="margin-bottom: 12px"
         >
@@ -572,7 +572,7 @@
                   ></div>
                 </div>
                 <div class="vote-cheer-num">
-                  🔥 {{ formatNumber(t.cheerCnt) }}
+                  {{ formatNumber(t.cheerCnt) }}
                   <NTag
                     v-if="t.level > 0"
                     size="tiny"
@@ -602,7 +602,7 @@
                 :loading="voteLoading"
                 @click="openVoteDialog(t.teamId, t.name, selectedRound)"
               >
-                {{ t.isOut ? "已淘汰" : "🚀 助威" }}
+                {{ t.isOut ? "已淘汰" : "助威" }}
               </NButton>
             </div>
           </div>
@@ -2046,7 +2046,7 @@ const betColumns = [
     width: 110,
     render: (row) =>
       h("span", {}, [
-        h("span", { style: "color:#999" }, `第${row.round ?? "?"}期 `),
+        h("span", { style: "color:var(--color-text-muted)" }, `第${row.round ?? "?"}期 `),
         row.stageName || "未知阶段",
       ]),
   },
@@ -2086,7 +2086,7 @@ const betColumns = [
         ]);
       return h(NSpace, { size: 8, align: "center" }, () => [
         side(row.team1Name, row.team1Win, row.myTeamId === row.team1Id),
-        h("span", { style: "color:#999" }, "VS"),
+        h("span", { style: "color:var(--color-text-muted)" }, "VS"),
         side(row.team2Name, row.team2Win, row.myTeamId === row.team2Id),
       ]);
     },
@@ -2180,9 +2180,9 @@ watch(
   align-items: center;
   margin-bottom: 12px;
   padding: 8px 12px;
-  background: var(--n-color-modal, #fff);
+  background: var(--n-color-modal, var(--color-surface));
   border-radius: 8px;
-  border: 1px solid var(--n-border-color, #e0e0e0);
+  border: 1px solid var(--n-border-color, var(--color-border));
 }
 
 .toolbar .left {
@@ -2202,21 +2202,21 @@ watch(
 }
 
 .match-card {
-  border-left: 3px solid var(--n-primary-color, #18a058);
+  border-left: 3px solid var(--n-primary-color, var(--color-success));
 }
 
 .stage-group-card {
-  border-left: 3px solid var(--n-primary-color, #18a058);
+  border-left: 3px solid var(--n-primary-color, var(--color-success));
 }
 .stage-group-title {
   font-weight: 700;
-  color: var(--n-primary-color, #18a058);
+  color: var(--n-primary-color, var(--color-success-text));
 }
 .match-card-inner {
-  border: 1px solid var(--n-border-color, #eee);
+  border: 1px solid var(--n-border-color, var(--color-border));
   border-radius: 8px;
   padding: 10px 12px;
-  background: var(--n-color-embedded, #fafafa);
+  background: var(--n-color-embedded, var(--color-surface-muted));
 }
 
 .match-row {
@@ -2236,7 +2236,7 @@ watch(
 }
 
 .team-block.win .team-name {
-  color: var(--n-success-color, #18a058);
+  color: var(--n-success-color, var(--color-success-text));
   font-weight: 700;
 }
 
@@ -2254,21 +2254,21 @@ watch(
 
 .team-meta {
   font-size: 12px;
-  color: var(--n-text-color-3, #999);
+  color: var(--n-text-color-3, var(--color-text-muted));
   margin-top: 2px;
 }
 
 .vs {
   font-size: 16px;
   font-weight: 800;
-  color: var(--n-error-color, #d03050);
+  color: var(--n-error-color, var(--color-danger-text));
   flex-shrink: 0;
 }
 
 /* 助威对话框 */
 .vote-dialog-tip {
   font-size: 13px;
-  color: var(--n-text-color-2, #666);
+  color: var(--n-text-color-2, var(--color-text-secondary));
   line-height: 1.6;
 }
 
@@ -2285,7 +2285,7 @@ watch(
   font-weight: 700;
   min-width: 64px;
   text-align: center;
-  color: var(--n-primary-color, #18a058);
+  color: var(--n-primary-color, var(--color-success-text));
 }
 
 /* 赛季横幅 */
@@ -2295,8 +2295,8 @@ watch(
   align-items: center;
   padding: 20px 24px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 45%, #0f3460 100%);
-  color: #fff;
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 45%, var(--color-accent) 100%);
+  color: var(--color-accent-text);
   position: relative;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(15, 52, 96, 0.35);
@@ -2314,7 +2314,7 @@ watch(
   font-size: 26px;
   font-weight: 800;
   letter-spacing: 2px;
-  background: linear-gradient(90deg, #ffd76e, #ff9a3c);
+  background: linear-gradient(90deg, var(--color-warning), var(--color-warning));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -2333,7 +2333,7 @@ watch(
 .banner-num {
   font-size: 26px;
   font-weight: 800;
-  color: #ffd76e;
+  color: var(--color-warning-text);
 }
 .banner-label {
   font-size: 12px;
@@ -2348,10 +2348,9 @@ watch(
   gap: 12px;
   padding: 16px;
   border-radius: 12px;
-  color: #fff;
+  color: var(--color-accent-text);
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
-  transition:
-    transform 0.2s,
+  transition: transform 0.2s,
     box-shadow 0.2s;
 }
 .stat-card:hover {
@@ -2381,16 +2380,16 @@ watch(
   font-family: "DIN", "Helvetica Neue", sans-serif;
 }
 .sc-blue {
-  background: linear-gradient(135deg, #54a0ff, #2e86de);
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent));
 }
 .sc-cyan {
-  background: linear-gradient(135deg, #00d2d3, #0abde3);
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent));
 }
 .sc-pink {
-  background: linear-gradient(135deg, #f368e0, #d63031);
+  background: linear-gradient(135deg, var(--color-accent), var(--color-danger));
 }
 .sc-gold {
-  background: linear-gradient(135deg, #f6b93b, #e58e26);
+  background: linear-gradient(135deg, var(--color-warning), var(--color-warning));
 }
 
 /* 赛程时间线 */
@@ -2403,15 +2402,15 @@ watch(
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  background: var(--n-color-embedded, #f6f8fa);
-  border: 1px solid var(--n-border-color, #e8e8e8);
+  background: var(--n-color-embedded, var(--color-surface-muted));
+  border: 1px solid var(--n-border-color, var(--color-border));
   border-radius: 10px;
   padding: 10px 14px;
   min-width: 168px;
   transition: border-color 0.2s;
 }
 .stage-node.active {
-  border-color: #ff6b6b;
+  border-color: var(--color-danger);
   background: linear-gradient(
     135deg,
     rgba(255, 107, 107, 0.12),
@@ -2426,12 +2425,12 @@ watch(
   opacity: 0.45;
 }
 .stage-dot {
-  color: #b2bec3;
+  color: var(--color-text-muted);
   font-size: 12px;
   line-height: 18px;
 }
 .stage-node.active .stage-dot {
-  color: #ff6b6b;
+  color: var(--color-danger-text);
   animation: pulse 1.4s infinite;
 }
 @keyframes pulse {
@@ -2452,12 +2451,12 @@ watch(
 }
 .stage-date {
   font-size: 12px;
-  color: var(--n-text-color-3, #888);
+  color: var(--n-text-color-3, var(--color-text-muted));
   margin-top: 2px;
 }
 .stage-sids {
   font-size: 11px;
-  color: var(--n-text-color-3, #aaa);
+  color: var(--n-text-color-3, var(--color-text-muted));
   margin-top: 2px;
 }
 
@@ -2483,11 +2482,10 @@ watch(
   border-radius: 12px;
   padding: 12px;
   text-align: center;
-  background: linear-gradient(160deg, #fff 50%, #f8f9fa 100%);
-  border: 1px solid var(--n-border-color, #e8e8e8);
+  background: linear-gradient(160deg, var(--color-surface) 50%, var(--color-surface) 100%);
+  border: 1px solid var(--n-border-color, var(--color-border));
   position: relative;
-  transition:
-    transform 0.2s,
+  transition: transform 0.2s,
     box-shadow 0.2s;
 }
 .vote-team-card:hover {
@@ -2500,7 +2498,7 @@ watch(
   left: 10px;
   font-size: 14px;
   font-weight: 800;
-  color: var(--rank-color, #576574);
+  color: var(--rank-color, var(--color-text-secondary));
 }
 .vote-name {
   font-size: 14px;
@@ -2511,7 +2509,7 @@ watch(
 }
 .vote-meta {
   font-size: 11px;
-  color: var(--n-text-color-3, #888);
+  color: var(--n-text-color-3, var(--color-text-muted));
   margin-top: 3px;
 }
 .vote-cheer {
@@ -2520,22 +2518,22 @@ watch(
 .vote-cheer-bar {
   height: 6px;
   border-radius: 3px;
-  background: #eceff1;
+  background: var(--color-surface-muted);
   overflow: hidden;
 }
 .vote-cheer-fill {
   height: 100%;
   border-radius: 3px;
-  background: linear-gradient(90deg, #ff9f43, #ff6b6b);
+  background: linear-gradient(90deg, var(--color-warning), var(--color-danger));
   transition: width 0.6s ease;
 }
 .vote-cheer-num {
   font-size: 11px;
-  color: var(--n-text-color-2, #666);
+  color: var(--n-text-color-2, var(--color-text-secondary));
   margin-top: 4px;
 }
 .my-vote {
   margin-left: 6px;
-  color: var(--n-primary-color, #18a058);
+  color: var(--n-primary-color, var(--color-success-text));
 }
 </style>

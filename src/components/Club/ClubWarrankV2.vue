@@ -307,7 +307,7 @@
               <n-tag
                 v-if="playerInfo.legacy > 0"
                 :style="{
-                  color: '#fff',
+                  color: 'var(--color-accent-text)',
                   backgroundColor: legacycolor[playerInfo.legacy]?.value,
                 }"
                 size="small"
@@ -520,7 +520,7 @@
           <div
             v-if="playerInfo.heroList"
             class="debug-info"
-            style="font-size: 12px; color: #999; margin-bottom: 10px"
+            style="font-size: 12px; color: var(--color-text-muted); margin-bottom: 10px"
           >
             武将数量: {{ playerInfo.heroList.length }}
           </div>
@@ -562,11 +562,11 @@
             <!-- 添加调试信息 -->
             <div
               v-if="playerInfo.heroList"
-              style="font-size: 12px; color: #999; margin-top: 10px"
+              style="font-size: 12px; color: var(--color-text-muted); margin-top: 10px"
             >
               武将列表为空
             </div>
-            <div v-else style="font-size: 12px; color: #999; margin-top: 10px">
+            <div v-else style="font-size: 12px; color: var(--color-text-muted); margin-top: 10px">
               武将列表未定�?
             </div>
           </div>
@@ -1189,7 +1189,7 @@ const saltTableColumns = [
                     height: "42px",
                     borderRadius: "50%",
                     objectFit: "cover",
-                    border: "2px solid #e5e7eb",
+                    border: "2px solid var(--color-border)",
                   },
                 })
               : h(
@@ -1207,7 +1207,7 @@ const saltTableColumns = [
                       color: "white",
                       background:
                         "linear-gradient(135deg, #1677ff 0%, #4096ff 100%)",
-                      border: "2px solid #e5e7eb",
+                      border: "2px solid var(--color-border)",
                     },
                   },
                   row.name?.charAt(0) || "?",
@@ -1305,9 +1305,9 @@ const saltTableColumns = [
                 gap: "6px",
                 width: "170px",
                 padding: "5px 5px 5px 5px",
-                background: "#ffffff",
+                background: "var(--color-surface)",
                 borderRadius: "8px",
-                border: "1px solid #e5e7eb",
+                border: "1px solid var(--color-border)",
                 flexShrink: "0",
               },
             },
@@ -1337,7 +1337,7 @@ const saltTableColumns = [
                           minHeight: "36px",
                           borderRadius: "50%",
                           objectFit: "cover",
-                          border: "2px solid #e5e7eb",
+                          border: "2px solid var(--color-border)",
                           display: "block",
                           flexShrink: "0",
                         },
@@ -1359,7 +1359,7 @@ const saltTableColumns = [
                             color: "white",
                             background:
                               "linear-gradient(135deg, #1677ff 0%, #4096ff 100%)",
-                            border: "2px solid #e5e7eb",
+                            border: "2px solid var(--color-border)",
                             flexShrink: "0",
                           },
                         },
@@ -1398,7 +1398,7 @@ const saltTableColumns = [
                           style: {
                             fontSize: "11px",
                             fontWeight: "500",
-                            color: "#1f2937",
+                            color: "var(--color-text-primary)",
                             overflow: "hidden",
                             textOverflow: "ellipsis",
                             whiteSpace: "nowrap",
@@ -1444,7 +1444,7 @@ const saltTableColumns = [
                         {
                           style: {
                             fontSize: "11px",
-                            color: "#6b7280",
+                            color: "var(--color-text-muted)",
                             whiteSpace: "nowrap",
                             minWidth: "50px",
                             flexShrink: "0",
@@ -1465,7 +1465,7 @@ const saltTableColumns = [
                             fontWeight: "500",
                             marginLeft: "auto",
                             flexShrink: "0",
-                            color: "#ef4444",
+                            color: "var(--color-danger-text)",
                           },
                         },
                         `${hero.redQuench}红`,
@@ -1576,7 +1576,7 @@ const getHeroInfo = (heroObj) => {
 const getLineupTagStyle = (lineupType) => {
   const rule = LINEUP_RULES.find((item) => item.name === lineupType);
   const colorProps = rule?.colorProps || {
-    color: "#f5f5f5",
+    color: "var(--color-text-disabled)",
     textColor: "#666",
   };
 
@@ -3555,8 +3555,8 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
       :deep(.stat-date-picker) {
         width: 132px;
-        border-color: #91caff;
-        background: #ffffff;
+        border-color: var(--color-accent);
+        background: var(--color-surface);
       }
 
       .stat-date-dropdown {
@@ -3579,8 +3579,8 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
         z-index: 30;
         width: 238px;
         padding: 10px;
-        background: #ffffff;
-        border: 1px solid #d9d9d9;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
         border-radius: 6px;
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
       }
@@ -3596,9 +3596,9 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
         button {
           width: 26px;
           height: 26px;
-          border: 1px solid #d9d9d9;
+          border: 1px solid var(--color-border);
           border-radius: 4px;
-          background: #ffffff;
+          background: var(--color-surface);
           cursor: pointer;
         }
       }
@@ -3612,7 +3612,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
       .stat-calendar-weekdays {
         margin-bottom: 4px;
-        color: #6b7280;
+        color: var(--color-text-muted);
         font-size: 12px;
         text-align: center;
       }
@@ -3621,22 +3621,22 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
         height: 28px;
         border: 1px solid transparent;
         border-radius: 4px;
-        background: #ffffff;
-        color: #1f2937;
+        background: var(--color-surface);
+        color: var(--color-text-primary);
         cursor: pointer;
 
         &.outside {
-          color: #c0c4cc;
+          color: var(--color-text-muted);
         }
 
         &.selected {
-          background: #1677ff;
-          color: #ffffff;
+          background: var(--color-accent);
+          color: var(--color-accent-text);
         }
 
         &.disabled {
-          color: #c0c4cc;
-          background: #f5f5f5;
+          color: var(--color-text-muted);
+          background: var(--color-surface-muted);
           cursor: not-allowed;
         }
       }
@@ -3704,7 +3704,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
       &.export-btn {
         background: var(--primary-color);
-        color: white;
+        color: var(--color-accent-text);
 
         &:hover {
           background: var(--primary-color-hover);
@@ -3718,7 +3718,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
         &:hover {
           background: var(--info-color-hover);
-          color: white;
+          color: var(--color-accent-text);
         }
       }
     }
@@ -3727,8 +3727,8 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
 // 公告区域
 .announcement-section {
-  background: #bae0ff;
-  border: 1px solid #1677ff;
+  background: var(--color-accent-soft);
+  border: 1px solid var(--color-accent);
   padding: var(--spacing-md);
   margin-bottom: var(--spacing-sm);
   border-radius: 8px;
@@ -3743,7 +3743,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
     flex-wrap: wrap;
 
     .announcement-text {
-      color: #8b4513;
+      color: var(--color-warning-text);
       font-size: 22px !important;
       font-weight: var(--font-weight-bold);
       text-align: center;
@@ -3798,18 +3798,18 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
     // 全部 - 蓝色
     &.alliance-all {
-      background: #f3f4f6;
-      border-color: #d1d5db;
-      color: #374151;
+      background: var(--color-surface-muted);
+      border-color: var(--color-border-strong);
+      color: var(--color-text-secondary);
 
       &:hover {
-        background: #e5e7eb;
+        background: var(--color-surface-hover);
       }
 
       &.active {
-        background: #e5e7eb;
-        color: #111827;
-        border-color: #9ca3af;
+        background: var(--color-surface-hover);
+        color: var(--color-text-primary);
+        border-color: var(--color-border);
       }
     }
 
@@ -3817,7 +3817,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
     &.alliance-dalianmeng {
       background: rgba(82, 196, 26, 0.18);
       border-color: rgba(82, 196, 26, 0.2);
-      color: #237804;
+      color: var(--color-success-text);
 
       &:hover {
         background: rgba(82, 196, 26, 0.22);
@@ -3825,7 +3825,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
       &.active {
         background: rgba(82, 196, 26, 0.26);
-        color: #135200;
+        color: var(--color-success-text);
         border-color: rgba(82, 196, 26, 0.38);
       }
     }
@@ -3834,7 +3834,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
     &.alliance-mengmeng {
       background: rgba(250, 173, 20, 0.2);
       border-color: rgba(250, 173, 20, 0.22);
-      color: #ad6800;
+      color: var(--color-warning-text);
 
       &:hover {
         background: rgba(250, 173, 20, 0.24);
@@ -3842,7 +3842,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
       &.active {
         background: rgba(250, 173, 20, 0.28);
-        color: #873800;
+        color: var(--color-warning-text);
         border-color: rgba(250, 173, 20, 0.4);
       }
     }
@@ -3851,7 +3851,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
     &.alliance-zhengyi {
       background: rgba(245, 34, 45, 0.18);
       border-color: rgba(245, 34, 45, 0.2);
-      color: #cf1322;
+      color: var(--color-danger-text);
 
       &:hover {
         background: rgba(245, 34, 45, 0.22);
@@ -3859,7 +3859,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
       &.active {
         background: rgba(245, 34, 45, 0.26);
-        color: #a8071a;
+        color: var(--color-danger-text);
         border-color: rgba(245, 34, 45, 0.36);
       }
     }
@@ -3868,7 +3868,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
     &.alliance-longmeng {
       background: rgba(114, 46, 209, 0.18);
       border-color: rgba(114, 46, 209, 0.2);
-      color: #531dab;
+      color: var(--color-link);
 
       &:hover {
         background: rgba(114, 46, 209, 0.22);
@@ -3876,7 +3876,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
       &.active {
         background: rgba(114, 46, 209, 0.26);
-        color: #391085;
+        color: var(--color-link);
         border-color: rgba(114, 46, 209, 0.36);
       }
     }
@@ -3885,7 +3885,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
     &.alliance-ximeng {
       background: rgba(19, 194, 194, 0.18);
       border-color: rgba(19, 194, 194, 0.2);
-      color: #08979c;
+      color: var(--color-link);
 
       &:hover {
         background: rgba(19, 194, 194, 0.22);
@@ -3893,25 +3893,25 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
       &.active {
         background: rgba(19, 194, 194, 0.26);
-        color: #006d75;
+        color: var(--color-link);
         border-color: rgba(19, 194, 194, 0.38);
       }
     }
 
     // 未知联盟 - 默认白色
     &.alliance-unknown {
-      background: #ffffff;
-      border-color: #d9d9d9;
-      color: #4b5563;
+      background: var(--color-surface);
+      border-color: var(--color-border);
+      color: var(--color-text-secondary);
 
       &:hover {
-        background: #f9fafb;
+        background: var(--color-surface-muted);
       }
 
       &.active {
-        background: #f3f4f6;
-        color: #111827;
-        border-color: #d1d5db;
+        background: var(--color-surface-muted);
+        color: var(--color-text-primary);
+        border-color: var(--color-border-strong);
       }
     }
 
@@ -3930,7 +3930,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
       .alliance-tab.active & {
         background: rgba(255, 255, 255, 0.3);
-        color: white;
+        color: var(--color-accent-text);
       }
     }
   }
@@ -4102,50 +4102,50 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
       // 联盟样式�?
       &.alliance-large {
         .alliance-tag {
-          background: #52c41a;
+          background: var(--color-success);
         }
       }
 
       &.alliance-dream {
         .alliance-tag {
-          background: #faad14;
+          background: var(--color-warning);
         }
       }
 
       &.alliance-xin-justice {
         .alliance-tag {
-          background: #f5222d;
+          background: var(--color-danger);
         }
       }
 
       &.alliance-dragon {
         .alliance-tag {
-          background: #722ed1;
+          background: var(--color-accent);
         }
       }
 
       &.alliance-xi {
         .alliance-tag {
-          background: #13c2c2;
+          background: var(--color-accent);
         }
       }
 
       &.alliance-unknown {
         .alliance-tag {
-          background: #f3f4f6;
-          color: #4b5563;
+          background: var(--color-surface-muted);
+          color: var(--color-text-secondary);
         }
       }
 
       &.alliance-other {
         .alliance-tag {
-          background: #1677ff;
+          background: var(--color-accent);
         }
       }
 
       &.alliance-all {
         .alliance-tag {
-          background: #1677ff;
+          background: var(--color-accent);
         }
       }
     }
@@ -4187,7 +4187,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
           justify-content: center;
           font-weight: bold;
           font-size: var(--font-size-base);
-          color: white;
+          color: var(--color-accent-text);
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
           margin: 0 6px;
 
@@ -4204,7 +4204,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
           }
 
           &.silver {
-            background: linear-gradient(135deg, #c0c0c0 0%, #a9a9a9 100%);
+            background: linear-gradient(135deg, var(--color-surface-hover) 0%, var(--color-surface-hover) 100%);
 
             &::before {
               content: "2";
@@ -4238,7 +4238,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
           border-radius: var(--border-radius-full);
           font-size: var(--font-size-xs);
           font-weight: var(--font-weight-bold);
-          color: white;
+          color: var(--color-accent-text);
           text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
           transition: all var(--transition-fast);
 
@@ -4353,7 +4353,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
               var(--primary-color) 0%,
               var(--primary-color-light) 100%
             );
-            color: white;
+            color: var(--color-accent-text);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -4451,7 +4451,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
             var(--primary-color-light) 0%,
             var(--primary-color) 100%
           );
-          color: white;
+          color: var(--color-accent-text);
           border-radius: var(--border-radius-full);
           font-weight: var(--font-weight-bold);
           font-size: var(--font-size-sm);
@@ -4509,9 +4509,9 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   }
 
   :deep(.n-data-table-th) {
-    background: #f3f4f6 !important;
-    border-color: #d1d5db !important;
-    color: #374151 !important;
+    background: var(--color-surface-muted) !important;
+    border-color: var(--color-border-strong) !important;
+    color: var(--color-text-secondary) !important;
     text-align: center !important;
     white-space: nowrap !important;
   }
@@ -4523,7 +4523,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
   :deep(.n-data-table-th:not(:last-child)),
   :deep(.n-data-table-td:not(:last-child)) {
-    border-right: 1px dashed #d1d5db !important;
+    border-right: 1px dashed var(--color-border-strong) !important;
   }
 
   :deep(.n-data-table-table) {
@@ -4549,8 +4549,8 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background: #60a5fa;
-    color: #ffffff;
+    background: var(--color-accent);
+    color: var(--color-accent-text);
     font-size: 12px;
     font-weight: 700;
     line-height: 1;
@@ -4582,8 +4582,8 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   }
 
   :deep(.salt-club-name-cell.is-current-club) {
-    background: #fff0f6;
-    border-color: #eb2f96;
+    background: var(--color-accent-soft);
+    border-color: var(--color-accent);
     box-shadow: inset 0 0 0 1px rgba(235, 47, 150, 0.16);
   }
 
@@ -4599,7 +4599,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    color: #1f2937;
+    color: var(--color-text-primary);
     font-size: 14px;
     font-weight: 500;
   }
@@ -4614,8 +4614,8 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   :deep(.current-club-badge) {
     padding: 2px 5px;
     border-radius: 999px;
-    background: #eb2f96;
-    color: #ffffff;
+    background: var(--color-accent);
+    color: var(--color-accent-text);
     font-size: 9px;
     font-weight: 700;
     line-height: 1;
@@ -4625,43 +4625,43 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   :deep(.alliance-tag-dalianmeng) {
     background: rgba(82, 196, 26, 0.18);
     border-color: rgba(82, 196, 26, 0.2);
-    color: #237804;
+    color: var(--color-success-text);
   }
 
   :deep(.alliance-tag-mengmeng) {
     background: rgba(250, 173, 20, 0.2);
     border-color: rgba(250, 173, 20, 0.22);
-    color: #ad6800;
+    color: var(--color-warning-text);
   }
 
   :deep(.alliance-tag-zhengyi) {
     background: rgba(245, 34, 45, 0.18);
     border-color: rgba(245, 34, 45, 0.2);
-    color: #cf1322;
+    color: var(--color-danger-text);
   }
 
   :deep(.alliance-tag-longmeng) {
     background: rgba(114, 46, 209, 0.18);
     border-color: rgba(114, 46, 209, 0.2);
-    color: #531dab;
+    color: var(--color-link);
   }
 
   :deep(.alliance-tag-ximeng) {
     background: rgba(19, 194, 194, 0.18);
     border-color: rgba(19, 194, 194, 0.2);
-    color: #08979c;
+    color: var(--color-link);
   }
 
   :deep(.alliance-tag-unknown) {
-    background: #ffffff;
-    border-color: #d9d9d9;
-    color: #4b5563;
+    background: var(--color-surface);
+    border-color: var(--color-border);
+    color: var(--color-text-secondary);
   }
 
   :deep(.alliance-tag-other) {
-    background: #f3f4f6;
-    border-color: #d1d5db;
-    color: #374151;
+    background: var(--color-surface-muted);
+    border-color: var(--color-border-strong);
+    color: var(--color-text-secondary);
   }
 
   :deep(img) {
@@ -4681,7 +4681,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   :deep(.salt-fetch-time-footer-row .n-data-table-td),
   :deep(.salt-fetch-time-footer-row .n-data-table-cell),
   :deep(.salt-alliance-group-row .n-data-table-cell) {
-    background: #ffffff !important;
+    background: var(--color-surface) !important;
   }
 
   :deep(.salt-alliance-group-row > td),
@@ -4702,7 +4702,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
     width: 100%;
     padding-right: 8px;
     text-align: right;
-    color: #4b5563;
+    color: var(--color-text-secondary);
     font-size: 13px;
     font-weight: 500;
     white-space: nowrap;
@@ -4757,63 +4757,63 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   }
 
   :deep(.salt-alliance-group-row-0 .salt-alliance-group-line) {
-    color: #237804;
+    color: var(--color-success-text);
   }
 
   :deep(.salt-alliance-group-row-0 .salt-alliance-group-label) {
     background: rgba(82, 196, 26, 0.18);
     border-color: rgba(82, 196, 26, 0.2);
-    color: #237804;
+    color: var(--color-success-text);
   }
 
   :deep(.salt-alliance-group-row-1 .salt-alliance-group-line) {
-    color: #ad6800;
+    color: var(--color-warning-text);
   }
 
   :deep(.salt-alliance-group-row-1 .salt-alliance-group-label) {
     background: rgba(250, 173, 20, 0.2);
     border-color: rgba(250, 173, 20, 0.22);
-    color: #ad6800;
+    color: var(--color-warning-text);
   }
 
   :deep(.salt-alliance-group-row-2 .salt-alliance-group-line) {
-    color: #cf1322;
+    color: var(--color-danger-text);
   }
 
   :deep(.salt-alliance-group-row-2 .salt-alliance-group-label) {
     background: rgba(245, 34, 45, 0.18);
     border-color: rgba(245, 34, 45, 0.2);
-    color: #cf1322;
+    color: var(--color-danger-text);
   }
 
   :deep(.salt-alliance-group-row-3 .salt-alliance-group-line) {
-    color: #531dab;
+    color: var(--color-link);
   }
 
   :deep(.salt-alliance-group-row-3 .salt-alliance-group-label) {
     background: rgba(114, 46, 209, 0.18);
     border-color: rgba(114, 46, 209, 0.2);
-    color: #531dab;
+    color: var(--color-link);
   }
 
   :deep(.salt-alliance-group-row-4 .salt-alliance-group-line) {
-    color: #08979c;
+    color: var(--color-link);
   }
 
   :deep(.salt-alliance-group-row-4 .salt-alliance-group-label) {
     background: rgba(19, 194, 194, 0.18);
     border-color: rgba(19, 194, 194, 0.2);
-    color: #08979c;
+    color: var(--color-link);
   }
 
   :deep(.salt-alliance-group-row-5 .salt-alliance-group-line) {
-    color: #9ca3af;
+    color: var(--color-text-muted);
   }
 
   :deep(.salt-alliance-group-row-5 .salt-alliance-group-label) {
-    background: #ffffff;
-    border-color: #d9d9d9;
-    color: #4b5563;
+    background: var(--color-surface);
+    border-color: var(--color-border);
+    color: var(--color-text-secondary);
   }
 
   :deep(.salt-alliance-row-0),
@@ -4890,14 +4890,14 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
   :deep(.salt-alliance-row-5 > td),
   :deep(.salt-alliance-row-5 .n-data-table-td),
   :deep(.salt-alliance-row-5 .n-data-table-cell) {
-    background-color: #ffffff !important;
+    background-color: var(--color-surface) !important;
   }
 
   :deep(.salt-alliance-row-5:hover),
   :deep(.salt-alliance-row-5:hover > td),
   :deep(.salt-alliance-row-5:hover .n-data-table-td),
   :deep(.salt-alliance-row-5:hover .n-data-table-cell) {
-    background-color: #f9fafb !important;
+    background-color: var(--color-surface-muted) !important;
   }
 }
 
@@ -5010,9 +5010,9 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
     }
 
     :deep(.n-data-table-th) {
-      background: #f3f4f6 !important;
-      border-color: #d1d5db !important;
-      color: #374151 !important;
+      background: var(--color-surface-muted) !important;
+      border-color: var(--color-border-strong) !important;
+      color: var(--color-text-secondary) !important;
       text-align: center !important;
       white-space: nowrap !important;
     }
@@ -5024,7 +5024,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
     :deep(.n-data-table-th:not(:last-child)),
     :deep(.n-data-table-td:not(:last-child)) {
-      border-right: 1px dashed #d1d5db !important;
+      border-right: 1px dashed var(--color-border-strong) !important;
     }
 
     :deep(.n-data-table-table) {
@@ -5046,7 +5046,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
     :deep(.salt-fetch-time-footer-row .n-data-table-td),
     :deep(.salt-fetch-time-footer-row .n-data-table-cell),
     :deep(.salt-alliance-group-row .n-data-table-cell) {
-      background: #ffffff !important;
+      background: var(--color-surface) !important;
     }
 
     :deep(.salt-alliance-group-row > td),
@@ -5067,7 +5067,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
       width: 100%;
       padding-right: 8px;
       text-align: right;
-      color: #4b5563;
+      color: var(--color-text-secondary);
       font-size: 13px;
       font-weight: 500;
       white-space: nowrap;
@@ -5122,63 +5122,63 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
     }
 
     :deep(.salt-alliance-group-row-0 .salt-alliance-group-line) {
-      color: #237804;
+      color: var(--color-success-text);
     }
 
     :deep(.salt-alliance-group-row-0 .salt-alliance-group-label) {
       background: rgba(82, 196, 26, 0.18);
       border-color: rgba(82, 196, 26, 0.2);
-      color: #237804;
+      color: var(--color-success-text);
     }
 
     :deep(.salt-alliance-group-row-1 .salt-alliance-group-line) {
-      color: #ad6800;
+      color: var(--color-warning-text);
     }
 
     :deep(.salt-alliance-group-row-1 .salt-alliance-group-label) {
       background: rgba(250, 173, 20, 0.2);
       border-color: rgba(250, 173, 20, 0.22);
-      color: #ad6800;
+      color: var(--color-warning-text);
     }
 
     :deep(.salt-alliance-group-row-2 .salt-alliance-group-line) {
-      color: #cf1322;
+      color: var(--color-danger-text);
     }
 
     :deep(.salt-alliance-group-row-2 .salt-alliance-group-label) {
       background: rgba(245, 34, 45, 0.18);
       border-color: rgba(245, 34, 45, 0.2);
-      color: #cf1322;
+      color: var(--color-danger-text);
     }
 
     :deep(.salt-alliance-group-row-3 .salt-alliance-group-line) {
-      color: #531dab;
+      color: var(--color-link);
     }
 
     :deep(.salt-alliance-group-row-3 .salt-alliance-group-label) {
       background: rgba(114, 46, 209, 0.18);
       border-color: rgba(114, 46, 209, 0.2);
-      color: #531dab;
+      color: var(--color-link);
     }
 
     :deep(.salt-alliance-group-row-4 .salt-alliance-group-line) {
-      color: #08979c;
+      color: var(--color-link);
     }
 
     :deep(.salt-alliance-group-row-4 .salt-alliance-group-label) {
       background: rgba(19, 194, 194, 0.18);
       border-color: rgba(19, 194, 194, 0.2);
-      color: #08979c;
+      color: var(--color-link);
     }
 
     :deep(.salt-alliance-group-row-5 .salt-alliance-group-line) {
-      color: #9ca3af;
+      color: var(--color-text-muted);
     }
 
     :deep(.salt-alliance-group-row-5 .salt-alliance-group-label) {
-      background: #ffffff;
-      border-color: #d9d9d9;
-      color: #4b5563;
+      background: var(--color-surface);
+      border-color: var(--color-border);
+      color: var(--color-text-secondary);
     }
 
     :deep(.salt-alliance-row-0),
@@ -5255,14 +5255,14 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
     :deep(.salt-alliance-row-5 > td),
     :deep(.salt-alliance-row-5 .n-data-table-td),
     :deep(.salt-alliance-row-5 .n-data-table-cell) {
-      background-color: #ffffff !important;
+      background-color: var(--color-surface) !important;
     }
 
     :deep(.salt-alliance-row-5:hover),
     :deep(.salt-alliance-row-5:hover > td),
     :deep(.salt-alliance-row-5:hover .n-data-table-td),
     :deep(.salt-alliance-row-5:hover .n-data-table-cell) {
-      background-color: #f9fafb !important;
+      background-color: var(--color-surface-muted) !important;
     }
 
     .rank-badge {
@@ -5273,23 +5273,26 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
       height: 24px;
       border-radius: 50%;
       font-weight: bold;
-      color: white;
+      color: var(--color-accent-text);
       font-size: 12px;
 
       &.gold {
         background: linear-gradient(135deg, #ffd700, #ffb700);
         box-shadow: 0 2px 4px rgba(255, 215, 0, 0.4);
-      }
+  color: var(--color-rank-text);
+}
 
       &.silver {
-        background: linear-gradient(135deg, #c0c0c0, #a8a8a8);
+        background: linear-gradient(135deg, var(--color-surface-hover), var(--color-surface-hover));
         box-shadow: 0 2px 4px rgba(192, 192, 192, 0.4);
-      }
+  color: var(--color-text-primary);
+}
 
       &.bronze {
         background: linear-gradient(135deg, #cd7f32, #b87333);
         box-shadow: 0 2px 4px rgba(205, 127, 50, 0.4);
-      }
+  color: var(--color-rank-text);
+}
     }
 
     .rank-number {
@@ -5320,9 +5323,9 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
       gap: 8px !important;
       width: 140px !important;
       padding: 8px !important;
-      background: #f3f4f6 !important;
+      background: var(--color-surface-muted) !important;
       border-radius: 8px !important;
-      border: 1px solid #e5e7eb !important;
+      border: 1px solid var(--color-border) !important;
       flex-shrink: 0 !important;
     }
 
@@ -5339,7 +5342,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
       height: 30px !important;
       border-radius: 50% !important;
       object-fit: cover !important;
-      border: 2px solid #e5e7eb !important;
+      border: 2px solid var(--color-border) !important;
     }
 
     .hero-info {
@@ -5369,7 +5372,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
         var(--primary-color) 0%,
         var(--primary-color-light) 100%
       );
-      color: white;
+      color: var(--color-accent-text);
 
       .table-cell {
         padding: var(--spacing-sm) var(--spacing-md);
@@ -5440,7 +5443,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
                 var(--primary-color) 0%,
                 var(--primary-color-light) 100%
               );
-              color: white;
+              color: var(--color-accent-text);
               display: flex;
               align-items: center;
               justify-content: center;
@@ -5525,7 +5528,7 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
                 var(--primary-color) 0%,
                 var(--primary-color-light) 100%
               );
-              color: white;
+              color: var(--color-accent-text);
               display: flex;
               align-items: center;
               justify-content: center;
@@ -5553,8 +5556,8 @@ watch(selectedTokenId, (newTokenId, oldTokenId) => {
 
                 .hero-holy-beast {
                   font-size: 10px;
-                  color: white;
-                  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+                  color: var(--color-accent-text);
+                  background: linear-gradient(135deg, var(--color-danger), var(--color-danger));
                   padding: 1px 4px;
                   border-radius: var(--border-radius-full);
                   font-weight: var(--font-weight-bold);

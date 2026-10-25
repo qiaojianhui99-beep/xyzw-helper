@@ -384,7 +384,7 @@
         >
           <div class="style2-header">
             <div class="style2-title">
-              <span class="trophy-icon">🏆</span>
+              <span class="trophy-icon" aria-hidden="true"><AppIcon name="trophy" :size="20" /></span>
               <div class="title-text">
                 <h2>{{ club.name || "俱乐部" }} 盐场周报</h2>
                 <div class="date-text">{{ queryDate }}</div>
@@ -451,7 +451,7 @@
               <div v-else class="mvp-avatar-placeholder">
                 {{ mvpPlayer.name?.charAt(0) || "?" }}
               </div>
-              <div class="mvp-crown">👑</div>
+              <div class="mvp-crown" aria-hidden="true"><AppIcon name="trophy" :size="18" /></div>
               <div class="mvp-name">{{ mvpPlayer.name }}</div>
               <div class="mvp-label">本周 MVP</div>
             </div>
@@ -461,7 +461,7 @@
           <div class="style2-rankings-grid">
             <div class="rank-card-s2 red-border">
               <div class="rank-card-title-s2">
-                <span class="icon">⚔️</span> 击杀前三
+                <span class="icon" aria-hidden="true"><AppIcon name="sword" :size="14" /></span> 击杀前三
               </div>
               <div class="rank-list-s2">
                 <div
@@ -485,7 +485,7 @@
 
             <div class="rank-card-s2 orange-border">
               <div class="rank-card-title-s2">
-                <span class="icon">💣</span> 攻城前三
+                <span class="icon" aria-hidden="true"><AppIcon name="target" :size="14" /></span> 攻城前三
               </div>
               <div class="rank-list-s2">
                 <div
@@ -509,7 +509,7 @@
 
             <div class="rank-card-s2 green-border">
               <div class="rank-card-title-s2">
-                <span class="icon">📊</span> KD 前三
+                <span class="icon" aria-hidden="true"><AppIcon name="chart" :size="14" /></span> KD 前三
               </div>
               <div class="rank-list-s2">
                 <div
@@ -533,7 +533,7 @@
 
             <div class="rank-card-s2 gray-border">
               <div class="rank-card-title-s2">
-                <span class="icon">💀</span> 死亡前三
+                <span class="icon" aria-hidden="true"><AppIcon name="warning" :size="14" /></span> 死亡前三
               </div>
               <div class="rank-list-s2">
                 <div
@@ -557,7 +557,7 @@
 
             <div class="rank-card-s2 purple-border">
               <div class="rank-card-title-s2">
-                <span class="icon">💊</span> 复活丹前三
+                <span class="icon" aria-hidden="true"><AppIcon name="heart" :size="14" /></span> 复活丹前三
               </div>
               <div class="rank-list-s2">
                 <div
@@ -582,7 +582,7 @@
             <!-- 占位，保持排版一致，或者放其他榜单 -->
             <div class="rank-card-s2 blue-border">
               <div class="rank-card-title-s2">
-                <span class="icon">🛡️</span> 生存前三
+                <span class="icon" aria-hidden="true"><AppIcon name="shield" :size="14" /></span> 生存前三
               </div>
               <div class="rank-list-s2">
                 <div
@@ -1289,9 +1289,9 @@ onMounted(() => {
 
 /* ================== 样式一 (Style 1) ================== */
 .style-1 {
-  background: #fff;
+  background: var(--color-surface);
   padding: var(--spacing-md);
-  color: #333;
+  color: var(--color-text-primary);
   font-family: Arial, sans-serif;
 }
 
@@ -1301,8 +1301,8 @@ onMounted(() => {
   margin-bottom: 20px;
   font-weight: bold;
   padding: 10px;
-  background: #f3f3f3;
-  border-bottom: 3px solid #800080;
+  background: var(--color-surface);
+  border-bottom: 3px solid var(--color-accent);
 }
 
 .style1-content {
@@ -1323,8 +1323,8 @@ onMounted(() => {
 }
 
 .style1-table th {
-  background: #800080;
-  color: #fff;
+  background: var(--color-accent);
+  color: var(--color-accent-text);
   padding: 8px;
   text-align: center;
   font-weight: bold;
@@ -1332,14 +1332,14 @@ onMounted(() => {
 
 .style1-table td {
   padding: 6px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border);
   text-align: center;
   vertical-align: middle;
   height: 36px;
 }
 
 .style1-table tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: var(--color-surface-muted);
 }
 
 .col-rank {
@@ -1367,12 +1367,12 @@ onMounted(() => {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: #ccc;
+  background: var(--color-surface-hover);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 10px;
-  color: #fff;
+  color: var(--color-accent-text);
 }
 
 .style1-summary {
@@ -1384,15 +1384,15 @@ onMounted(() => {
 }
 
 .summary-card {
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border-strong);
   border-radius: 4px;
   overflow: hidden;
-  background: #fff;
+  background: var(--color-surface);
 }
 
 .summary-title {
-  background: #800080;
-  color: #fff;
+  background: var(--color-accent);
+  color: var(--color-accent-text);
   padding: 8px;
   text-align: center;
   font-weight: bold;
@@ -1403,7 +1403,7 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   padding: 8px 15px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border-subtle);
   font-size: 13px;
   font-weight: bold;
 }
@@ -1412,7 +1412,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   padding: 6px 10px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border-subtle);
   font-size: 13px;
 }
 
@@ -1468,12 +1468,12 @@ onMounted(() => {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #999;
+  background: var(--color-surface-hover);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 10px;
-  color: #fff;
+  color: var(--color-accent-text);
 }
 
 .top3-value {
@@ -1484,7 +1484,7 @@ onMounted(() => {
 
 /* ================== 样式二 (Style 2) ================== */
 .style-2 {
-  background: #eef2f7;
+  background: var(--color-accent-soft);
   padding: 20px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   border-radius: 8px;
@@ -1494,7 +1494,7 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
-  background: #fff;
+  background: var(--color-surface);
   padding: 15px;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -1512,14 +1512,14 @@ onMounted(() => {
 
 .title-text h2 {
   font-size: 22px;
-  color: #333;
+  color: var(--color-text-primary);
   margin: 0;
   font-weight: 800;
 }
 
 .date-text {
   font-size: 14px;
-  color: #888;
+  color: var(--color-text-muted);
   margin-top: 4px;
 }
 
@@ -1543,7 +1543,7 @@ onMounted(() => {
 
 .stat-card-mini {
   flex: 1;
-  background: #fff;
+  background: var(--color-surface);
   padding: 15px;
   border-radius: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
@@ -1555,29 +1555,29 @@ onMounted(() => {
 
 .stat-label-mini {
   font-size: 12px;
-  color: #888;
+  color: var(--color-text-muted);
   margin-bottom: 4px;
 }
 
 .stat-value-mini {
   font-size: 18px;
   font-weight: 800;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .warning-text {
-  color: #ff9800;
+  color: var(--color-warning-text);
 }
 .danger-text {
-  color: #f44336;
+  color: var(--color-danger-text);
 }
 .purple-text {
-  color: #9c27b0;
+  color: var(--color-link);
 }
 
 .dashboard-mvp {
   width: 160px;
-  background: #fff;
+  background: var(--color-surface);
   border-radius: 12px;
   padding: 15px;
   text-align: center;
@@ -1609,7 +1609,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   font-size: 24px;
-  color: #fff;
+  color: var(--color-rank-text);
   font-weight: bold;
 }
 
@@ -1635,7 +1635,7 @@ onMounted(() => {
   font-size: 12px;
   color: #ffab40;
   font-weight: bold;
-  background: #fff8e1;
+  background: var(--color-warning-soft);
   padding: 2px 8px;
   border-radius: 10px;
 }
@@ -1648,7 +1648,7 @@ onMounted(() => {
 }
 
 .rank-card-s2 {
-  background: #fff;
+  background: var(--color-surface);
   border-radius: 12px;
   padding: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
@@ -1656,22 +1656,22 @@ onMounted(() => {
 }
 
 .rank-card-s2.red-border {
-  border-top-color: #ff5252;
+  border-top-color: var(--color-danger);
 }
 .rank-card-s2.orange-border {
   border-top-color: #ffab40;
 }
 .rank-card-s2.green-border {
-  border-top-color: #69f0ae;
+  border-top-color: var(--color-success);
 }
 .rank-card-s2.gray-border {
-  border-top-color: #9e9e9e;
+  border-top-color: var(--color-border-strong);
 }
 .rank-card-s2.purple-border {
-  border-top-color: #e040fb;
+  border-top-color: var(--color-accent);
 }
 .rank-card-s2.blue-border {
-  border-top-color: #448aff;
+  border-top-color: var(--color-accent);
 }
 
 .rank-card-title-s2 {
@@ -1681,7 +1681,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #444;
+  color: var(--color-text-primary);
 }
 
 .rank-list-s2 {
@@ -1700,27 +1700,27 @@ onMounted(() => {
 .rank-num-s2 {
   width: 16px;
   height: 16px;
-  background: #eee;
+  background: var(--color-surface-hover);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 10px;
-  color: #666;
+  color: var(--color-text-secondary);
   margin-right: 8px;
 }
 
 .rank-item-s2:nth-child(1) .rank-num-s2 {
   background: #ffd700;
-  color: #fff;
+  color: var(--color-rank-text);
 }
 .rank-item-s2:nth-child(2) .rank-num-s2 {
-  background: #c0c0c0;
-  color: #fff;
+  background: var(--color-surface-hover);
+  color: var(--color-accent-text);
 }
 .rank-item-s2:nth-child(3) .rank-num-s2 {
   background: #cd7f32;
-  color: #fff;
+  color: var(--color-rank-text);
 }
 
 .rank-player-s2 {
@@ -1748,26 +1748,26 @@ onMounted(() => {
   font-weight: bold;
 }
 .rank-val-s2.red {
-  color: #ff5252;
+  color: var(--color-danger-text);
 }
 .rank-val-s2.orange {
   color: #ffab40;
 }
 .rank-val-s2.green {
-  color: #4caf50;
+  color: var(--color-success-text);
 }
 .rank-val-s2.gray {
-  color: #757575;
+  color: var(--color-text-secondary);
 }
 .rank-val-s2.purple {
-  color: #9c27b0;
+  color: var(--color-link);
 }
 .rank-val-s2.blue {
-  color: #2196f3;
+  color: var(--color-link);
 }
 
 .style2-table-wrapper {
-  background: #fff;
+  background: var(--color-surface);
   padding: 0;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -1780,11 +1780,11 @@ onMounted(() => {
 }
 
 .style2-table thead {
-  background: #4285f4;
+  background: var(--color-accent);
 }
 
 .style2-table th {
-  color: #fff;
+  color: var(--color-accent-text);
   padding: 12px 8px;
   text-align: center;
   font-size: 13px;
@@ -1798,15 +1798,15 @@ onMounted(() => {
 
 .style2-table td {
   padding: 10px 8px;
-  border-bottom: 1px solid #f1f1f1;
+  border-bottom: 1px solid var(--color-border-subtle);
   vertical-align: middle;
   text-align: center;
   font-size: 13px;
-  color: #444;
+  color: var(--color-text-primary);
 }
 
 .style2-table tr:hover {
-  background: #f8fbff;
+  background: var(--color-accent-soft);
 }
 
 .medal-icon {
@@ -1814,7 +1814,7 @@ onMounted(() => {
 }
 .rank-num-plain {
   font-weight: bold;
-  color: #888;
+  color: var(--color-text-muted);
 }
 
 .player-cell {
@@ -1827,7 +1827,7 @@ onMounted(() => {
 
 .player-name-s2 {
   font-weight: 600;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .avatar-xs {
@@ -1841,12 +1841,12 @@ onMounted(() => {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: #ccc;
+  background: var(--color-surface-hover);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 12px;
-  color: #fff;
+  color: var(--color-accent-text);
 }
 
 .bar-cell {
@@ -1864,10 +1864,10 @@ onMounted(() => {
   font-size: 12px;
 }
 .bar-val.red {
-  color: #ff5252;
+  color: var(--color-danger-text);
 }
 .bar-val.gray {
-  color: #9e9e9e;
+  color: var(--color-text-secondary);
 }
 .bar-val.orange {
   color: #ffab40;
@@ -1876,7 +1876,7 @@ onMounted(() => {
 .progress-bg {
   flex: 1;
   height: 6px;
-  background: #f0f0f0;
+  background: var(--color-surface-muted);
   border-radius: 3px;
   overflow: hidden;
 }
@@ -1886,18 +1886,18 @@ onMounted(() => {
   border-radius: 3px;
 }
 .progress-fill.red {
-  background: #ff5252;
+  background: var(--color-danger);
 }
 .progress-fill.orange {
   background: #ffab40;
 }
 .progress-fill.gray {
-  background: #9e9e9e;
+  background: var(--color-surface-hover);
 }
 
 .kd-val {
   font-weight: bold;
-  color: #4caf50;
+  color: var(--color-success-text);
 }
 
 @media (max-width: 768px) {

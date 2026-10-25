@@ -411,7 +411,7 @@ watch(
 
 .team-button.active {
   background: var(--primary-color);
-  color: white;
+  color: var(--color-accent-text);
 }
 
 .team-button:disabled {
@@ -425,10 +425,10 @@ watch(
   gap: 6px;
   height: 32px;
   padding: 0 12px;
-  border: 1px solid var(--border-color, #e5e7eb);
+  border: 1px solid var(--border-color, var(--color-border));
   border-radius: 8px;
-  background: var(--bg-primary, #ffffff);
-  color: var(--text-secondary, #6b7280);
+  background: var(--bg-primary, var(--color-surface));
+  color: var(--text-secondary, var(--color-text-muted));
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -436,9 +436,9 @@ watch(
 }
 
 .refresh-button:hover {
-  background: var(--bg-secondary, #f9fafb);
-  border-color: var(--border-hover, #d1d5db);
-  color: var(--text-primary, #374151);
+  background: var(--bg-secondary, var(--color-surface-muted));
+  border-color: var(--border-hover, var(--color-border-strong));
+  color: var(--text-primary, var(--color-text-secondary));
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }

@@ -2529,7 +2529,7 @@ onMounted(() => {
   height: 18px;
   border-radius: 50%;
   background: var(--primary-color);
-  color: white;
+  color: var(--color-accent-text);
   font-size: 10px;
   font-weight: bold;
   display: flex;
@@ -2586,7 +2586,7 @@ onMounted(() => {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 600;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-accent);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -2594,10 +2594,10 @@ onMounted(() => {
 
 .hero-level-small-inline {
   font-size: 10px;
-  color: white;
+  color: var(--color-accent-text);
   font-weight: 600;
   white-space: nowrap;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, var(--color-accent-soft) 0%, var(--color-danger) 100%);
   padding: 2px 6px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(240, 147, 251, 0.3);
@@ -2673,30 +2673,30 @@ onMounted(() => {
   }
 
   .stat-power {
-    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--color-danger) 0%, var(--color-danger) 100%);
+    color: var(--color-accent-text);
     font-size: 12px;
   }
 
   .stat-attack {
-    background: linear-gradient(135deg, #ffa940 0%, #fa8c16 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--color-warning) 0%, var(--color-warning) 100%);
+    color: var(--color-accent-text);
   }
 
   .stat-hp {
-    background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--color-success) 0%, var(--color-success) 100%);
+    color: var(--color-accent-text);
   }
 
   .stat-speed {
-    background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%);
+    color: var(--color-accent-text);
   }
 }
 
 .hero-fish-skill-inline {
-  background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--color-success) 0%, var(--color-success) 100%);
+  color: var(--color-accent-text);
   padding: 1px 6px;
   border-radius: 4px;
   font-size: 10px;
@@ -2848,7 +2848,7 @@ onMounted(() => {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 600;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-accent);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -2856,9 +2856,9 @@ onMounted(() => {
 
 .hero-level-small {
   font-size: 12px;
-  color: white;
+  color: var(--color-accent-text);
   font-weight: 600;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, var(--color-accent-soft) 0%, var(--color-danger) 100%);
   padding: 2px 6px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(240, 147, 251, 0.3);
@@ -2914,23 +2914,23 @@ onMounted(() => {
   }
 
   .stat-power {
-    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--color-danger) 0%, var(--color-danger) 100%);
+    color: var(--color-accent-text);
   }
 
   .stat-attack {
-    background: linear-gradient(135deg, #ffa940 0%, #fa8c16 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--color-warning) 0%, var(--color-warning) 100%);
+    color: var(--color-accent-text);
   }
 
   .stat-hp {
-    background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--color-success) 0%, var(--color-success) 100%);
+    color: var(--color-accent-text);
   }
 
   .stat-speed {
-    background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%);
+    color: var(--color-accent-text);
   }
 }
 
@@ -2942,8 +2942,8 @@ onMounted(() => {
 
 .hero-fish-skill-name {
   font-size: 10px;
-  background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--color-success) 0%, var(--color-success) 100%);
+  color: var(--color-accent-text);
   padding: 2px 6px;
   border-radius: 4px;
   margin-left: 4px;
@@ -3033,32 +3033,32 @@ onMounted(() => {
   }
 
   &.color-1 {
-    border-left-color: #ffffff;
+    border-left-color: var(--color-surface);
     background: rgba(255, 255, 255, 0.1);
   }
 
   &.color-2 {
-    border-left-color: #4caf50;
+    border-left-color: var(--color-success);
     background: rgba(76, 175, 80, 0.1);
   }
 
   &.color-3 {
-    border-left-color: #2196f3;
+    border-left-color: var(--color-accent);
     background: rgba(33, 150, 243, 0.1);
   }
 
   &.color-4 {
-    border-left-color: #9c27b0;
+    border-left-color: var(--color-accent);
     background: rgba(156, 39, 176, 0.1);
   }
 
   &.color-5 {
-    border-left-color: #ff9800;
+    border-left-color: var(--color-warning);
     background: rgba(255, 152, 0, 0.1);
   }
 
   &.color-6 {
-    border-left-color: #f44336;
+    border-left-color: var(--color-danger);
     background: rgba(244, 67, 54, 0.1);
   }
 }
@@ -3171,7 +3171,7 @@ onMounted(() => {
     }
 
     &.selected {
-      border-color: #f5222d;
+      border-color: var(--color-danger);
       background: rgba(245, 34, 45, 0.15);
     }
   }
@@ -3185,7 +3185,7 @@ onMounted(() => {
     }
 
     &.selected {
-      border-color: #faad14;
+      border-color: var(--color-warning);
       background: rgba(250, 173, 20, 0.15);
     }
   }
@@ -3199,7 +3199,7 @@ onMounted(() => {
     }
 
     &.selected {
-      border-color: #722ed1;
+      border-color: var(--color-accent);
       background: rgba(114, 46, 209, 0.15);
     }
   }
@@ -3282,7 +3282,7 @@ onMounted(() => {
 
   &.active {
     background: var(--primary-color);
-    color: white;
+    color: var(--color-accent-text);
   }
 }
 

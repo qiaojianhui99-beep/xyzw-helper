@@ -164,7 +164,7 @@ const powerRanks = [
     description: "初登江湖，尚显青涩。",
     icon: "🌱",
     class: "rank-beginner",
-    color: "#6b7280",
+    color: "var(--color-text-muted)",
   },
   {
     min: 1000000,
@@ -173,7 +173,7 @@ const powerRanks = [
     description: "已有名声，立足江湖。",
     icon: "⚔️",
     class: "rank-known",
-    color: "#10b981",
+    color: "var(--color-success-text)",
   },
   {
     min: 10000000,
@@ -182,7 +182,7 @@ const powerRanks = [
     description: "身经百战，渐成人物。",
     icon: "🗡️",
     class: "rank-veteran",
-    color: "#3b82f6",
+    color: "var(--color-link)",
   },
   {
     min: 100000000,
@@ -191,7 +191,7 @@ const powerRanks = [
     description: "武艺精进，名震一域。",
     icon: "🏹",
     class: "rank-master",
-    color: "#8b5cf6",
+    color: "var(--color-link)",
   },
   {
     min: 500000000,
@@ -200,7 +200,7 @@ const powerRanks = [
     description: "豪迈英勇，威震四方。",
     icon: "⚡",
     class: "rank-hero",
-    color: "#f59e0b",
+    color: "var(--color-warning-text)",
   },
   {
     min: 2000000000,
@@ -209,7 +209,7 @@ const powerRanks = [
     description: "才智兼备，呼风唤雨。",
     icon: "👑",
     class: "rank-overlord",
-    color: "#ef4444",
+    color: "var(--color-danger-text)",
   },
   {
     min: 4000000000,
@@ -218,7 +218,7 @@ const powerRanks = [
     description: "实力深不可测，世人仰望。",
     icon: "🔱",
     class: "rank-supreme",
-    color: "#ec4899",
+    color: "var(--color-link)",
   },
   {
     min: 6000000000,
@@ -227,7 +227,7 @@ const powerRanks = [
     description: "威势登峰造极，号令天下。",
     icon: "⚜️",
     class: "rank-emperor",
-    color: "#dc2626",
+    color: "var(--color-danger-text)",
   },
   {
     min: 9000000000,
@@ -236,7 +236,7 @@ const powerRanks = [
     description: "超凡入圣，江湖传说。",
     icon: "💎",
     class: "rank-legend",
-    color: "#7c3aed",
+    color: "var(--color-link)",
   },
   {
     min: 15000000000,
@@ -245,7 +245,7 @@ const powerRanks = [
     description: "超越传说，无人能及。",
     icon: "🌟",
     class: "rank-infinite",
-    color: "#fbbf24",
+    color: "var(--color-warning-text)",
   },
 ];
 
@@ -651,7 +651,7 @@ watch(() => roleInfo.value, initializeAvatar, { deep: true, immediate: true });
   }
   &.active {
     background: var(--primary-color);
-    color: white;
+    color: var(--color-accent-text);
   }
   &:disabled {
     opacity: 0.6;
@@ -665,19 +665,19 @@ watch(() => roleInfo.value, initializeAvatar, { deep: true, immediate: true });
   gap: 6px;
   height: 32px;
   padding: 0 12px;
-  border: 1px solid var(--border-color, #e5e7eb);
+  border: 1px solid var(--border-color, var(--color-border));
   border-radius: 8px;
-  background: var(--bg-primary, #ffffff);
-  color: var(--text-secondary, #6b7280);
+  background: var(--bg-primary, var(--color-surface));
+  color: var(--text-secondary, var(--color-text-muted));
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition: all var(--transition-fast, 0.15s ease);
 
   &:hover {
-    background: var(--bg-secondary, #f9fafb);
-    border-color: var(--border-hover, #d1d5db);
-    color: var(--text-primary, #374151);
+    background: var(--bg-secondary, var(--color-surface-muted));
+    border-color: var(--border-hover, var(--color-border-strong));
+    color: var(--text-primary, var(--color-text-secondary));
     transform: translateY(-1px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   }
@@ -694,9 +694,9 @@ watch(() => roleInfo.value, initializeAvatar, { deep: true, immediate: true });
     box-shadow: none;
 
     &:hover {
-      background: var(--bg-primary, #ffffff);
-      border-color: var(--border-color, #e5e7eb);
-      color: var(--text-secondary, #6b7280);
+      background: var(--bg-primary, var(--color-surface));
+      border-color: var(--border-color, var(--color-border));
+      color: var(--text-secondary, var(--color-text-muted));
       transform: none;
       box-shadow: none;
     }
@@ -793,7 +793,7 @@ watch(() => roleInfo.value, initializeAvatar, { deep: true, immediate: true });
   width: 100%;
   height: 100%;
   background: var(--primary-color);
-  color: white;
+  color: var(--color-accent-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -997,61 +997,61 @@ watch(() => roleInfo.value, initializeAvatar, { deep: true, immediate: true });
 // 段位特定样式
 .rank-beginner {
   .role-profile-header {
-    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    background: linear-gradient(135deg, var(--color-surface-muted) 0%, var(--color-surface-hover) 100%);
   }
 }
 
 .rank-known {
   .role-profile-header {
-    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    background: linear-gradient(135deg, var(--color-success-soft) 0%, var(--color-success-soft) 100%);
   }
 }
 
 .rank-veteran {
   .role-profile-header {
-    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    background: linear-gradient(135deg, var(--color-accent-soft) 0%, var(--color-accent-soft) 100%);
   }
 }
 
 .rank-master {
   .role-profile-header {
-    background: linear-gradient(135deg, #e9d5ff 0%, #ddd6fe 100%);
+    background: linear-gradient(135deg, var(--color-accent-soft) 0%, var(--color-accent-soft) 100%);
   }
 }
 
 .rank-hero {
   .role-profile-header {
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    background: linear-gradient(135deg, var(--color-warning-soft) 0%, var(--color-warning) 100%);
   }
 }
 
 .rank-overlord {
   .role-profile-header {
-    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    background: linear-gradient(135deg, var(--color-danger-soft) 0%, var(--color-danger-soft) 100%);
   }
 }
 
 .rank-supreme {
   .role-profile-header {
-    background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+    background: linear-gradient(135deg, var(--color-accent-soft) 0%, var(--color-accent-soft) 100%);
   }
 }
 
 .rank-emperor {
   .role-profile-header {
-    background: linear-gradient(135deg, #fee2e2 0%, #dc2626 20%);
+    background: linear-gradient(135deg, var(--color-danger-soft) 0%, var(--color-danger) 20%);
   }
 }
 
 .rank-legend {
   .role-profile-header {
-    background: linear-gradient(135deg, #ede9fe 0%, #7c3aed 30%);
+    background: linear-gradient(135deg, var(--color-accent-soft) 0%, var(--color-accent) 30%);
   }
 }
 
 .rank-infinite {
   .role-profile-header {
-    background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 30%, #f59e0b 100%);
+    background: linear-gradient(135deg, var(--color-warning-soft) 0%, var(--color-warning) 30%, var(--color-warning) 100%);
     animation: shimmer 3s ease-in-out infinite;
   }
 }
@@ -1087,7 +1087,7 @@ watch(() => roleInfo.value, initializeAvatar, { deep: true, immediate: true });
   }
 
   .role-name {
-    color: #ffffff;
+    color: var(--color-accent-text);
   }
 
   .level-text {
@@ -1095,11 +1095,11 @@ watch(() => roleInfo.value, initializeAvatar, { deep: true, immediate: true });
   }
 
   .power-value {
-    color: #60a5fa;
+    color: var(--color-link);
   }
 
   .rank-title {
-    color: #ffffff;
+    color: var(--color-accent-text);
   }
 
   .rank-section {
@@ -1108,43 +1108,43 @@ watch(() => roleInfo.value, initializeAvatar, { deep: true, immediate: true });
 
   // 深色主题段位背景优化
   &.rank-beginner .role-profile-header {
-    background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+    background: linear-gradient(135deg, var(--color-surface-active) 0%, var(--color-surface-active) 100%);
   }
 
   &.rank-known .role-profile-header {
-    background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+    background: linear-gradient(135deg, var(--color-success) 0%, var(--color-success) 100%);
   }
 
   &.rank-veteran .role-profile-header {
-    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%);
   }
 
   &.rank-master .role-profile-header {
-    background: linear-gradient(135deg, #581c87 0%, #6b21a8 100%);
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%);
   }
 
   &.rank-hero .role-profile-header {
-    background: linear-gradient(135deg, #92400e 0%, #b45309 100%);
+    background: linear-gradient(135deg, var(--color-warning) 0%, var(--color-warning) 100%);
   }
 
   &.rank-overlord .role-profile-header {
-    background: linear-gradient(135deg, #991b1b 0%, #dc2626 100%);
+    background: linear-gradient(135deg, var(--color-danger) 0%, var(--color-danger) 100%);
   }
 
   &.rank-supreme .role-profile-header {
-    background: linear-gradient(135deg, #be185d 0%, #db2777 100%);
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%);
   }
 
   &.rank-emperor .role-profile-header {
-    background: linear-gradient(135deg, #991b1b 0%, #b91c1c 100%);
+    background: linear-gradient(135deg, var(--color-danger) 0%, var(--color-danger) 100%);
   }
 
   &.rank-legend .role-profile-header {
-    background: linear-gradient(135deg, #581c87 0%, #6b21a8 100%);
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%);
   }
 
   &.rank-infinite .role-profile-header {
-    background: linear-gradient(135deg, #92400e 0%, #d97706 50%, #f59e0b 100%);
+    background: linear-gradient(135deg, var(--color-warning) 0%, var(--color-warning) 50%, var(--color-warning) 100%);
   }
 }
 

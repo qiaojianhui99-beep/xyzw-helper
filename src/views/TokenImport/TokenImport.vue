@@ -1305,7 +1305,7 @@ const getTokenActions = (token) => {
       label: "删除",
       key: "delete",
       icon: () => h(NIcon, null, { default: () => h(TrashBin) }),
-      props: { style: { color: "#e74c3c" } },
+      props: { style: { color: "var(--color-danger-text)" } },
     },
   );
 
@@ -1990,14 +1990,10 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .token-import-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-bg);
   padding: var(--spacing-xl) 0;
 }
 
-/* 深色主题下的页面背景 */
-[data-theme="dark"] .token-import-page {
-  background: linear-gradient(135deg, #0f172a 0%, #1f2937 100%);
-}
 
 .container {
   max-width: 1200px;
@@ -2015,7 +2011,7 @@ onUnmounted(() => {
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-md);
-  color: white;
+  color: var(--color-accent-text);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -2047,7 +2043,7 @@ onUnmounted(() => {
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
   margin: 0;
-  color: #ffffff;
+  color: var(--color-accent-text);
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
@@ -2129,12 +2125,12 @@ onUnmounted(() => {
 /* 深色主题强制覆盖（与全局 data-theme 保持一致） */
 [data-theme="dark"] .n-form-item-label,
 [data-theme="dark"] .n-form-item-label__text {
-  color: #ffffff !important;
+  color: var(--color-accent-text) !important;
 }
 
 [data-theme="dark"] .n-input__input,
 [data-theme="dark"] .n-input__textarea {
-  color: #ffffff !important;
+  color: var(--color-accent-text) !important;
   background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
@@ -2144,16 +2140,16 @@ onUnmounted(() => {
 
 [data-theme="dark"] .n-card {
   background-color: rgba(255, 255, 255, 0.1) !important;
-  color: #ffffff !important;
+  color: var(--color-accent-text) !important;
 }
 
 [data-theme="dark"] .import-card {
   background: rgba(45, 55, 72, 0.9) !important;
-  color: #ffffff !important;
+  color: var(--color-accent-text) !important;
 }
 
 [data-theme="dark"] .import-card h2 {
-  color: #ffffff !important;
+  color: var(--color-accent-text) !important;
 }
 
 [data-theme="dark"] .import-card .subtitle {
@@ -2161,7 +2157,7 @@ onUnmounted(() => {
 }
 
 [data-theme="dark"] .n-collapse-item__header {
-  color: #ffffff !important;
+  color: var(--color-accent-text) !important;
 }
 
 [data-theme="dark"] .n-collapse-item__content-wrapper {
@@ -2169,12 +2165,12 @@ onUnmounted(() => {
 }
 
 [data-theme="dark"] .n-radio-button {
-  color: #ffffff !important;
+  color: var(--color-text-secondary) !important;
 }
 
 [data-theme="dark"] .n-radio-button--checked {
-  background-color: rgba(16, 185, 129, 0.8) !important;
-  color: #ffffff !important;
+  background-color: var(--color-accent-soft) !important;
+  color: var(--color-link) !important;
 }
 
 [data-theme="dark"] .form-tip {
@@ -2207,7 +2203,7 @@ onUnmounted(() => {
 /* 深色主题下的列表区域背景 */
 [data-theme="dark"] .tokens-section {
   background: rgba(45, 55, 72, 0.9);
-  color: #ffffff;
+  color: var(--color-accent-text);
 }
 
 /* 深色主题下的固定头部 */
@@ -2530,24 +2526,24 @@ onUnmounted(() => {
   position: relative;
 
   &.connected {
-    background-color: #10b981;
+    background-color: var(--color-success);
     /* 绿色 - 已连接 */
     animation: pulse-green 2s infinite;
   }
 
   &.connecting {
-    background-color: #f59e0b;
+    background-color: var(--color-warning);
     /* 黄色 - 连接中 */
     animation: pulse-yellow 1s infinite;
   }
 
   &.disconnected {
-    background-color: #6b7280;
+    background-color: var(--color-surface-active);
     /* 灰色 - 已断开 */
   }
 
   &.error {
-    background-color: #ef4444;
+    background-color: var(--color-danger);
     /* 红色 - 连接错误 */
     animation: pulse-red 1s infinite;
   }
@@ -2560,22 +2556,22 @@ onUnmounted(() => {
   border-radius: 4px;
 
   &.connected {
-    color: #10b981;
-    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--color-success-text);
+    background-color: var(--color-accent-soft);
   }
 
   &.connecting {
-    color: #f59e0b;
+    color: var(--color-warning-text);
     background-color: rgba(245, 158, 11, 0.1);
   }
 
   &.disconnected {
-    color: #6b7280;
+    color: var(--color-text-muted);
     background-color: rgba(107, 114, 128, 0.1);
   }
 
   &.error {
-    color: #ef4444;
+    color: var(--color-danger-text);
     background-color: rgba(239, 68, 68, 0.1);
   }
 }
@@ -2697,11 +2693,11 @@ onUnmounted(() => {
 }
 
 :global([data-theme="dark"] .token-import-modal .arco-modal) {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  background: var(--color-surface-raised) !important;
 }
 
 [data-theme="dark"] .token-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-surface);
 }
 </style>
 

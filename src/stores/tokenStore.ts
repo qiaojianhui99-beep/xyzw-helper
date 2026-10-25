@@ -847,33 +847,46 @@ export const useTokenStore = defineStore("tokens", () => {
 
       wsClient.onDisconnect = async (event) => {
         if (!isCurrentConnection()) return;
-        const reason = event.code === 1006 ? "异常断开" : event.reason || "";
+        const reason = event?.code === 1006 ? "异常断开" : event?.reason || "";
         wsLogger.wsDisconnect(tokenId, reason);
-        if (wsConnections.value[tokenId]) {
-          const conn = wsConnections.value[tokenId];
-          const wasDisconnecting = conn.status === "disconnecting";
-          conn.status = "disconnected";
-          conn.randomSeedSynced = false;
-          updateCrossTabConnectionState(tokenId, "disconnected");
-
-          // 如果连接异常断开(1006)且从未连接成功(握手失败)，尝试刷新Token
-          // connectedAt 为 null 表示 socket.onopen 还没触发就断开了，通常意味着握手失败（如403 Forbidden）
-          if (event.code === 1006 && !conn.connectedAt && !wasDisconnecting) {
-            wsLogger.warn(`检测到握手失败(1006)，尝试刷新Token [${tokenId}]`);
-            // 强制刷新并重连
-            await attemptTokenRefresh(tokenId, true);
-          }
+        const conn = wsConnections.value[tokenId];
+        if (!conn) return;
+        const wasDisconnecting = conn.status === "disconnecting";
+        conn.randomSeedSynced = false;
+        // The client reconnects unexpected drops itself. Keep the session in
+        // "connecting" so tasks wait instead of treating it as a dead token.
+        if (wsClient._pendingReconnect && !wasDisconnecting) {
+          conn.status = "connecting";
+          updateCrossTabConnectionState(tokenId, "connecting");
+          return;
         }
+        conn.status = "disconnected";
+        updateCrossTabConnectionState(tokenId, "disconnected");
+
+        // 如果连接异常断开(1006)且从未连接成功(握手失败)，尝试刷新Token
+        // connectedAt 为 null 表示 socket.onopen 还没触发就断开了，通常意味着握手失败（如403 Forbidden）
+        if (event?.code === 1006 && !conn.connectedAt && !wasDisconnecting) {
+          wsLogger.warn(`检测到握手失败(1006)，尝试刷新Token [${tokenId}]`);
+          await attemptTokenRefresh(tokenId, true);
+        }
+      };
+
+      wsClient.onReconnectGiveUp = () => {
+        if (!isCurrentConnection()) return;
+        const conn = wsConnections.value[tokenId];
+        if (!conn || conn.status === "disconnecting") return;
+        conn.status = "disconnected";
+        updateCrossTabConnectionState(tokenId, "disconnected");
       };
 
       wsClient.onError = (error) => {
         if (!isCurrentConnection()) return;
         wsLogger.wsError(tokenId, error);
-        if (wsConnections.value[tokenId]) {
-          wsConnections.value[tokenId].status = "error";
-          wsConnections.value[tokenId].lastError = {
+        const conn = wsConnections.value[tokenId];
+        if (conn) {
+          conn.lastError = {
             timestamp: new Date().toISOString(),
-            error: error.toString(),
+            error: String(error),
             url: wsUrl,
           };
         }
@@ -1031,6 +1044,33 @@ export const useTokenStore = defineStore("tokens", () => {
     }
   };
 
+  /**
+   * Wait briefly for a connection to become live before a request is attempted.
+   * @param {string} tokenId Account connection to use.
+   * @param {number} timeout Maximum wait in milliseconds.
+   * @returns {Promise<object | null>} Live connection record, or null when it will not recover.
+   */
+  const waitForLiveConnection = async (tokenId: string, timeout = 12000) => {
+    const startedAt = Date.now();
+    while (Date.now() - startedAt < timeout) {
+      const connection = wsConnections.value[tokenId];
+      if (connection?.status === "connected" && connection.client?.connected) {
+        return connection;
+      }
+      if (
+        !connection ||
+        connection.status === "disconnected" ||
+        connection.status === "error" ||
+        connection.status === "disconnecting"
+      ) {
+        return null;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 200));
+    }
+    const connection = wsConnections.value[tokenId];
+    return connection?.status === "connected" ? connection : null;
+  };
+
   // Promise版发送消息
   /**
    * Attach the current battle version where required and await a protocol response.
@@ -1046,7 +1086,13 @@ export const useTokenStore = defineStore("tokens", () => {
     params = {},
     timeout = 5000,
   ) => {
-    const connection = wsConnections.value[tokenId];
+    let connection = wsConnections.value[tokenId];
+    if (!connection || connection.status !== "connected") {
+      connection = await waitForLiveConnection(
+        tokenId,
+        Math.min(Math.max(timeout, 1000), 12000),
+      );
+    }
     if (!connection || connection.status !== "connected") {
       return Promise.reject(new Error(`WebSocket未连接 [${tokenId}]`));
     }
@@ -1375,10 +1421,15 @@ export const useTokenStore = defineStore("tokens", () => {
               timeSinceActivity > 30000 &&
               connection.status === "connected"
             ) {
-              wsLogger.warn(`检测到连接可能已断开: ${tokenId}`);
-              // 发送心跳检测
-              if (connection.client) {
-                connection.client.sendHeartbeat();
+              const client = connection.client;
+              const open =
+                client?.connected &&
+                client?.socket?.readyState === WebSocket.OPEN;
+              if (open) {
+                client.sendHeartbeat?.();
+              } else if (client && !client.intentionalClose) {
+                wsLogger.warn(`连接无响应，准备重连: ${tokenId}`);
+                client.reconnect?.();
               }
             }
           }

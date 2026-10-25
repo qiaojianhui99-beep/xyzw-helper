@@ -5,6 +5,10 @@ import {
   loadDailyTaskConfig,
   runWithDailyTaskLock,
 } from "@/utils/dailyTaskState";
+import {
+  describePresetTeamPayload,
+  normalizePresetTeamInfo,
+} from "@/utils/presetTeamInfo";
 
 const taskLabels = {
   1: "登录游戏",
@@ -119,55 +123,106 @@ export class DailyTaskRunner {
     }
   }
 
-  async switchToFormationIfNeeded(tokenId, targetFormation, formationName) {
+  /**
+   * 解析「当前阵容」：先看本次响应，再看事件缓存，最后重取一次。
+   * 服务端返回结构会随版本变化，任何一步拿不到 id 都只是返回 null，
+   * 绝不能把整个补差流程打断。
+   * @param {string} tokenId 账号标识
+   * @param {unknown} teamInfo presetteam_getinfo 的响应体
+   * @returns {Promise<number|null>} 当前阵容 id，确认不到时为 null
+   */
+  async resolveCurrentFormation(tokenId, teamInfo) {
+    const direct = normalizePresetTeamInfo(teamInfo);
+    if (direct.useTeamId !== null) return direct.useTeamId;
+    this.log(
+      `阵容响应结构未直接给出当前阵容: ${describePresetTeamPayload(teamInfo)}`,
+      "warning",
+    );
+
+    const cached = normalizePresetTeamInfo(this.tokenStore.gameData?.presetTeam);
+    if (cached.useTeamId !== null) {
+      this.log(`使用缓存中的当前阵容: ${cached.useTeamId}`);
+      return cached.useTeamId;
+    }
+
     try {
-      if (!Number.isInteger(targetFormation) || targetFormation <= 0)
-        throw new Error("目标阵容无效，停止切换");
-      this.log(`检查${formationName}配置...`);
-      const teamInfo = await this.executeGameCommand(
-        tokenId,
-        "presetteam_getinfo",
-        {},
-        "获取阵容信息",
+      await this.sleep(Math.max(this.delaySettings.commandDelay, 300));
+      const retried = await this.sendRequest(tokenId, () =>
+        this.tokenStore.sendMessageWithPromise(
+          tokenId,
+          "presetteam_getinfo",
+          {},
+          8000,
+        ),
       );
-
-      if (!teamInfo || !teamInfo.presetTeamInfo) {
-        this.log(`阵容信息异常: ${JSON.stringify(teamInfo)}`, "warning");
+      const again = normalizePresetTeamInfo(retried);
+      if (again.useTeamId !== null) {
+        this.log(`重新获取到当前阵容: ${again.useTeamId}`);
+        return again.useTeamId;
       }
-
-      const currentFormation = teamInfo?.presetTeamInfo?.useTeamId;
-      if (!Number.isInteger(currentFormation))
-        throw new Error("服务器未提供有效阵容，停止切换");
-      if (this.originalFormation === undefined)
-        this.originalFormation = currentFormation;
-      this.log(`当前阵容: ${currentFormation}`);
-
-      if (currentFormation === targetFormation) {
-        this.log(
-          `当前已是${formationName}${targetFormation}，无需切换`,
-          "success",
-        );
-        return false;
-      }
-
       this.log(
-        `当前阵容: ${currentFormation}, 目标阵容: ${targetFormation}，开始切换...`,
+        `重新获取阵容信息仍未解析出当前阵容: ${describePresetTeamPayload(retried)}`,
+        "warning",
       );
-      // A lost acknowledgement can still follow a server-side switch.
-      this.formationChanged = true;
+    } catch (error) {
+      this.log(`重新获取阵容信息失败: ${error.message}`, "warning");
+    }
+    return null;
+  }
+
+  async switchToFormationIfNeeded(tokenId, targetFormation, formationName) {
+    const target = Number(targetFormation);
+    if (!Number.isInteger(target) || target <= 0)
+      throw new Error("目标阵容无效，停止切换");
+    this.log(`检查${formationName}配置...`);
+
+    const teamInfo = await this.executeGameCommand(
+      tokenId,
+      "presetteam_getinfo",
+      {},
+      "获取阵容信息",
+    );
+
+    const currentFormation = await this.resolveCurrentFormation(
+      tokenId,
+      teamInfo,
+    );
+    if (currentFormation === null) {
+      this.log(
+        `无法确认当前阵容，跳过${formationName}切换并继续后续步骤（可稍后在阵容页确认后重试）`,
+        "warning",
+      );
+      return false;
+    }
+    if (this.originalFormation === undefined)
+      this.originalFormation = currentFormation;
+    this.log(`当前阵容: ${currentFormation}`);
+
+    if (currentFormation === target) {
+      this.log(`当前已是${formationName}${target}，无需切换`, "success");
+      return false;
+    }
+
+    this.log(`当前阵容: ${currentFormation}, 目标阵容: ${target}，开始切换...`);
+    // A lost acknowledgement can still follow a server-side switch.
+    this.formationChanged = true;
+    try {
       await this.executeGameCommand(
         tokenId,
         "presetteam_saveteam",
-        { teamId: targetFormation },
-        `切换到${formationName}${targetFormation}`,
+        { teamId: target },
+        `切换到${formationName}${target}`,
       );
-
-      this.log(`成功切换到${formationName}${targetFormation}`, "success");
-      return true;
     } catch (error) {
-      this.log(`阵容检查或切换失败: ${error.message}`, "error");
-      throw error;
+      this.log(
+        `切换到${formationName}${target}失败: ${error.message}（继续执行后续步骤）`,
+        "warning",
+      );
+      return false;
     }
+
+    this.log(`成功切换到${formationName}${target}`, "success");
+    return true;
   }
 
   loadSettings(roleId) {
@@ -197,7 +252,10 @@ export class DailyTaskRunner {
   throwIfInterrupted(tokenId) {
     const stopped = this.callbacks?.shouldStop?.();
     const status = this.tokenStore.getWebSocketStatus?.(tokenId);
-    if (stopped || (status && status !== "connected")) {
+    if (
+      stopped ||
+      (status && status !== "connected" && status !== "connecting")
+    ) {
       const error = new Error(
         stopped
           ? "任务已停止，再次执行将根据服务器任务列表补差"

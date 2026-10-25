@@ -126,7 +126,7 @@
                       <n-tag
                         v-if="memberData.legacy > 0"
                         :style="{
-                          color: '#fff',
+                          color: 'var(--color-accent-text)',
                           backgroundColor:
                             legacyColorMap[memberData.legacy]?.value,
                         }"
@@ -1235,7 +1235,7 @@ onMounted(() => {
 }
 
 .info-table .lineup .red-count {
-  color: #ef4444;
+  color: var(--color-danger-text);
   font-weight: 600;
 }
 
@@ -1244,7 +1244,7 @@ onMounted(() => {
 }
 
 .info-table .lineup .hole-count {
-  color: #10b981;
+  color: var(--color-success-text);
   font-weight: 600;
 }
 
@@ -1722,14 +1722,14 @@ onMounted(() => {
 .equipment-slot {
   width: 20px;
   height: 20px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--color-border-strong);
   border-radius: 4px;
   transition: all 0.2s ease;
 }
 
 .equipment-slot.red-slot {
-  background-color: #ef4444;
-  border-color: #ef4444;
+  background-color: var(--color-danger);
+  border-color: var(--color-danger);
   box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
 }
 

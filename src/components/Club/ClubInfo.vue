@@ -200,7 +200,7 @@
                     >
                       <NStatistic label="战力">
                         <template #prefix>
-                          <NIcon color="#18a058"><BarChart /></NIcon>
+                          <NIcon color="var(--color-success-text)"><BarChart /></NIcon>
                         </template>
                         {{ formatNumber(clubOverview.power) }}
                       </NStatistic>
@@ -215,7 +215,7 @@
                     >
                       <NStatistic label="红粹">
                         <template #prefix>
-                          <NIcon color="#d03050"><Flame /></NIcon>
+                          <NIcon color="var(--color-danger-text)"><Flame /></NIcon>
                         </template>
                         {{ clubOverview.redQuench }}
                       </NStatistic>
@@ -230,7 +230,7 @@
                     >
                       <NStatistic label="当前BossId">
                         <template #prefix>
-                          <NIcon color="#8a2be2"><Skull /></NIcon>
+                          <NIcon color="var(--color-link)"><Skull /></NIcon>
                         </template>
                         {{ clubOverview.currentBossId }}
                       </NStatistic>
@@ -245,7 +245,7 @@
                     >
                       <NStatistic label="Boss剩余血量">
                         <template #prefix>
-                          <NIcon color="#f0a020"><Skull /></NIcon>
+                          <NIcon color="var(--color-warning-text)"><Skull /></NIcon>
                         </template>
                         {{ clubOverview.currentHP }}
                       </NStatistic>
@@ -277,7 +277,7 @@
                           <div style="margin-top: 4px; font-size: 12px">
                             已击杀:
                             {{ 150 - clubOverview.unfoughtBosses.length }} / 150
-                            <span style="margin-left: 12px; color: #d03050"
+                            <span style="margin-left: 12px; color: var(--color-danger-text)"
                               >遗漏:
                               {{ clubOverview.unfoughtBosses.length }}</span
                             >
@@ -309,14 +309,14 @@
                   <NGi span="2" v-if="club.announcement">
                     <NCard size="small" title="公告" embedded :bordered="false">
                       <template #header-extra>
-                        <NIcon size="18" color="#f0a020"><Megaphone /></NIcon>
+                        <NIcon size="18" color="var(--color-warning-text)"><Megaphone /></NIcon>
                       </template>
                       <div
                         style="
                           white-space: pre-wrap;
                           font-size: 13px;
                           line-height: 1.6;
-                          color: #666;
+                          color: var(--color-text-secondary);
                         "
                       >
                         {{ club.announcement }}
@@ -328,7 +328,7 @@
                   <NGi span="2" v-if="leader">
                     <NCard size="small" title="会长" embedded :bordered="false">
                       <template #header-extra>
-                        <NIcon size="18" color="#2080f0"><Person /></NIcon>
+                        <NIcon size="18" color="var(--color-link)"><Person /></NIcon>
                       </template>
                       <div
                         style="display: flex; align-items: center; gap: 12px"
@@ -338,7 +338,7 @@
                           :size="40"
                           :src="leader.headImg || '/icons/xiaoyugan.png'"
                           style="
-                            border: 2px solid #fff;
+                            border: 2px solid var(--color-surface);
                             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
                           "
                         />
@@ -346,7 +346,7 @@
                           <div style="font-weight: bold; font-size: 14px">
                             {{ leader.name }}
                           </div>
-                          <div style="font-size: 12px; color: #999">
+                          <div style="font-size: 12px; color: var(--color-text-muted)">
                             ID: {{ leader.roleId }}
                           </div>
                         </div>
@@ -443,7 +443,7 @@
             <NTag
               v-if="playerInfo.legacy > 0"
               :style="{
-                color: '#fff',
+                color: 'var(--color-accent-text)',
                 backgroundColor: legacycolor[playerInfo.legacy]?.value,
               }"
               size="small"
@@ -488,7 +488,7 @@
         <div
           v-if="playerInfo.heroList"
           class="debug-info"
-          style="font-size: 12px; color: #999; margin-bottom: 10px"
+          style="font-size: 12px; color: var(--color-text-muted); margin-bottom: 10px"
         >
           武将数量: {{ playerInfo.heroList.length }}
         </div>
@@ -530,11 +530,11 @@
           <!-- 添加调试信息 -->
           <div
             v-if="playerInfo.heroList"
-            style="font-size: 12px; color: #999; margin-top: 10px"
+            style="font-size: 12px; color: var(--color-text-muted); margin-top: 10px"
           >
             武将列表为空
           </div>
-          <div v-else style="font-size: 12px; color: #999; margin-top: 10px">
+          <div v-else style="font-size: 12px; color: var(--color-text-muted); margin-top: 10px">
             武将列表未定义
           </div>
         </div>
@@ -1232,12 +1232,12 @@ const memberColumns = computed(() => {
               width: "32px",
               height: "32px",
               borderRadius: "50%",
-              background: "#f0f0f0",
+              background: "var(--color-surface-muted)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               fontSize: "14px",
-              color: "#999",
+              color: "var(--color-text-muted)",
             },
           },
           row.name?.charAt(0) || "?",
@@ -1268,7 +1268,7 @@ const memberColumns = computed(() => {
               {
                 style: {
                   fontWeight: "500",
-                  color: "#1890ff",
+                  color: "var(--color-link)",
                   lineHeight: "1.2",
                 },
               },
@@ -1279,7 +1279,7 @@ const memberColumns = computed(() => {
               {
                 style: {
                   fontSize: "12px",
-                  color: "#999",
+                  color: "var(--color-text-muted)",
                   lineHeight: "1.2",
                   marginTop: "2px",
                 },
@@ -1305,7 +1305,7 @@ const memberColumns = computed(() => {
       render: (row) =>
         h(
           "span",
-          { style: { color: "#ff4d4f" } },
+          { style: { color: "var(--color-danger-text)" } },
           redQuenchlabel(row.custom?.red_quench_cnt || 0),
         ),
     },
@@ -1384,7 +1384,7 @@ const memberColumns = computed(() => {
             h(
               "span",
               {
-                style: { fontSize: "16px", fontWeight: "bold", color: "#333" },
+                style: { fontSize: "16px", fontWeight: "bold", color: "var(--color-text-primary)" },
               },
               "俱乐部成员详情",
             ),
@@ -1836,7 +1836,7 @@ const formatNumber = (num) => {
     font-size: 15px;
     font-weight: 600;
     line-height: 1.4;
-    color: var(--n-text-color, #333);
+    color: var(--n-text-color, var(--color-text-primary));
 
     &::before {
       content: "";
@@ -1847,7 +1847,7 @@ const formatNumber = (num) => {
       width: 3px;
       height: 14px;
       border-radius: 2px;
-      background: #18a058;
+      background: var(--color-success);
     }
   }
 
@@ -2042,11 +2042,11 @@ const formatNumber = (num) => {
   gap: 16px;
   margin-bottom: 20px;
   padding-bottom: 15px;
-  border-bottom: 1px solid var(--border-light, #eee);
+  border-bottom: 1px solid var(--border-light, var(--color-border));
 }
 
 .player-avatar {
-  border: 2px solid var(--primary-color, #1890ff);
+  border: 2px solid var(--primary-color, var(--color-accent));
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -2059,7 +2059,7 @@ const formatNumber = (num) => {
 .player-info-detail p {
   margin: 0 0 4px 0;
   font-size: var(--font-size-sm, 14px);
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary, var(--color-text-secondary));
 }
 
 .player-info-detail .detail-row {
@@ -2067,20 +2067,20 @@ const formatNumber = (num) => {
   gap: 16px;
   margin-bottom: 4px;
   font-size: var(--font-size-sm, 14px);
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary, var(--color-text-secondary));
 }
 
 .red-text {
-  color: #ff4d4f;
+  color: var(--color-danger-text);
 }
 .green-text {
-  color: #52c41a;
+  color: var(--color-success-text);
 }
 .blue-text {
-  color: #1890ff;
+  color: var(--color-link);
 }
 .highlight {
-  color: #1890ff;
+  color: var(--color-link);
   font-weight: bold;
 }
 
@@ -2105,17 +2105,17 @@ const formatNumber = (num) => {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: var(--bg-secondary, #f9f9f9);
+  background: var(--bg-secondary, var(--color-surface-muted));
   padding: 12px 16px;
   border-radius: var(--border-radius-sm, 4px);
-  border: 1px solid var(--border-light, #eee);
+  border: 1px solid var(--border-light, var(--color-border));
   transition: all var(--transition-fast, 0.3s ease);
   cursor: pointer;
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.1));
-    border-color: var(--primary-color, #1890ff);
+    border-color: var(--primary-color, var(--color-accent));
   }
 }
 
@@ -2136,35 +2136,35 @@ const formatNumber = (num) => {
   flex-wrap: wrap;
   gap: 8px;
   font-size: var(--font-size-xs, 12px);
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary, var(--color-text-secondary));
 
   span {
     padding: 2px 6px;
-    background: var(--bg-primary, #fff);
+    background: var(--bg-primary, var(--color-surface));
     border-radius: var(--border-radius-full, 99px);
-    border: 1px solid var(--border-light, #eee);
+    border: 1px solid var(--border-light, var(--color-border));
   }
 
   span.opened {
     background: rgba(82, 196, 26, 0.1);
-    color: var(--success-color, #52c41a);
-    border-color: var(--success-color, #52c41a);
+    color: var(--success-color, var(--color-success-text));
+    border-color: var(--success-color, var(--color-success));
   }
 
   span.closed {
     background: rgba(250, 173, 20, 0.1);
-    color: var(--warning-color, #faad14);
-    border-color: var(--warning-color, #faad14);
+    color: var(--warning-color, var(--color-warning-text));
+    border-color: var(--warning-color, var(--color-warning));
   }
 }
 
 .empty-heroes {
-  background: var(--bg-secondary, #f9f9f9);
+  background: var(--bg-secondary, var(--color-surface-muted));
   padding: 30px;
   border-radius: var(--border-radius-sm, 4px);
-  border: 1px solid var(--border-light, #eee);
+  border: 1px solid var(--border-light, var(--color-border));
   text-align: center;
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary, var(--color-text-secondary));
   font-size: var(--font-size-sm, 14px);
 }
 
@@ -2185,12 +2185,12 @@ const formatNumber = (num) => {
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    background: var(--bg-secondary, #f9f9f9);
+    background: var(--bg-secondary, var(--color-surface-muted));
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    border: 2px solid var(--border-light, #eee);
+    border: 2px solid var(--border-light, var(--color-border));
 
     img {
       width: 100%;
@@ -2214,13 +2214,13 @@ const formatNumber = (num) => {
     align-items: center;
     gap: 15px;
     font-size: var(--font-size-sm, 14px);
-    color: var(--text-secondary, #666);
+    color: var(--text-secondary, var(--color-text-secondary));
 
     .stat-item {
       padding: 4px 8px;
-      background: var(--bg-secondary, #f9f9f9);
+      background: var(--bg-secondary, var(--color-surface-muted));
       border-radius: var(--border-radius-sm, 4px);
-      border: 1px solid var(--border-light, #eee);
+      border: 1px solid var(--border-light, var(--color-border));
     }
   }
 
@@ -2232,11 +2232,11 @@ const formatNumber = (num) => {
 
       .n-descriptions-item-label {
         font-weight: var(--font-weight-medium, 500);
-        color: var(--text-primary, #333);
+        color: var(--text-primary, var(--color-text-primary));
       }
 
       .n-descriptions-item-content {
-        color: var(--text-secondary, #666);
+        color: var(--text-secondary, var(--color-text-secondary));
       }
     }
   }
@@ -2265,7 +2265,7 @@ const formatNumber = (num) => {
 
   .equipment-label {
     font-size: var(--font-size-sm, 14px);
-    color: var(--text-primary, #333);
+    color: var(--text-primary, var(--color-text-primary));
     font-weight: var(--font-weight-medium, 500);
     width: 60px;
   }
@@ -2278,14 +2278,14 @@ const formatNumber = (num) => {
   .equipment-slot {
     width: 20px;
     height: 20px;
-    border: 1px solid var(--border-light, #eee);
+    border: 1px solid var(--border-light, var(--color-border));
     border-radius: var(--border-radius-sm, 4px);
-    background: var(--bg-secondary, #f9f9f9);
+    background: var(--bg-secondary, var(--color-surface-muted));
   }
 
   .equipment-slot.red-slot {
-    background: var(--error-color, #ff4d4f);
-    border-color: var(--error-color, #ff4d4f);
+    background: var(--error-color, var(--color-danger));
+    border-color: var(--error-color, var(--color-danger));
   }
 
   /* 鱼灵洗练颜色块 */

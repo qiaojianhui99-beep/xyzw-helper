@@ -32,7 +32,7 @@
             class="ml-2"
             @click="testBONDecoding"
           >
-            🔓 测试BON解码
+            测试BON解码
           </n-button>
         </div>
 
@@ -61,16 +61,16 @@
         <n-divider title-placement="left"> 预设消息测试 </n-divider>
         <div class="grid grid-cols-2 gap-2">
           <n-button :disabled="!canSendMessage" @click="sendHeartbeat">
-            💗 发送心跳
+            发送心跳
           </n-button>
           <n-button :disabled="!canSendMessage" @click="sendGetRoleInfo">
-            👤 获取角色信息
+            获取角色信息
           </n-button>
           <n-button :disabled="!canSendMessage" @click="sendGetDataVersion">
-            📦 获取数据版本
+            获取数据版本
           </n-button>
           <n-button :disabled="!canSendMessage" @click="sendSignIn">
-            📅 签到
+            签到
           </n-button>
         </div>
 
@@ -94,7 +94,7 @@
             type="primary"
             @click="sendCustomMessage"
           >
-            🚀 发送自定义消息
+            发送自定义消息
           </n-button>
         </div>
 
@@ -158,10 +158,10 @@
                 <span class="font-semibold">
                   {{
                     historyMessage.type === "sent"
-                      ? "📤 发送"
+                      ? "发送"
                       : historyMessage.type === "test"
-                        ? "🧪 测试"
-                        : "📨 接收"
+                        ? "测试"
+                        : "接收"
                   }}
                   <span class="text-sm text-gray-500 ml-2">{{
                     formatTime(historyMessage.timestamp)
@@ -380,7 +380,7 @@
             v-if="messageHistory.length === 0"
             class="text-center text-gray-500 p-8"
           >
-            <div class="text-lg mb-2">📭</div>
+            <div class="text-lg mb-2"></div>
             <div>暂无消息历史</div>
             <div class="text-xs mt-1">发送消息后将在此显示</div>
           </div>
@@ -1056,17 +1056,17 @@ watch(
 }
 
 .message-history::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--color-surface);
   border-radius: 4px;
 }
 
 .message-history::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
+  background: var(--color-surface-hover);
   border-radius: 4px;
 }
 
 .message-history::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
+  background: var(--color-surface-hover);
 }
 
 /* 优化代码块样式 */

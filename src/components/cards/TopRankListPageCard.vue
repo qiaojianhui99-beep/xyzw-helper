@@ -123,7 +123,7 @@
                 <NTag
                   v-if="memberData.legacy > 0"
                   :style="{
-                    color: '#fff',
+                    color: 'var(--color-accent-text)',
                     backgroundColor: legacycolor[memberData.legacy]?.value,
                   }"
                   size="small"
@@ -182,7 +182,7 @@
               <NTag
                 v-if="playerInfo.legacy > 0"
                 :style="{
-                  color: '#fff',
+                  color: 'var(--color-accent-text)',
                   backgroundColor: legacycolor[playerInfo.legacy]?.value,
                 }"
                 size="small"
@@ -1382,7 +1382,7 @@ onMounted(() => {
 
       &.export-btn {
         background: var(--primary-color);
-        color: white;
+        color: var(--color-accent-text);
 
         &:hover {
           background: var(--primary-color-hover);
@@ -1528,7 +1528,7 @@ onMounted(() => {
           justify-content: center;
           font-weight: bold;
           font-size: var(--font-size-base);
-          color: white;
+          color: var(--color-accent-text);
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
           margin: 0 6px;
 
@@ -1545,7 +1545,7 @@ onMounted(() => {
           }
 
           &.silver {
-            background: linear-gradient(135deg, #c0c0c0 0%, #a9a9a9 100%);
+            background: linear-gradient(135deg, var(--color-surface-hover) 0%, var(--color-surface-hover) 100%);
 
             &::before {
               content: "2";

@@ -109,3 +109,46 @@ for (const [file, name] of [
     assert.deepEqual(errors, []);
   });
 }
+
+test("heartbeat is sent immediately and does not wait behind queued commands", async () => {
+  const { client } = await createClient(
+    "xyzwWebSocket.js",
+    "XyzwWebSocketClient",
+  );
+  const sent = [];
+  client.socket.send = (payload) => sent.push(payload);
+  client.send("role_getroleinfo");
+  client._emitHeartbeat();
+  assert.equal(client.sendQueue.length, 1);
+  assert.equal(sent.length, 1);
+  assert.match(String(sent[0]), /_sys\/ack/);
+});
+
+test("server seq 0 does not rewind ack", async () => {
+  const { client } = await createClient(
+    "xyzwWebSocket.js",
+    "XyzwWebSocketClient",
+  );
+  client.ack = 5;
+  client._noteServerSeq(0);
+  assert.equal(client.ack, 5);
+  client._noteServerSeq(6);
+  assert.equal(client.ack, 6);
+});
+
+test("an unexpected close schedules reconnect and an intentional close does not", async () => {
+  const { client, timers } = await createClient(
+    "xyzwWebSocket.js",
+    "XyzwWebSocketClient",
+  );
+  client._openedOnce = true;
+  client.socket = null;
+  client._handleTransportClosed({ code: 1006, reason: "" });
+  assert.equal(client._pendingReconnect, true);
+  assert.equal(timers.has(client.reconnectTimer), true);
+
+  client.disconnect();
+  assert.equal(client.intentionalClose, true);
+  assert.equal(client.reconnectTimer, null);
+  assert.equal(timers.has(client.reconnectTimer), false);
+});

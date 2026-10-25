@@ -312,25 +312,25 @@
         <n-tab name="battleMap">
           <div class="tab-item-content">
             <n-icon><ShieldOutline /></n-icon>
-            <span>⚔️ 今日据点沙盘 (击破图表)</span>
+            <span>今日据点沙盘 (击破图表)</span>
           </div>
         </n-tab>
         <n-tab name="todayDetails">
           <div class="tab-item-content">
             <n-icon><FlameOutline /></n-icon>
-            <span>🎯 今日公会对战详细 (催刀督战)</span>
+            <span>今日公会对战详细 (催刀督战)</span>
           </div>
         </n-tab>
         <n-tab name="weekRoster">
           <div class="tab-item-content">
             <n-icon><TrophyOutline /></n-icon>
-            <span>📊 当周全员战绩 & 排位天梯</span>
+            <span>当周全员战绩 & 排位天梯</span>
           </div>
         </n-tab>
         <n-tab name="lineupTable">
           <div class="tab-item-content">
             <n-icon><StatsChartOutline /></n-icon>
-            <span>🥋 详细武将布阵大表</span>
+            <span>详细武将布阵大表</span>
           </div>
         </n-tab>
       </n-tabs>
@@ -357,8 +357,8 @@
             <span class="indicator-title">
               {{
                 selectedSide === "opponent"
-                  ? "💥 敌方防守据点沙盘"
-                  : "🛡️ 我方防守据点沙盘"
+                  ? "敌方防守据点沙盘"
+                  : "我方防守据点沙盘"
               }}
             </span>
             <span class="indicator-sub">
@@ -388,10 +388,10 @@
                 >全部 ({{ mapStats.total }})</n-radio-button
               >
               <n-radio-button value="alive"
-                >🛡️ 仅坚守 ({{ mapStats.aliveCount }})</n-radio-button
+                >仅坚守 ({{ mapStats.aliveCount }})</n-radio-button
               >
               <n-radio-button value="defeated"
-                >💥 仅击破 ({{ mapStats.defeatedCount }})</n-radio-button
+                >仅击破 ({{ mapStats.defeatedCount }})</n-radio-button
               >
             </n-radio-group>
             <NSelect
@@ -437,9 +437,9 @@
               </span>
               <div class="stamp-wrapper">
                 <span v-if="item.defeated" class="stamp stamp-defeated"
-                  >💥 已攻破</span
+                  >已攻破</span
                 >
-                <span v-else class="stamp stamp-alive">🛡️ 坚守中</span>
+                <span v-else class="stamp stamp-alive">坚守中</span>
               </div>
             </div>
 
@@ -468,7 +468,7 @@
                   <span
                     v-if="item.mirror"
                     class="mirror-text"
-                    style="font-size: 11px; color: #f0a020; margin-left: 2px"
+                    style="font-size: 11px; color: var(--color-warning-text); margin-left: 2px"
                     >(镜像)</span
                   >
                 </div>
@@ -618,7 +618,7 @@
                   todayCombatStats.ourClub.totalAttacks
                 }}刀)</span
               >
-              <span class="bar-center-title">⚔️ 双方出刀总体胜率对比</span>
+              <span class="bar-center-title">双方出刀总体胜率对比</span>
               <span class="bar-right-text"
                 >对手出手胜率 {{ todayCombatStats.oppClub.winRate }}% ({{
                   todayCombatStats.oppClub.totalAttacks
@@ -646,7 +646,7 @@
                   todayCombatStats.ourClub.defTotal
                 }}次)</span
               >
-              <span class="bar-center-title">🛡️ 双方防守总体胜率对比</span>
+              <span class="bar-center-title">双方防守总体胜率对比</span>
               <span class="bar-right-text"
                 >对手防守胜率 {{ todayCombatStats.oppClub.defWinRate }}% ({{
                   todayCombatStats.oppClub.defTotal
@@ -730,7 +730,7 @@
               style="margin-bottom: 10px"
             >
               <span class="box-label error-label"
-                >🛑 0 刀未动成员（{{
+                >0 刀未动成员（{{
                   attendanceStats.unattackedCount
                 }}人，急需催刀）：</span
               >
@@ -756,7 +756,7 @@
               style="margin-bottom: 10px"
             >
               <span class="box-label warning-label"
-                >⚠️ 未打满成员（{{
+                >未打满成员（{{
                   attendanceStats.incompleteCount
                 }}人，仍有剩余免费挑战机会）：</span
               >
@@ -786,7 +786,7 @@
               "
             >
               <NTag size="medium" type="success" :bordered="false">
-                🎉 太强了！我方 30 名成员今日免费挑战次数已全部出战打满！
+                太强了！我方 30 名成员今日免费挑战次数已全部出战打满！
               </NTag>
             </div>
           </div>
@@ -804,12 +804,12 @@
             <div class="header-right-sort">
               <span class="sort-label">排序维度：</span>
               <n-radio-group v-model:value="todaySortBy" size="small">
-                <n-radio-button value="score">🏆 贡献排名</n-radio-button>
+                <n-radio-button value="score">贡献排名</n-radio-button>
                 <n-radio-button value="attackWinRate"
-                  >🎯 出手胜率排名</n-radio-button
+                  >出手胜率排名</n-radio-button
                 >
                 <n-radio-button value="defWinRate"
-                  >🛡️ 防守胜率排名</n-radio-button
+                  >防守胜率排名</n-radio-button
                 >
               </n-radio-group>
             </div>
@@ -856,11 +856,11 @@
               <div class="rank-badge-num">
                 {{
                   idx === 0
-                    ? "🥇 冠军位"
+                    ? "冠军位"
                     : idx === 1
-                      ? "🥈 亚军位"
+                      ? "亚军位"
                       : idx === 2
-                        ? "🥉 季军位"
+                        ? "季军位"
                         : "第 4 名"
                 }}
               </div>
@@ -902,9 +902,9 @@
             <div class="header-right-sort">
               <span class="sort-label">排序维度：</span>
               <n-radio-group v-model:value="weeklySortBy" size="small">
-                <n-radio-button value="score">🏆 贡献排名</n-radio-button>
+                <n-radio-button value="score">贡献排名</n-radio-button>
                 <n-radio-button value="defWinRate"
-                  >🛡️ 防守胜率排名</n-radio-button
+                  >防守胜率排名</n-radio-button
                 >
               </n-radio-group>
             </div>
@@ -1539,7 +1539,7 @@ const lineupStats = computed(() => {
       return {
         name,
         count,
-        colorProps: rule?.colorProps || { color: "#e8e8e8", textColor: "#444" },
+        colorProps: rule?.colorProps || { color: "var(--color-text-disabled)", textColor: "#444" },
       };
     })
     .sort((a, b) => b.count - a.count);
@@ -1931,7 +1931,7 @@ const todayTableColumns = [
         {
           style: {
             fontWeight: "600",
-            color: "#1890ff",
+            color: "var(--color-link)",
             cursor: "pointer",
             display: "inline-flex",
             alignItems: "center",
@@ -1960,7 +1960,7 @@ const todayTableColumns = [
     render: (row: any) =>
       h(
         "span",
-        { style: { fontWeight: "600", color: "#fa8c16" } },
+        { style: { fontWeight: "600", color: "var(--color-warning-text)" } },
         formatPower(row.power),
       ),
   },
@@ -1975,7 +1975,7 @@ const todayTableColumns = [
         {
           style: {
             fontWeight: "700",
-            color: row.todayScore > 0 ? "#10b981" : "#94a3b8",
+            color: row.todayScore > 0 ? "var(--color-success-text)" : "#94a3b8",
             fontSize: "14px",
           },
         },
@@ -2008,7 +2008,7 @@ const todayTableColumns = [
     render: (row: any) =>
       h(
         "span",
-        { style: { fontSize: "12px", color: "#64748b" } },
+        { style: { fontSize: "12px", color: "var(--color-text-secondary)" } },
         `遭遇 ${row.challengeCnt || 0} 次 / 守住 ${row.defWins || 0} 次 (胜率 ${
           row.defWinRate || "—"
         })`,
@@ -2062,7 +2062,7 @@ const todayTableColumns = [
             style: {
               fontSize: "12px",
               fontWeight: "600",
-              color: "#10b981",
+              color: "var(--color-success-text)",
             },
           },
           `${row.attackWins || 0}胜 / ${row.attackLosses || 0}负 (胜率 ${
@@ -2072,7 +2072,7 @@ const todayTableColumns = [
       }
       return h(
         "span",
-        { style: { color: "#94a3b8", fontSize: "12px" } },
+        { style: { color: "var(--color-text-muted)", fontSize: "12px" } },
         "0刀",
       );
     },
@@ -2123,7 +2123,7 @@ const weeklyRosterColumns = [
     render: (row: any) =>
       h(
         "span",
-        { style: { color: "#64748b", fontWeight: "600" } },
+        { style: { color: "var(--color-text-secondary)", fontWeight: "600" } },
         `#${row.slot || 1} 据点`,
       ),
   },
@@ -2146,7 +2146,7 @@ const weeklyRosterColumns = [
         {
           style: {
             fontWeight: "600",
-            color: "#1890ff",
+            color: "var(--color-link)",
             cursor: "pointer",
             display: "inline-flex",
             alignItems: "center",
@@ -2175,7 +2175,7 @@ const weeklyRosterColumns = [
     render: (row: any) =>
       h(
         "span",
-        { style: { fontWeight: "600", color: "#fa8c16" } },
+        { style: { fontWeight: "600", color: "var(--color-warning-text)" } },
         formatPower(row.power),
       ),
   },
@@ -2187,7 +2187,7 @@ const weeklyRosterColumns = [
     render: (row: any) =>
       h(
         "span",
-        { style: { color: "#ff4d4f", fontWeight: "700" } },
+        { style: { color: "var(--color-danger-text)", fontWeight: "700" } },
         row.redQuench || 0,
       ),
   },
@@ -2203,7 +2203,7 @@ const weeklyRosterColumns = [
         {
           style: {
             fontWeight: "700",
-            color: "#6366f1",
+            color: "var(--color-link)",
             fontSize: "14px",
           },
         },
@@ -2225,7 +2225,7 @@ const weeklyRosterColumns = [
     render: (row: any) =>
       h(
         "span",
-        { style: { color: "#10b981", fontWeight: "600" } },
+        { style: { color: "var(--color-success-text)", fontWeight: "600" } },
         `${row.defWins || 0}次`,
       ),
   },
@@ -3356,7 +3356,7 @@ const columns = [
       h(
         "span",
         {
-          style: { cursor: "pointer", color: "#1890ff", fontWeight: "600" },
+          style: { cursor: "pointer", color: "var(--color-link)", fontWeight: "600" },
           onClick: () => openDuelModal(row),
         },
         row.name,
@@ -3370,7 +3370,7 @@ const columns = [
     render: (row: any) =>
       h(
         "span",
-        { style: { fontWeight: "600", color: "#fa8c16" } },
+        { style: { fontWeight: "600", color: "var(--color-warning-text)" } },
         formatPower(row.power),
       ),
   },
@@ -3382,7 +3382,7 @@ const columns = [
     render: (row: any) =>
       h(
         "span",
-        { style: { color: "#ff4d4f", fontWeight: "700" } },
+        { style: { color: "var(--color-danger-text)", fontWeight: "700" } },
         row.redQuench,
       ),
   },
@@ -3463,7 +3463,7 @@ const columns = [
       const type = row.lineupType || "其他";
       const rule = LINEUP_RULES.find((r) => r.name === type);
       const colorProps = rule?.colorProps || {
-        color: "#e8e8e8",
+        color: "var(--color-text-disabled)",
         textColor: "#444",
       };
       return h(
@@ -3544,11 +3544,11 @@ onMounted(() => {
 .club-vs-container {
   display: flex;
   align-items: stretch;
-  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  color: #fff;
+  color: var(--color-accent-text);
 }
 
 .club-info {
@@ -3563,7 +3563,7 @@ onMounted(() => {
 
 .club-details .club-id-text {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--color-text-muted);
   margin-bottom: 4px;
 }
 
@@ -3578,8 +3578,8 @@ onMounted(() => {
   font-size: 11px;
   padding: 2px 6px;
   border-radius: 4px;
-  background: #3b82f6;
-  color: #fff;
+  background: var(--color-accent);
+  color: var(--color-accent-text);
 }
 
 .club-name {
@@ -3589,13 +3589,13 @@ onMounted(() => {
 
 .club-power-text {
   font-size: 13px;
-  color: #fbbf24;
+  color: var(--color-warning-text);
   margin-bottom: 4px;
 }
 
 .club-announce-text {
   font-size: 12px;
-  color: #cbd5e1;
+  color: var(--color-text-secondary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -3618,11 +3618,11 @@ onMounted(() => {
 }
 
 .vs-v {
-  color: #ef4444;
+  color: var(--color-danger-text);
 }
 
 .vs-s {
-  color: #3b82f6;
+  color: var(--color-link);
 }
 
 .rank-badge-text {
@@ -3647,8 +3647,8 @@ onMounted(() => {
 }
 
 .stats-panel {
-  background: var(--n-card-color, #ffffff);
-  border: 1px solid var(--n-border-color, #e2e8f0);
+  background: var(--n-card-color, var(--color-surface));
+  border: 1px solid var(--n-border-color, var(--color-border));
   border-radius: 12px;
   padding: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
@@ -3663,11 +3663,11 @@ onMounted(() => {
 }
 
 .weekly-panel {
-  border-top: 3px solid #3b82f6;
+  border-top: 3px solid var(--color-accent);
 }
 
 .daily-panel {
-  border-top: 3px solid #ef4444;
+  border-top: 3px solid var(--color-danger);
 }
 
 .panel-header {
@@ -3684,11 +3684,11 @@ onMounted(() => {
 
 .panel-icon {
   font-size: 18px;
-  color: #3b82f6;
+  color: var(--color-link);
 }
 
 .panel-icon.flame {
-  color: #ef4444;
+  color: var(--color-danger-text);
 }
 
 .panel-title {
@@ -3699,12 +3699,12 @@ onMounted(() => {
 
 .panel-subtitle {
   font-size: 12px;
-  color: #64748b;
+  color: var(--color-text-secondary);
 }
 
 .opp-highlight {
   font-weight: 700;
-  color: #ef4444;
+  color: var(--color-danger-text);
 }
 
 .stat-metrics-grid {
@@ -3721,7 +3721,7 @@ onMounted(() => {
 
 .metric-card {
   background: var(--n-color-embedded, rgba(0, 0, 0, 0.02));
-  border: 1px solid var(--n-border-color, #f1f5f9);
+  border: 1px solid var(--n-border-color, var(--color-accent));
   border-radius: 8px;
   padding: 10px 8px;
   display: flex;
@@ -3733,7 +3733,7 @@ onMounted(() => {
 
 .metric-label {
   font-size: 11px;
-  color: #64748b;
+  color: var(--color-text-secondary);
   margin-bottom: 4px;
 }
 
@@ -3744,41 +3744,41 @@ onMounted(() => {
 }
 
 .metric-value.highlight {
-  color: #6366f1;
+  color: var(--color-link);
 }
 
 .metric-value.personal-score {
-  color: #f59e0b;
+  color: var(--color-warning-text);
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
 .metric-value.win-stat {
-  color: #10b981;
+  color: var(--color-success-text);
 }
 
 .metric-value.dan-value {
   font-size: 12px;
-  color: #3b82f6;
+  color: var(--color-link);
 }
 
 .metric-value.progress-value {
   font-size: 12px;
-  color: #ef4444;
+  color: var(--color-danger-text);
 }
 
 .metric-unit {
   font-size: 11px;
   font-weight: normal;
-  color: #94a3b8;
+  color: var(--color-text-muted);
   margin-left: 2px;
 }
 
 .sub-rate {
   font-size: 11px;
   font-weight: normal;
-  color: #64748b;
+  color: var(--color-text-secondary);
   margin-left: 2px;
 }
 
@@ -3798,7 +3798,7 @@ onMounted(() => {
 
 .schedule-title {
   font-size: 11px;
-  color: #64748b;
+  color: var(--color-text-secondary);
   font-weight: 600;
 }
 
@@ -3813,8 +3813,8 @@ onMounted(() => {
   min-width: 100px;
   padding: 6px 8px;
   border-radius: 6px;
-  border: 1px solid var(--n-border-color, #e2e8f0);
-  background: var(--n-card-color, #ffffff);
+  border: 1px solid var(--n-border-color, var(--color-border));
+  background: var(--n-card-color, var(--color-surface));
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
@@ -3823,17 +3823,17 @@ onMounted(() => {
 }
 
 .schedule-chip:hover {
-  border-color: #3b82f6;
+  border-color: var(--color-accent);
 }
 
 .schedule-chip.active {
-  border-color: #3b82f6;
+  border-color: var(--color-accent);
   background: rgba(59, 130, 246, 0.06);
 }
 
 .chip-day {
   font-size: 10px;
-  color: #64748b;
+  color: var(--color-text-secondary);
   font-weight: 600;
 }
 
@@ -3848,7 +3848,7 @@ onMounted(() => {
 
 .chip-power {
   font-size: 11px;
-  color: #f59e0b;
+  color: var(--color-warning-text);
   font-weight: 600;
 }
 
@@ -3866,7 +3866,7 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   font-size: 11px;
-  color: #64748b;
+  color: var(--color-text-secondary);
   font-weight: 600;
 }
 
@@ -3904,7 +3904,7 @@ onMounted(() => {
   min-width: 110px;
   padding: 4px 6px;
   background: var(--n-card-color, rgba(0, 0, 0, 0.03));
-  border: 1px solid var(--n-border-color, #e2e8f0);
+  border: 1px solid var(--n-border-color, var(--color-border));
   border-radius: 6px;
   font-size: 11px;
 }
@@ -3919,8 +3919,8 @@ onMounted(() => {
 .hero-slot-badge {
   font-size: 10px;
   padding: 1px 4px;
-  background: #6366f1;
-  color: #fff;
+  background: var(--color-accent);
+  color: var(--color-accent-text);
   border-radius: 3px;
 }
 
@@ -3930,26 +3930,26 @@ onMounted(() => {
 }
 
 .hero-red {
-  color: #ef4444;
+  color: var(--color-danger-text);
   font-weight: 600;
 }
 
 .hb-badge {
   font-size: 10px;
   padding: 1px 4px;
-  background: #f59e0b;
-  color: #fff;
+  background: var(--color-warning);
+  color: var(--color-accent-text);
   border-radius: 3px;
 }
 
 .hero-card-pearl {
   margin-top: 2px;
   font-size: 10px;
-  color: #059669;
+  color: var(--color-success-text);
 }
 
 .text-muted {
-  color: #94a3b8;
+  color: var(--color-text-muted);
 }
 
 .loading-state,
@@ -3980,7 +3980,7 @@ onMounted(() => {
 .duel-player-info p {
   margin: 2px 0;
   font-size: 12px;
-  color: #64748b;
+  color: var(--color-text-secondary);
 }
 
 /* 战报明细选项卡与交战流水列表 */
@@ -4004,7 +4004,7 @@ onMounted(() => {
 
 .summary-box {
   background: var(--n-card-color, rgba(0, 0, 0, 0.03));
-  border: 1px solid var(--n-border-color, #e2e8f0);
+  border: 1px solid var(--n-border-color, var(--color-border));
   border-radius: 8px;
   padding: 10px 8px;
   display: flex;
@@ -4016,7 +4016,7 @@ onMounted(() => {
 
 .summary-box .s-label {
   font-size: 11px;
-  color: #64748b;
+  color: var(--color-text-secondary);
 }
 
 .summary-box .s-val {
@@ -4025,7 +4025,7 @@ onMounted(() => {
 }
 
 .highlight-text {
-  color: #6366f1;
+  color: var(--color-link);
 }
 
 .combat-list-container {
@@ -4043,7 +4043,7 @@ onMounted(() => {
   justify-content: space-between;
   padding: 10px 14px;
   border-radius: 8px;
-  border: 1px solid var(--n-border-color, #e2e8f0);
+  border: 1px solid var(--n-border-color, var(--color-border));
   background: var(--n-card-color, rgba(0, 0, 0, 0.01));
   transition: all 0.2s ease;
 }
@@ -4053,12 +4053,12 @@ onMounted(() => {
 }
 
 .combat-item.combat-win {
-  border-left: 4px solid #10b981;
+  border-left: 4px solid var(--color-success);
   background: rgba(16, 185, 129, 0.03);
 }
 
 .combat-item.combat-loss {
-  border-left: 4px solid #ef4444;
+  border-left: 4px solid var(--color-danger);
   background: rgba(239, 68, 68, 0.03);
 }
 
@@ -4075,7 +4075,7 @@ onMounted(() => {
 
 .combat-time {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--color-text-muted);
 }
 
 .combat-center {
@@ -4088,7 +4088,7 @@ onMounted(() => {
 
 .vs-text {
   font-size: 12px;
-  color: #64748b;
+  color: var(--color-text-secondary);
   font-weight: 600;
 }
 
@@ -4104,7 +4104,7 @@ onMounted(() => {
 
 .enemy-power {
   font-size: 12px;
-  color: #f59e0b;
+  color: var(--color-warning-text);
   font-weight: 500;
 }
 
@@ -4156,10 +4156,10 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--n-card-color, #ffffff);
+  background: var(--n-card-color, var(--color-surface));
   padding: 12px 16px;
   border-radius: 10px;
-  border: 1px solid var(--n-border-color, #e2e8f0);
+  border: 1px solid var(--n-border-color, var(--color-border));
   flex-wrap: wrap;
   gap: 12px;
 }
@@ -4178,7 +4178,7 @@ onMounted(() => {
 
 .indicator-sub {
   font-size: 12px;
-  color: #64748b;
+  color: var(--color-text-secondary);
 }
 
 .map-metrics-summary {
@@ -4200,9 +4200,9 @@ onMounted(() => {
 
 .fortress-card {
   position: relative;
-  background: var(--n-card-color, #ffffff);
+  background: var(--n-card-color, var(--color-surface));
   border-radius: 10px;
-  border: 1px solid var(--n-border-color, #e2e8f0);
+  border: 1px solid var(--n-border-color, var(--color-border));
   padding: 12px 14px;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -4215,7 +4215,7 @@ onMounted(() => {
 .fortress-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-  border-color: #3b82f6;
+  border-color: var(--color-accent);
 }
 
 .fortress-card.is-defeated {
@@ -4250,7 +4250,7 @@ onMounted(() => {
 .slot-badge {
   font-size: 13px;
   font-weight: 700;
-  color: #64748b;
+  color: var(--color-text-secondary);
   background: rgba(100, 116, 139, 0.1);
   padding: 2px 8px;
   border-radius: 6px;
@@ -4270,15 +4270,15 @@ onMounted(() => {
 }
 
 .stamp-defeated {
-  color: #ef4444;
+  color: var(--color-danger-text);
   background: rgba(239, 68, 68, 0.12);
-  border: 1px dashed #ef4444;
+  border: 1px dashed var(--color-danger);
 }
 
 .stamp-alive {
-  color: #10b981;
+  color: var(--color-success-text);
   background: rgba(16, 185, 129, 0.12);
-  border: 1px solid #10b981;
+  border: 1px solid var(--color-success);
 }
 
 .card-body {
@@ -4299,8 +4299,8 @@ onMounted(() => {
   right: -6px;
   font-size: 10px;
   font-weight: 800;
-  background: #ff4d4f;
-  color: #fff;
+  background: var(--color-danger);
+  color: var(--color-accent-text);
   padding: 0 4px;
 }
 
@@ -4322,7 +4322,7 @@ onMounted(() => {
 .member-power {
   font-size: 13px;
   font-weight: 700;
-  color: #f59e0b;
+  color: var(--color-warning-text);
   margin-bottom: 4px;
 }
 
@@ -4330,26 +4330,26 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px dashed var(--n-border-color, #e2e8f0);
+  border-top: 1px dashed var(--n-border-color, var(--color-border));
   padding-top: 8px;
   font-size: 11px;
 }
 
 .combat-stat-text {
-  color: #64748b;
+  color: var(--color-text-secondary);
 }
 
 .combat-stat-text .num {
   font-weight: 700;
-  color: #1e293b;
+  color: var(--color-text-primary);
 }
 
 .combat-stat-text .num.error {
-  color: #ef4444;
+  color: var(--color-danger-text);
 }
 
 .card-action-hint {
-  color: #3b82f6;
+  color: var(--color-link);
   font-weight: 600;
 }
 
@@ -4363,10 +4363,10 @@ onMounted(() => {
 .today-versus-score-banner {
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #1e293b 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 50%, var(--color-accent) 100%);
   border-radius: 12px;
   padding: 18px 24px;
-  color: #fff;
+  color: var(--color-accent-text);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
   gap: 14px;
 }
@@ -4406,16 +4406,16 @@ onMounted(() => {
 }
 
 .score-num.own-text {
-  color: #10b981;
+  color: var(--color-success-text);
 }
 
 .score-num.oppo-text {
-  color: #f43f5e;
+  color: var(--color-danger-text);
 }
 
 .score-label {
   font-size: 13px;
-  color: #94a3b8;
+  color: var(--color-text-muted);
 }
 
 .combat-rate-display {
@@ -4431,26 +4431,26 @@ onMounted(() => {
 .combat-rate-display .rate-num {
   font-size: 16px;
   font-weight: 800;
-  color: #38bdf8;
+  color: var(--color-link);
 }
 
 .combat-rate-display.oppo-rate .rate-num {
-  color: #fb7185;
+  color: var(--color-danger-text);
 }
 
 .combat-rate-display .rate-label {
   font-size: 12px;
-  color: #e2e8f0;
+  color: var(--color-link);
 }
 
 .combat-rate-display .rate-detail {
   font-size: 11px;
-  color: #94a3b8;
+  color: var(--color-text-muted);
 }
 
 .sub-stat {
   font-size: 12px;
-  color: #cbd5e1;
+  color: var(--color-text-secondary);
 }
 
 .vs-divider {
@@ -4466,7 +4466,7 @@ onMounted(() => {
   font-weight: 900;
   font-style: italic;
   letter-spacing: 2px;
-  color: #f59e0b;
+  color: var(--color-warning-text);
 }
 
 .score-gap-badge {
@@ -4478,14 +4478,14 @@ onMounted(() => {
 
 .score-gap-badge.lead {
   background: rgba(16, 185, 129, 0.2);
-  color: #34d399;
-  border: 1px solid #10b981;
+  color: var(--color-success-text);
+  border: 1px solid var(--color-success);
 }
 
 .score-gap-badge.lag {
   background: rgba(239, 68, 68, 0.2);
-  color: #f87171;
-  border: 1px solid #ef4444;
+  color: var(--color-danger-text);
+  border: 1px solid var(--color-danger);
 }
 
 .combat-comparison-bar-container {
@@ -4506,17 +4506,17 @@ onMounted(() => {
 }
 
 .bar-left-text {
-  color: #38bdf8;
+  color: var(--color-link);
   font-weight: 700;
 }
 
 .bar-center-title {
-  color: #cbd5e1;
+  color: var(--color-text-secondary);
   font-size: 11px;
 }
 
 .bar-right-text {
-  color: #fb7185;
+  color: var(--color-danger-text);
   font-weight: 700;
 }
 
@@ -4529,22 +4529,22 @@ onMounted(() => {
 }
 
 .comparison-fill-left {
-  background: linear-gradient(90deg, #38bdf8, #10b981);
+  background: linear-gradient(90deg, var(--color-accent), var(--color-success));
   height: 100%;
   transition: width 0.4s ease;
 }
 
 .comparison-fill-right {
-  background: linear-gradient(90deg, #f43f5e, #fb7185);
+  background: linear-gradient(90deg, var(--color-danger), var(--color-danger));
   height: 100%;
   margin-left: auto;
   transition: width 0.4s ease;
 }
 
 .attendance-control-panel {
-  background: var(--n-card-color, #ffffff);
+  background: var(--n-card-color, var(--color-surface));
   border-radius: 10px;
-  border: 1px solid var(--n-border-color, #e2e8f0);
+  border: 1px solid var(--n-border-color, var(--color-border));
   padding: 14px 18px;
 }
 
@@ -4564,7 +4564,7 @@ onMounted(() => {
 }
 
 .att-icon {
-  color: #f59e0b;
+  color: var(--color-warning-text);
   font-size: 20px;
 }
 
@@ -4583,15 +4583,15 @@ onMounted(() => {
 .box-label {
   font-size: 13px;
   font-weight: 600;
-  color: #d97706;
+  color: var(--color-warning-text);
 }
 
 .box-label.error-label {
-  color: #ef4444;
+  color: var(--color-danger-text);
 }
 
 .box-label.warning-label {
-  color: #d97706;
+  color: var(--color-warning-text);
 }
 
 .unattacked-tags {
@@ -4610,9 +4610,9 @@ onMounted(() => {
 }
 
 .table-card {
-  background: var(--n-card-color, #ffffff);
+  background: var(--n-card-color, var(--color-surface));
   border-radius: 10px;
-  border: 1px solid var(--n-border-color, #e2e8f0);
+  border: 1px solid var(--n-border-color, var(--color-border));
   padding: 14px 16px;
 }
 
@@ -4636,7 +4636,7 @@ onMounted(() => {
 
 .table-header-title .sub-hint {
   font-size: 12px;
-  color: #64748b;
+  color: var(--color-text-secondary);
   font-weight: normal;
 }
 
@@ -4646,7 +4646,7 @@ onMounted(() => {
   gap: 8px;
   font-size: 13px;
   font-weight: normal;
-  color: #64748b;
+  color: var(--color-text-secondary);
 }
 
 /* ================= 视图 3：当周全员战绩 & 排位天梯 ================= */
@@ -4657,9 +4657,9 @@ onMounted(() => {
 }
 
 .group-rank-section {
-  background: var(--n-card-color, #ffffff);
+  background: var(--n-card-color, var(--color-surface));
   border-radius: 10px;
-  border: 1px solid var(--n-border-color, #e2e8f0);
+  border: 1px solid var(--n-border-color, var(--color-border));
   padding: 14px 18px;
 }
 
@@ -4682,7 +4682,7 @@ onMounted(() => {
 .group-rank-card {
   border-radius: 8px;
   padding: 12px 14px;
-  border: 1px solid var(--n-border-color, #e2e8f0);
+  border: 1px solid var(--n-border-color, var(--color-border));
   background: rgba(0, 0, 0, 0.02);
   display: flex;
   flex-direction: column;
@@ -4692,26 +4692,26 @@ onMounted(() => {
 }
 
 .group-rank-card.is-own-club {
-  border: 2px solid #10b981;
+  border: 2px solid var(--color-success);
   background: rgba(16, 185, 129, 0.04);
 }
 
 .group-rank-card.rank-1 {
-  border-left: 4px solid #f59e0b;
+  border-left: 4px solid var(--color-warning);
 }
 
 .group-rank-card.rank-2 {
-  border-left: 4px solid #94a3b8;
+  border-left: 4px solid var(--color-accent);
 }
 
 .group-rank-card.rank-3 {
-  border-left: 4px solid #b45309;
+  border-left: 4px solid var(--color-warning);
 }
 
 .rank-badge-num {
   font-size: 12px;
   font-weight: 700;
-  color: #64748b;
+  color: var(--color-text-secondary);
 }
 
 .club-main-info .club-title-row {
@@ -4728,7 +4728,7 @@ onMounted(() => {
 
 .club-main-info .server-tag {
   font-size: 11px;
-  color: #94a3b8;
+  color: var(--color-text-muted);
 }
 
 .club-rank-score {
@@ -4741,11 +4741,11 @@ onMounted(() => {
 .club-rank-score .score-val {
   font-size: 22px;
   font-weight: 800;
-  color: #6366f1;
+  color: var(--color-link);
 }
 
 .club-rank-score .score-unit {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--color-text-muted);
 }
 </style>

@@ -111,7 +111,7 @@
                   <p>正在获取地图数据...</p>
                 </template>
                 <template v-else>
-                  <n-icon size="48" color="#ccc">
+                  <n-icon size="48" color="var(--color-text-disabled)">
                     <MapOutline />
                   </n-icon>
                   <p>暂无地图数据，请手动刷新数据</p>
@@ -745,10 +745,9 @@ onUnmounted(() => {
   padding: 8px;
 
   .legion-war-map-card {
-    background: #fff;
+    background: var(--color-surface);
     border-radius: 8px;
-    box-shadow:
-      0 1px 2px -2px rgba(0, 0, 0, 0.08),
+    box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.08),
       0 3px 6px 0 rgba(0, 0, 0, 0.06),
       0 5px 12px 4px rgba(0, 0, 0, 0.04);
 
@@ -763,7 +762,7 @@ onUnmounted(() => {
     .access-denied-info {
       margin-top: 16px;
       text-align: left;
-      color: #666;
+      color: var(--color-text-secondary);
 
       p {
         margin: 4px 0;
@@ -775,7 +774,7 @@ onUnmounted(() => {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid var(--color-border);
       flex-wrap: wrap;
       gap: 12px;
 
@@ -793,12 +792,12 @@ onUnmounted(() => {
           h2 {
             margin: 0;
             font-size: 18px;
-            color: #333;
+            color: var(--color-text-primary);
           }
           p {
             margin: 4px 0 0;
             font-size: 12px;
-            color: #999;
+            color: var(--color-text-muted);
           }
         }
       }
@@ -815,7 +814,7 @@ onUnmounted(() => {
 
           .stat-label {
             font-size: 13px;
-            color: #666;
+            color: var(--color-text-secondary);
           }
         }
       }
@@ -832,7 +831,7 @@ onUnmounted(() => {
         flex: 1;
         height: 100%;
         position: relative;
-        background-color: #f5f5f5;
+        background-color: var(--color-surface-muted);
         overflow: hidden;
 
         .map-container {
@@ -860,7 +859,7 @@ onUnmounted(() => {
 
           .empty-content {
             text-align: center;
-            color: #999;
+            color: var(--color-text-muted);
 
             p {
               margin-top: 12px;
@@ -872,8 +871,8 @@ onUnmounted(() => {
       .side-info-panel {
         width: 300px;
         height: 100%;
-        background: #fff;
-        border-left: 1px solid #eee;
+        background: var(--color-surface);
+        border-left: 1px solid var(--color-border);
         display: flex;
         flex-direction: column;
         z-index: 20;
@@ -881,13 +880,13 @@ onUnmounted(() => {
 
         .panel-header {
           padding: 12px 16px;
-          border-bottom: 1px solid #eee;
-          background: #f9f9f9;
+          border-bottom: 1px solid var(--color-border);
+          background: var(--color-surface-muted);
 
           h3 {
             margin: 0;
             font-size: 16px;
-            color: #333;
+            color: var(--color-text-primary);
           }
         }
 
@@ -901,22 +900,22 @@ onUnmounted(() => {
             align-items: center;
             padding: 2px 4px; /* 进一步减小内边距 */
             margin-bottom: 2px; /* 进一步减小外边距 */
-            background: #f8f9fa;
+            background: var(--color-surface);
             border-radius: 4px;
             border-left: 4px solid transparent;
             transition: all 0.2s;
             height: 32px; /* 进一步减小固定高度 */
 
             &:hover {
-              background: #f0f0f0;
+              background: var(--color-surface-muted);
               transform: translateX(2px);
             }
 
             .rank-badge {
               width: 18px;
               height: 18px;
-              background: #e0e0e0;
-              color: #666;
+              background: var(--color-surface-muted);
+              color: var(--color-text-secondary);
               border-radius: 50%;
               display: flex;
               align-items: center;
@@ -936,7 +935,7 @@ onUnmounted(() => {
 
               .legion-name {
                 font-size: 13px; /* 缩小字体 */
-                color: #333;
+                color: var(--color-text-primary);
                 font-weight: 500;
                 white-space: nowrap;
                 overflow: hidden;
@@ -946,7 +945,7 @@ onUnmounted(() => {
                 flex: 1; /* 占据剩余空间 */
 
                 .legion-id {
-                  color: #999;
+                  color: var(--color-text-muted);
                   font-size: 11px;
                   margin-right: 4px;
                   font-weight: normal;
@@ -961,7 +960,7 @@ onUnmounted(() => {
                 flex-shrink: 0; /* 防止被压缩 */
 
                 .stat-red {
-                  color: #d03050;
+                  color: var(--color-danger-text);
                   background: rgba(208, 48, 80, 0.1);
                   padding: 1px 4px; /* 减小内边距 */
                   border-radius: 3px;
@@ -982,13 +981,13 @@ onUnmounted(() => {
               .group-name {
                 font-weight: bold;
                 font-size: 13px; /* 缩小字体 */
-                color: #333;
+                color: var(--color-text-primary);
                 margin-right: 6px;
               }
 
               .group-count {
                 font-size: 11px;
-                color: #999;
+                color: var(--color-text-muted);
               }
             }
           }

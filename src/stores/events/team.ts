@@ -31,6 +31,10 @@ export const TeamPlugin = ({ onSome }: EVM) => {
       "presetteam_setteamresp",
       "presetteam_saveteam",
       "presetteam_saveteamresp",
+      // 读取阵容的响应同样携带 presetTeamInfo（含当前 useTeamId），
+      // 缓存下来作为补差 / 批量流程解析失败时的兜底数据源。
+      "presetteam_getinfo",
+      "presetteam_getinforesp",
     ],
     (data: XyzwSession) => {
       gameLogger.verbose(`收到队伍信息事件: ${data.tokenId}`, data);

@@ -6,6 +6,23 @@
     <title>XYZW 游戏管理系统</title>
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <style>
+      /* 首屏样式：只服务于「应用挂载前」的那一帧。
+         颜色与 src/assets/styles/tokens.scss 保持同一组值（不用紫靛渐变）。 */
+      :root {
+        --boot-bg: #e9edf2;
+        --boot-text: #14181f;
+        --boot-muted: #5f6975;
+        --boot-accent: #2b54d4;
+      }
+
+      html[data-theme="dark"],
+      html.dark {
+        --boot-bg: #0d0f13;
+        --boot-text: #e9ecf2;
+        --boot-muted: #8f99a8;
+        --boot-accent: #7a97f0;
+      }
+
       * {
         margin: 0;
         padding: 0;
@@ -14,18 +31,11 @@
 
       body {
         font-family:
-          "SF Pro Display",
-          -apple-system,
-          BlinkMacSystemFont,
-          "Segoe UI",
-          "PingFang SC",
-          "Hiragino Sans GB",
-          "Microsoft YaHei",
-          "Helvetica Neue",
-          Helvetica,
-          Arial,
-          sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI",
+          "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
+          Helvetica, Arial, sans-serif;
+        background: var(--boot-bg);
+        color: var(--boot-text);
         min-height: 100vh;
       }
 
@@ -35,11 +45,35 @@
 
       .loading {
         display: flex;
+        gap: 12px;
         justify-content: center;
         align-items: center;
         height: 100vh;
-        color: white;
-        font-size: 18px;
+        color: var(--boot-muted);
+        font-size: 15px;
+        letter-spacing: 0.01em;
+      }
+
+      .loading::before {
+        content: "";
+        width: 16px;
+        height: 16px;
+        border: 2px solid currentColor;
+        border-top-color: var(--boot-accent);
+        border-radius: 50%;
+        animation: boot-spin 900ms linear infinite;
+      }
+
+      @keyframes boot-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .loading::before {
+          animation: none;
+        }
       }
     </style>
   </head>
