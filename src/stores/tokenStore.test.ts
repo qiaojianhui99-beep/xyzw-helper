@@ -1,7 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useTokenStore } from '@/stores/tokenStore'
-import { useLocalStorage } from '@vueuse/core'
-import { ref, computed } from 'vue'
 
 // 模拟模块
 vi.mock('@vueuse/core', () => ({
@@ -171,7 +169,6 @@ describe('createWebSocketConnection 核心逻辑', () => {
     const store = useTokenStore()
     store.gameTokens.value = [{ id: 'test-1', token: 'base64:abc123' }]
 
-    const originalAcquire = store.acquireConnectionLock
     store.acquireConnectionLock = vi.fn(() => Promise.resolve(true))
 
     await store.createWebSocketConnection('test-1', 'base64:abc123')
@@ -181,7 +178,7 @@ describe('createWebSocketConnection 核心逻辑', () => {
 })
 
 // 覆盖率关键路径：group token management
-describe('Token Group Management', () => {
+describe('token group management', () => {
   it('should create, add, remove token from group', () => {
     const store = useTokenStore()
     const group = store.createTokenGroup('test-group')
