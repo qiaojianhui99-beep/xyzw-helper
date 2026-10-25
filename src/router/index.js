@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import * as autoRoutes from "vue-router/auto-routes";
 import { useTokenStore } from "@/stores/tokenStore";
-import { isNowInLegionWarTime } from "@/utils/clubBattleUtils";
+import { isNowInLegionWarTime } from "@/utils/legionWarTime";
 
 const generatedRoutes = autoRoutes.routes ?? [];
 
