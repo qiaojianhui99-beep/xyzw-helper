@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import zlib from "node:zlib";
 import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vite";
 
@@ -18,6 +19,176 @@ async function safeImport(moduleName, humanName) {
     }
     throw error;
   }
+}
+
+function walkFiles(dir) {
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const full = path.join(dir, entry.name);
+    return entry.isDirectory() ? walkFiles(full) : [full];
+  });
+}
+
+/**
+ * 把 src/xyzw/** 原样拷进 dist/game-runtime/。
+ * 这些文件是游戏侧产物（不允许改），本身就是独立的经典脚本，
+ * 不需要（也不应该）进 rollup 依赖图，交给 src/utils/gameRuntime.js 运行时注入。
+ */
+function emitGameRuntimePlugin() {
+  const files = ["cocos2d-js-min.js", "game-defines.js", "index.js"];
+  return {
+    name: "emit-game-runtime",
+    apply: "build",
+    enforce: "post",
+    closeBundle() {
+      const fromDir = path.resolve(__dirname, "src/xyzw");
+      const toDir = path.resolve(__dirname, "dist/game-runtime");
+      if (!fs.existsSync(fromDir)) {
+        console.warn(`\n[emit-game-runtime] 未找到 ${fromDir}`);
+        return;
+      }
+      fs.mkdirSync(toDir, { recursive: true });
+      let bytes = 0;
+      for (const file of files) {
+        const src = path.join(fromDir, file);
+        if (!fs.existsSync(src)) {
+          console.warn(`\n[emit-game-runtime] 缺少 ${file}，跳过`);
+          continue;
+        }
+        fs.copyFileSync(src, path.join(toDir, file));
+        bytes += fs.statSync(src).size;
+      }
+      console.log(
+        `\n[emit-game-runtime] ${files.length} 个文件 → dist/game-runtime/（${(bytes / 1024 / 1024).toFixed(2)} MB，按需加载）`,
+      );
+    },
+  };
+}
+
+/**
+ * 开发态直接吐 src/xyzw 的原始文件：走 Vite 的 transform 管线会塞进 inline sourcemap，
+ * 1.7 MB 的文件会膨胀成 12 MB。
+ */
+function gameRuntimeDevPlugin() {
+  const files = new Set(["cocos2d-js-min.js", "game-defines.js", "index.js"]);
+  return {
+    name: "game-runtime-dev",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const url = (req.url || "").split("?")[0];
+        const idx = url.indexOf("/game-runtime/");
+        if (idx === -1) return next();
+        const name = url.slice(idx + "/game-runtime/".length);
+        if (!files.has(name)) return next();
+        const file = path.resolve(__dirname, "src/xyzw", name);
+        if (!fs.existsSync(file)) {
+          res.statusCode = 404;
+          res.end("game runtime file not found");
+          return;
+        }
+        res.setHeader("Content-Type", "application/javascript; charset=utf-8");
+        res.setHeader("Cache-Control", "no-cache");
+        fs.createReadStream(file).pipe(res);
+        return undefined;
+      });
+    },
+  };
+}
+
+/**
+ * 产物预压缩：为静态服务器（nginx gzip_static / Cloudflare Pages）生成 .gz 与 .br，
+ * 省掉运行时压缩的 CPU，也让 CDN 能直接吐压缩体。
+ */
+function precompressPlugin() {
+  const targets = /\.(?:js|mjs|css|html|json|svg|txt|xml|map)$/i;
+  const minBytes = 1024;
+  const maxBrotliBytes = 6 * 1024 * 1024;
+  return {
+    name: "precompress",
+    apply: "build",
+    enforce: "post",
+    closeBundle() {
+      const distDir = path.resolve(__dirname, "dist");
+      if (!fs.existsSync(distDir)) return;
+      let count = 0;
+      let raw = 0;
+      let gz = 0;
+      let br = 0;
+      for (const file of walkFiles(distDir)) {
+        if (!targets.test(file)) continue;
+        const buf = fs.readFileSync(file);
+        if (buf.length < minBytes) continue;
+        const gzBuf = zlib.gzipSync(buf, { level: 9 });
+        fs.writeFileSync(`${file}.gz`, gzBuf);
+        let brSize = 0;
+        if (buf.length <= maxBrotliBytes) {
+          const brBuf = zlib.brotliCompressSync(buf, {
+            params: {
+              [zlib.constants.BROTLI_PARAM_QUALITY]: 9,
+              [zlib.constants.BROTLI_PARAM_MODE]:
+                zlib.constants.BROTLI_MODE_TEXT,
+            },
+          });
+          fs.writeFileSync(`${file}.br`, brBuf);
+          brSize = brBuf.length;
+        }
+        count += 1;
+        raw += buf.length;
+        gz += gzBuf.length;
+        br += brSize;
+      }
+      console.log(
+        `\n[precompress] ${count} 个文件：原始 ${(raw / 1024 / 1024).toFixed(2)} MB → gzip ${(gz / 1024 / 1024).toFixed(2)} MB / brotli ${(br / 1024 / 1024).toFixed(2)} MB`,
+      );
+    },
+  };
+}
+
+/** 第三方依赖分包：把长期不变的库拆成独立 vendor chunk，便于长缓存与并行下载 */
+function manualChunks(id) {
+  if (!id.includes("node_modules")) return undefined;
+  const normalized = id.replace(/\\/g, "/");
+  if (normalized.includes("/xlsx/")) return "vendor-xlsx";
+  if (normalized.includes("/html2canvas/")) return "vendor-html2canvas";
+  if (normalized.includes("/moment/")) return "vendor-moment";
+  if (normalized.includes("/crypto-js/") || normalized.includes("/lz4js/")) {
+    return "vendor-crypto";
+  }
+  if (
+    normalized.includes("/naive-ui/") ||
+    normalized.includes("/vueuc/") ||
+    normalized.includes("/seemly/") ||
+    normalized.includes("/css-render/") ||
+    normalized.includes("/@css-render/") ||
+    normalized.includes("/treemate/") ||
+    normalized.includes("/vdirs/") ||
+    normalized.includes("/vooks/") ||
+    normalized.includes("/evtd/") ||
+    normalized.includes("/@vicons/")
+  ) {
+    return "vendor-naive";
+  }
+  if (
+    normalized.includes("/node_modules/vue/") ||
+    normalized.includes("/node_modules/@vue/") ||
+    normalized.includes("/vue-router/") ||
+    normalized.includes("/pinia/") ||
+    normalized.includes("/@vueuse/") ||
+    normalized.includes("/vue-i18n/") ||
+    normalized.includes("/@intlify/")
+  ) {
+    return "vendor-vue";
+  }
+  if (
+    normalized.includes("/axios/") ||
+    normalized.includes("/p-queue/") ||
+    normalized.includes("/idb/") ||
+    normalized.includes("/event-emitter3/")
+  ) {
+    return "vendor-misc";
+  }
+  return undefined;
 }
 
 export default defineConfig(async () => {
@@ -74,17 +245,18 @@ export default defineConfig(async () => {
     dts: "src/auto-imports.d.ts",
   });
 
-  const { ArcoResolver } = componentsResolversModule ?? {};
+  const { ArcoResolver, NaiveUiResolver } = componentsResolversModule ?? {};
+  const resolvers = [
+    // 按需引入 naive-ui 组件（模板里的 <n-button> 等），替代 app.use(naive) 全量注册
+    NaiveUiResolver && NaiveUiResolver({ importStyle: false }),
+    // importStyle: "css" → 只把真正用到的组件样式注入对应 chunk，
+    // 不再在 main.js 全量 import arco.css（468 KB）
+    ArcoResolver && ArcoResolver({ importStyle: "css" }),
+  ].filter(Boolean);
   const componentsPlugin = componentsModule?.default?.({
     dirs: ["src/components"],
     globsExclude: ["**/Private/**"],
-    resolvers: ArcoResolver
-      ? [
-          ArcoResolver({
-            importStyle: false,
-          }),
-        ]
-      : [],
+    resolvers,
   });
 
   const unoCssPlugin = unoCssModule?.default?.();
@@ -124,6 +296,9 @@ export default defineConfig(async () => {
         }
       },
     },
+    gameRuntimeDevPlugin(),
+    emitGameRuntimePlugin(),
+    precompressPlugin(),
   ].filter(Boolean);
 
   return {
@@ -132,6 +307,45 @@ export default defineConfig(async () => {
       alias: {
         "@": path.resolve(__dirname, "src"),
       },
+      dedupe: ["vue", "vue-router"],
+    },
+    build: {
+      // 保持 Vite 默认的现代浏览器基线（WeChat / iOS 老 WebView 仍在用）
+      target: "modules",
+      outDir: "dist",
+      assetsDir: "assets",
+      sourcemap: false,
+      minify: "esbuild",
+      cssMinify: "esbuild",
+      cssCodeSplit: true,
+      assetsInlineLimit: 4096,
+      reportCompressedSize: true,
+      chunkSizeWarningLimit: 900,
+      modulePreload: { polyfill: true },
+      rollupOptions: {
+        output: {
+          manualChunks,
+          // 让 vendor chunk 的文件名稳定，便于 CDN 长缓存
+          chunkFileNames: "assets/[name]-[hash].js",
+          entryFileNames: "assets/[name]-[hash].js",
+          assetFileNames: "assets/[name]-[hash][extname]",
+        },
+      },
+    },
+    // 非致命但会拖累产物的调试代码：构建时去掉 debugger 断点
+    esbuild: {
+      drop: ["debugger"],
+    },
+    optimizeDeps: {
+      include: [
+        "vue",
+        "vue-router",
+        "pinia",
+        "naive-ui",
+        "@arco-design/web-vue",
+        "@vueuse/core",
+        "xlsx",
+      ],
     },
     server: {
       port: 3000,

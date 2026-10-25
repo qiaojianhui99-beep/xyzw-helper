@@ -82,8 +82,10 @@
       <div class="loading">正在加载应用...</div>
     </div>
     <script type="module" src="/src/main.js"></script>
-    <script type="module" src="/src/xyzw/cocos2d-js-min.js"></script>
-    <script type="module" src="/src/xyzw/game-defines.js"></script>
-    <script type="module" src="/src/xyzw/index.js"></script>
+    <!--
+      游戏运行时（src/xyzw/**，约 4 MB）不再挂在首屏：
+      改由 src/utils/gameRuntime.js 在 Token 管理页按需注入，
+      构建时 vite.config.js 的 emit-game-runtime 插件会把它原样拷到 dist/game-runtime/。
+    -->
   </body>
 </html>

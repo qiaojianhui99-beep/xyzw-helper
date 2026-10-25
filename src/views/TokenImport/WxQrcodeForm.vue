@@ -160,6 +160,7 @@ import {
   getRoleBinFileName,
 } from "@/utils/binFile";
 import { g_utils } from "@/utils/bonProtocol";
+import { ensureGameRuntime } from "@/utils/gameRuntime";
 import { getServerList, getTokenId, transformToken } from "@/utils/token";
 // 定义事件
 const emit = defineEmits(["cancel", "ok"]);
@@ -568,6 +569,8 @@ const getEncryptedData = async (code) => {
 
   // 这里简化处理，实际应该调用游戏加密模块生成bin
   // 由于是前端环境，我们模拟生成一个token
+  // 游戏运行时按需注入（src/utils/gameRuntime.js），先确保 __require 已挂载
+  await ensureGameRuntime();
   const dm = (window as any).__require?.("13");
   if (!dm?.encMsg || !dm?.lz4XorEncode)
     throw new Error("游戏加密模块未加载，不能生成 bin");

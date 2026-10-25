@@ -1,3 +1,4 @@
+import { ensureGameRuntime } from "@/utils/gameRuntime";
 import { getServerList, transformToken } from "@/utils/token";
 
 export interface SavedCombUser {
@@ -69,6 +70,8 @@ export async function refreshTokenFromCombUser(
   combUser: SavedCombUser,
   config: RoleMatchConfig,
 ) {
+  // 生成 bin 依赖游戏加密模块，确保运行时已注入（首屏不再预载）
+  await ensureGameRuntime();
   const baseBin = generateBinFromCombUser(combUser);
   const listStr = await getServerList(baseBin);
   const roles = JSON.parse(listStr || "{}");

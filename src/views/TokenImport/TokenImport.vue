@@ -748,6 +748,7 @@ import {
   getRoleBinFileName,
 } from "@/utils/binFile";
 import { prepareMultiGameLaunch } from "@/utils/gameLauncher";
+import { ensureGameRuntime, prefetchGameRuntime } from "@/utils/gameRuntime";
 import {
   pruneTokenSelection,
   selectAllTokenIds,
@@ -1384,6 +1385,7 @@ const downloadTokenBin = async (token) => {
   try {
     let sourceBin;
     if (token.combUser) {
+      await ensureGameRuntime();
       sourceBin = generateBinFromCombUser(token.combUser, token.serverId);
     } else {
       sourceBin = await getArrayBuffer(token.id);
@@ -1968,6 +1970,10 @@ const handleRateLimitWaiting = (data) => {
 // 生命周期
 onMounted(async () => {
   tokenStore.initTokenStore();
+
+  // 本页是唯一用到游戏加密模块（__require("13")）的地方：空闲时预取运行时，
+  // 不阻塞首屏，等用户真去登录/导出时再 await 兜底。
+  prefetchGameRuntime();
 
   // 监听限流等待事件
   $emit.on("token:refresh:waiting", handleRateLimitWaiting);

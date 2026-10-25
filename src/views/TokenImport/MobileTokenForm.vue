@@ -149,6 +149,7 @@ import {
   getRoleBinFileName,
 } from "@/utils/binFile";
 import { g_utils } from "@/utils/bonProtocol";
+import { ensureGameRuntime } from "@/utils/gameRuntime";
 import { encodeHortorLoginPayload } from "@/utils/hortorMobileLogin";
 import { getServerList, getTokenId, transformToken } from "@/utils/token";
 
@@ -400,6 +401,8 @@ const loginWithVerificationCode = async () => {
     const data = ensureSuccess(await response.json(), "登录失败");
     if (!data?.combUser) throw new Error("登录响应缺少用户凭据");
     currentCombUser.value = data.combUser;
+    // 游戏加密模块（__require("13")）按需注入，先确保已就绪
+    await ensureGameRuntime();
     await loadRoles(createGameLoginBuffer(data.combUser));
     message.success("登录成功，请选择需要添加的角色");
   } catch (error: any) {
