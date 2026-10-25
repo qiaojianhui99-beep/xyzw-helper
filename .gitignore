@@ -1,137 +1,123 @@
-# Logs
-logs
+# ============================================================================
+# XYZW Web Helper — Git 忽略规则
+# 原则：
+#   1) 依赖 / 构建产物 / 缓存 / 日志不入库（体积大、可重建）
+#   2) 纯前端项目，凭证（游戏 Token、bin 文件）只属于本机，绝不入库
+#   3) 文档必须入库（README / CHANGELOG / AGENTS / CLAUDE / docs / design-system），
+#      因此这里不再使用 `*.md` 这种全量忽略，只忽略本地草稿
+# ============================================================================
+
+# ---------------------------------------------------------------- 依赖 / 包管理
+node_modules/
+jspm_packages/
+.pnpm-store/
+.npm/
+.yarn/
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+.yarn-integrity
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+*.tgz
+
+# ---------------------------------------------------------------- 构建产物 / 缓存
+dist/
+dist-ssr/
+dist-*/
+release/
+.vite/
+.cache/
+.parcel-cache/
+.turbo/
+.eslintcache
+.nuxt/
+.next/
+.serverless/
+coverage/
+.nyc_output/
+*.tsbuildinfo
+*.local
+*.local.*
+
+# ---------------------------------------------------------------- 日志 / 临时文件
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# IDE
-# 同步vscode工作空间的配置
-# .vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Logs
-logs
-*.log
-*.md
-# Runtime data
 pids
 *.pid
 *.seed
 *.pid.lock
-
-# 用户敏感数据（token 凭证、bin 文件）- 不要上传到 git
-xyzw_data/
-
-# 敏感凭据二进制文件
-*.bin
-public/xyzw_token.bin
-
-# 临时测试与探查脚本目录
-scratch/
-
-# Vite 缓存
-.vite/
-
-# Coverage directory used by tools like istanbul
-coverage/
-
-# nyc test coverage
-.nyc_output
-
-# Dependency directories
-jspm_packages/
-
-# TypeScript cache
-*.tsbuildinfo
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Microbundle cache
-.rpt2_cache/
-.rts2_cache_cjs/
-.rts2_cache_es/
-.rts2_cache_umd/
-
-# Optional REPL history
 .node_repl_history
+*.swp
+*.swo
+*.ntvs*
+*.njsproj
+*.sln
+*.suo
 
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-
-# dotenv environment variable files
+# ---------------------------------------------------------------- 环境变量 / 本地配置
 .env
-.env.development
-.env.test
-.env.production
-.env.local
-.env.*.local
+.env.*
+!.env.example
+.envrc
+config.local.*
+deploy/*.local.*
+deploy/.env*
 
-# parcel-bundler cache (https://parceljs.org/)
-.cache
-.parcel-cache
+# ---------------------------------------------------------------- 敏感数据（Token / bin / 抓包）
+# 游戏 Token、伏羲 bin、抓包数据一律不上传
+xyzw_data/
+*.bin
+!public/game/**/*.bin
+public/xyzw_token.bin
+*.token
+*.tokens
+*.har
 
-# Next.js build output
-.next
+# ---------------------------------------------------------------- 本地草稿 / 探查脚本
+scratch/
+tmp/
+temp/
+*.draft.*
+*.local.md
+*-draft.md
+docs/private/
+docs/local/
 
-# Nuxt.js build / generate output
-.nuxt
-dist
+# ---------------------------------------------------------------- 编辑器 / 系统
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+.history/
+*.code-workspace
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+desktop.ini
 
-# Gatsby files
-.cache/
-# Comment in the case you want to commit your Gatsby cache
-# src/.cache
+# ---------------------------------------------------------------- 测试 / 覆盖率产物
+test-results/
+playwright-report/
+screenshots/
 
-# Serverless directories
-.serverless/
-
-# FuseBox cache
-.fusebox/
-
-# DynamoDB Local files
-.dynamodb/
-
-# Tern JS port file
-.tern-port
-
-# Stores VSCode versions used for testing VSCode extensions
-.vscode-test
-
-# yarn v2
-.yarn/cache
-.yarn/unplugged
-.yarn/build-state.yml
-.yarn/install-state.gz
-.pnp.*
+# ---------------------------------------------------------------- 反向保险：文档与契约文件必须入库
+!README.md
+!CHANGELOG.md
+!LICENSE
+!AGENTS.md
+!CLAUDE.md
+!docs/**
+!design-system/**
