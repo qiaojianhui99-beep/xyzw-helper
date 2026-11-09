@@ -13,11 +13,11 @@
  */
 
 import assert from "node:assert/strict";
-import { after, afterEach, before, beforeEach, describe, it } from "node:test";
 import process from "node:process";
+import { after, afterEach, before, beforeEach, describe, it } from "node:test";
+import { seal } from "../src/infra/crypto.js";
 import { closePool, many, pool } from "../src/infra/db.js";
 import { executeTask, resetClientFactory, setClientFactory } from "../src/worker/runner.js";
-import { seal } from "../src/infra/crypto.js";
 
 /** 记录所有被创建过的 fake 客户端，便于断言。 */
 let created = [];

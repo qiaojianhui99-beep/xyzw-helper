@@ -11,10 +11,10 @@
     "build": "vite build",
     "check:bundle": "node scripts/check-bundle-size.mjs",
     "preview": "vite preview",
-    "lint": "eslint src render-backend test public/game/multi-game-storage-bridge.js public/game/diagnose_require.js vite.config.js worker.js eslint.config.mjs uno.config.ts --max-warnings 0",
-    "format": "prettier --write \"src/**/*.{js,ts,tsx,vue,css,scss,json}\" \"render-backend/**/*.{js,json}\" \"test/**/*.js\" \"*.{js,mjs,ts,json,html}\" \"public/game/{index.html,multi-game.html,multi-game-storage-bridge.js,diagnose_require.js}\"",
-    "lint:fix": "eslint src render-backend test public/game/multi-game-storage-bridge.js public/game/diagnose_require.js vite.config.js worker.js eslint.config.mjs uno.config.ts --max-warnings 0 --fix",
-    "format:check": "prettier --check \"src/**/*.{js,ts,tsx,vue,css,scss,json}\" \"render-backend/**/*.{js,json}\" \"test/**/*.js\" \"*.{js,mjs,ts,json,html}\" \"public/game/{index.html,multi-game.html,multi-game-storage-bridge.js,diagnose_require.js}\"",
+    "lint": "eslint src render-backend backend/src backend/test backend/scripts test public/game/multi-game-storage-bridge.js public/game/diagnose_require.js vite.config.js worker.js eslint.config.mjs uno.config.ts --max-warnings 0",
+    "format": "prettier --write \"src/**/*.{js,ts,tsx,vue,css,scss,json}\" \"render-backend/**/*.{js,json}\" \"backend/**/*.{js,mjs,json}\" \"test/**/*.js\" \"*.{js,mjs,ts,json,html}\" \"public/game/{index.html,multi-game.html,multi-game-storage-bridge.js,diagnose_require.js}\"",
+    "lint:fix": "eslint src render-backend backend/src backend/test backend/scripts test public/game/multi-game-storage-bridge.js public/game/diagnose_require.js vite.config.js worker.js eslint.config.mjs uno.config.ts --max-warnings 0 --fix",
+    "format:check": "prettier --check \"src/**/*.{js,ts,tsx,vue,css,scss,json}\" \"render-backend/**/*.{js,json}\" \"backend/**/*.{js,mjs,json}\" \"test/**/*.js\" \"*.{js,mjs,ts,json,html}\" \"public/game/{index.html,multi-game.html,multi-game-storage-bridge.js,diagnose_require.js}\"",
     "test": "node --import ./test/helpers/register-alias.mjs --test test/*.test.js",
     "test:no-alias": "node --test test/*.test.js",
     "test:backend": "node --test --test-concurrency=1 backend/test/*.test.js",
@@ -25,9 +25,11 @@
     "db:reset": "docker compose -f backend/docker-compose.dev.yml down -v && docker compose -f backend/docker-compose.dev.yml up -d",
     "check:arch": "node scripts/check-architecture.mjs",
     "update:arch": "node scripts/check-architecture.mjs --update",
-    "verify": "node scripts/check-architecture.mjs && npm run lint && npm test",
+    "verify": "node scripts/check-architecture.mjs --strict && npm run lint && npm test",
     "verify:backend": "npm run test:backend",
-    "verify:full": "node scripts/check-architecture.mjs && npm run lint && npm test && npm run build"
+    "verify:full": "node scripts/check-architecture.mjs --strict && npm run lint && npm test && npm run build && npm run check:bundle",
+    "check:arch:strict": "node scripts/check-architecture.mjs --strict",
+    "verify:all": "node scripts/verify-all.mjs"
   },
   "dependencies": {
     "@arco-design/web-vue": "^2.57.0",

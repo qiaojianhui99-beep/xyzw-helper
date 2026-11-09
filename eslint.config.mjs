@@ -57,8 +57,20 @@ export default antfu(
   },
   {
     name: "project/node-tests",
-    files: ["test/**/*.test.js"],
+    // 前端与后端测试都用 node:test，不引入 vitest
+    files: ["test/**/*.test.js", "backend/test/**/*.test.js"],
     rules: { "test/no-import-node-test": "off" },
+  },
+  {
+    name: "project/backend",
+    // 后端是 Node 服务端代码：允许 node 全局，且它的 JSDoc 只要求参数/返回类型
+    files: ["backend/src/**/*.js", "backend/test/**/*.js", "backend/scripts/**/*.js", "backend/scripts/**/*.mjs"],
+    rules: {
+      "jsdoc/require-returns-description": "off",
+      // 服务端代码用 Node 全局 process / Buffer 是正常写法
+      "node/prefer-global/process": "off",
+      "node/prefer-global/buffer": "off",
+    },
   },
   prettier,
 );

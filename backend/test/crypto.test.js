@@ -6,8 +6,8 @@
  */
 
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
 import process from "node:process";
+import { describe, it } from "node:test";
 
 // 固定测试密钥，避免依赖外部 env（若外部已设则沿用，便于在加密模式下跑）
 process.env.TOKEN_MASTER_KEY ||= Buffer.alloc(32, 7).toString("base64");

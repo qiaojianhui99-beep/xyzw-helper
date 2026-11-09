@@ -16,12 +16,12 @@
 
 import process from "node:process";
 import { config } from "../config.js";
-import { closePool, query } from "../infra/db.js";
 import { encryptionEnabled } from "../infra/crypto.js";
+import { closePool, query } from "../infra/db.js";
 import { logger } from "../infra/logger.js";
 import { acquireWorkerLock, releaseWorkerLock, verifySessionLockSupport } from "./lock.js";
-import { registerAllCrons, setExecutor, stopAllCrons } from "./scheduler.js";
 import { executeTask } from "./runner.js";
+import { registerAllCrons, setExecutor, stopAllCrons } from "./scheduler.js";
 
 /** 正在执行的任务数：关闭时要等它们归零。 */
 let inFlight = 0;
@@ -56,6 +56,8 @@ async function cleanupOldLogs() {
 /** 等到在飞任务归零，最多等 timeoutMs。 */
 async function drain(timeoutMs) {
   const deadline = Date.now() + timeoutMs;
+  // inFlight 由并发执行的 cron 任务递减，不是本循环修改 —— 规则看不到跨 async 写入
+  // eslint-disable-next-line no-unmodified-loop-condition
   while (inFlight > 0 && Date.now() < deadline) {
     await new Promise((r) => setTimeout(r, 200));
   }

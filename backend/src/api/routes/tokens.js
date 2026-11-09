@@ -10,14 +10,14 @@
  * 因此对拍基准里的字段集合完全不变。
  */
 
-import { mapPgError, one } from "../../infra/db.js";
-import { id } from "../../infra/sql.js";
 import {
   createToken,
   deleteToken,
   listTokens,
   TOKEN_PUBLIC_COLUMNS,
 } from "../../domain/tokenService.js";
+import { mapPgError, one } from "../../infra/db.js";
+import { id } from "../../infra/sql.js";
 
 const PUBLIC_SELECT = TOKEN_PUBLIC_COLUMNS.map((c) => id(c)).join(", ");
 
