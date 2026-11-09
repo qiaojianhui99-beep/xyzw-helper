@@ -1,0 +1,34 @@
+# backend/docker-compose.dev.yml
+# 只起一个本地 Postgres，供「原版 Express(shim)」与「新版 Fastify」共用。
+#
+#   docker compose -f backend/docker-compose.dev.yml up -d
+#   docker compose -f backend/docker-compose.dev.yml down -v     # 连数据一起清
+#
+# 端口 55432 而不是 5432，避免与机器上已有的 Postgres 冲突。
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: xyzw-pg-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: xyzw
+      POSTGRES_PASSWORD: xyzw_dev_pw
+      POSTGRES_DB: xyzw
+      # 让 order by created_at 的默认排序稳定可复现
+      TZ: Asia/Shanghai
+    ports:
+      - "55432:5432"
+    volumes:
+      - xyzw_pgdata:/var/lib/postgresql/data
+      # 首次启动自动执行建表脚本
+      - ./sql:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U xyzw -d xyzw"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+volumes:
+  xyzw_pgdata:
