@@ -1,126 +1,170 @@
 // create by elishell <75950346@qq.com>
+//
+// 注意：文件名在 stores/ 下，但它**不是 Pinia store**，而是一个进程内的请求合并缓存
+// （同一个 key 并发只发一次请求，其余等待同一个 Promise）。放在这里属历史遗留，
+// 契约（architecture.contract.json）冻结了这条路径，故保留；新增缓存逻辑请直接用。
 import type { App } from "vue";
 
 const _timeout = 5 * 1000;
 
-const [key, val, timeout, ok, reject, reslove, config] = [
-  Symbol("key"),
-  Symbol("val"),
-  Symbol("timeout"),
-  Symbol("ok"),
-  Symbol("reject"),
-  Symbol("reslove"),
-  Symbol("config"),
-];
-
+/** 缓存内容容器：用普通对象承载 key → CacheItem，加索引签名让动态键可推断。 */
 class Content {
-  constructor() {}
+  [key: string]: unknown;
 }
 
+/** 等待中的调用方回调签名 */
+type Waiter<T = unknown> = (value: T) => void;
+type Rejecter = (reason: unknown) => void;
+
 class CacheItem {
-  constructor(_key, _val, _t = _timeout) {
-    this[key] = _key;
-    this[val] = _val;
-    this[timeout] = +new Date() + _t;
+  private readonly _key: string;
+  private _val: unknown;
+  private readonly _timeout: number;
+  private _ok = false;
+  private readonly _reject: Rejecter[] = [];
+  private readonly _resolve: Waiter[] = [];
 
-    this[reject] = [];
-    this[reslove] = [];
+  /**
+   * @param key 缓存键
+   * @param val 初始值
+   * @param t 有效期（毫秒）
+   */
+  constructor(key: string, val: unknown, t: number = _timeout) {
+    this._key = key;
+    this._val = val;
+    this._timeout = +new Date() + t;
   }
 
-  get reject() {
-    return this[reject];
+  get reject(): Rejecter[] {
+    return this._reject;
   }
 
-  get reslove() {
-    return this[reslove];
+  /** 历史拼写（reslove），对外已被调用方使用，保持原样以免破坏契约 */
+  get reslove(): Waiter[] {
+    return this._resolve;
   }
 
-  get timeout() {
-    return this[timeout];
+  get timeout(): number {
+    return this._timeout;
   }
 
-  get key() {
-    return this[key];
+  get key(): string {
+    return this._key;
   }
 
-  set val(data) {
-    this[ok] = true;
-    this[val] = data;
+  set val(data: unknown) {
+    this._ok = true;
+    this._val = data;
   }
 
-  get val() {
-    return this[val];
+  get val(): unknown {
+    return this._val;
   }
 
-  toJSON() {
-    return {
-      key: this[key],
-      val: this[val],
-      timeout: this[timeout],
-    };
+  toJSON(): { key: string; val: unknown; timeout: number } {
+    return { key: this._key, val: this._val, timeout: this._timeout };
   }
 
-  isTimeout() {
-    return this[timeout] < +new Date();
+  isTimeout(): boolean {
+    return this._timeout < +new Date();
   }
 
-  isOk() {
-    return this[ok];
+  isOk(): boolean {
+    return this._ok;
   }
+}
+
+interface CacheConfig {
+  content: Content;
+  timeout: number;
 }
 
 class Cache {
-  constructor(name, { content = new Content(), timeout = _timeout }) {
+  name: string;
+  content: Content & Record<string, CacheItem | undefined>;
+  /**
+   * 历史字段：旧实现由 CacheManager.getCache 直接往实例上挂 timeout，
+   * 但它不影响 Cache.get 的默认 conf（那份来自构造参数），因此保持「存了但不用」，
+   * 只为让类型与既有调用点一致。
+   */
+  timeout?: number;
+  private readonly _config: CacheConfig;
+
+  /**
+   * @param name 缓存名
+   * @param options 内容容器与默认有效期
+   * @param options.content 内容容器
+   * @param options.timeout 默认有效期（毫秒）
+   */
+  constructor(
+    name: string,
+    { content = new Content(), timeout = _timeout }: { content?: Content; timeout?: number } = {},
+  ) {
     this.name = name;
-    this.content = content;
-    this[config] = {
-      content,
-      timeout,
-    };
+    this.content = content as Content & Record<string, CacheItem | undefined>;
+    this._config = { content, timeout };
   }
 
-  async get(key, callback, conf) {
+  /**
+   * @param key 缓存键
+   * @param callback 未命中时的加载器，或直接可用的值
+   * @param conf 覆盖默认有效期
+   * @param conf.timeout 覆盖后的有效期（毫秒）
+   * @returns 缓存值或加载结果
+   */
+  async get<T = unknown>(
+    key: string,
+    callback?: ((key: string, conf: CacheConfig) => Promise<T> | T) | Promise<T> | T,
+    conf?: { timeout?: number },
+  ): Promise<T> {
     const item = this.content[key];
-    // 没有 初始化
     if (item != null) {
       if (!item.isOk()) {
-        return new Promise((reslove, reject) => {
-          item.reslove.push(reslove);
-          item.reject.push(reject);
+        return new Promise<T>((resolve, reject) => {
+          item.reslove.push(resolve as Waiter);
+          item.reject.push(reject as Rejecter);
         });
       }
       if (!item.isTimeout()) {
-        return item.val;
+        return item.val as T;
       }
     }
     return this.feach(key, callback, {
-      ...this[config],
+      ...this._config,
       ...conf,
-    });
+    }) as Promise<T>;
   }
 
   /**
    * Populate a cache entry and settle every reader waiting for the same key.
-   * @param {string} key Cache key.
-   * @param {Function|Promise<unknown>|unknown} callback Loader or already available value.
-   * @param {object} conf Entry timeout configuration.
-   * @returns {Promise<unknown>} Loaded value; loader failures reject and evict the entry.
+   * @param key Cache key.
+   * @param callback Loader or already available value.
+   * @param conf Entry timeout configuration.
+   * @param conf.timeout 覆盖后的有效期（毫秒）
+   * @returns Loaded value; loader failures reject and evict the entry.
    */
-  async feach(key, callback, conf = this[config]) {
+  async feach<T = unknown>(
+    key: string,
+    callback?: ((key: string, conf: CacheConfig) => Promise<T> | T) | Promise<T> | T,
+    conf: { timeout?: number } = this._config,
+  ): Promise<T> {
     const oldItem = this.content[key];
     const newItem = new CacheItem(key, null, conf.timeout);
     this.content[key] = newItem;
-    const waitingItems = [oldItem, newItem].filter(Boolean);
+    const waitingItems = [oldItem, newItem].filter((i): i is CacheItem => Boolean(i));
     try {
       const data =
         typeof callback === "function"
-          ? await callback(key, conf)
+          ? await (callback as (key: string, conf: CacheConfig) => Promise<T> | T)(key, {
+              ...this._config,
+              ...conf,
+            })
           : await callback;
       newItem.val = data;
       for (const item of waitingItems) {
         for (const resolve of item.reslove) resolve(data);
       }
-      return data;
+      return data as T;
     } catch (error) {
       if (this.content[key] === newItem) delete this.content[key];
       for (const item of waitingItems) {
@@ -135,49 +179,73 @@ class Cache {
     }
   }
 
-  clean(content = new Content()) {
-    this.content = content;
+  /**
+   * @param content 新的内容容器
+   */
+  clean(content: Content = new Content()): void {
+    this.content = content as Content & Record<string, CacheItem | undefined>;
   }
 }
 
 class CacheManager {
-  constructor(content = new Content(), timeout = _timeout) {
-    this.content = content;
+  content: Content & Record<string, Cache | undefined>;
+  timeout: number;
+
+  /**
+   * @param content 内容容器
+   * @param timeout 默认有效期
+   */
+  constructor(content: Content = new Content(), timeout: number = _timeout) {
+    this.content = content as Content & Record<string, Cache | undefined>;
     this.timeout = timeout;
   }
 
-  getCache(name, config) {
+  /**
+   * @param name 缓存名
+   * @param config 覆盖默认有效期
+   * @param config.timeout 覆盖后的有效期（毫秒）
+   * @returns 对应的 Cache 实例（不存在则创建）
+   */
+  getCache(name: string, config?: { timeout?: number }): Cache {
     let cache = this.content[name];
     if (cache == null) {
       this.content[name] = cache = new Cache(name, {
         timeout: this.timeout,
         ...config,
       });
-    } else {
-      config && (cache.timeout = config.timeout);
+    } else if (config?.timeout != null) {
+      cache.timeout = config.timeout;
     }
     return cache;
   }
 
-  delCache(name) {
+  /**
+   * @param name 缓存名
+   */
+  delCache(name: string): void {
     delete this.content[name];
   }
 
-  clear() {
-    this.content = new Content();
+  clear(): void {
+    this.content = new Content() as Content & Record<string, Cache | undefined>;
   }
 }
 
 const $CacheManager = new CacheManager();
 
-const install = (vm: App) => {
+/**
+ * @param vm Vue 应用实例
+ */
+const install = (vm: App & { prototype?: Record<string, unknown> }) => {
   if (vm.version.startsWith("3.")) {
     vm.config.globalProperties.$CacheManager = $CacheManager;
-  } else {
+  } else if (vm.prototype) {
     vm.prototype.$CacheManager = $CacheManager;
   }
 };
 
-if (typeof window !== "undefined") window.$CacheManager = $CacheManager;
+if (typeof window !== "undefined") {
+  (window as unknown as { $CacheManager: CacheManager }).$CacheManager = $CacheManager;
+}
 
 export { $CacheManager, Cache, CacheManager, Content, install };

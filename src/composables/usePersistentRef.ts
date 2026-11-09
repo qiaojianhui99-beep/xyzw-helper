@@ -79,7 +79,8 @@ function guessType(init: PersistentInit): string {
  * @returns 响应式引用
  */
 export function usePersistentRef<T>(key: string, defaultValue: T): Ref<T> {
-  const serializer = SERIALIZERS[guessType(defaultValue as PersistentInit)];
+  // 类型系统看不到 SERIALIZERS 覆盖了 guessType 的全部返回值，兜底到 any 序列化器
+  const serializer = SERIALIZERS[guessType(defaultValue as PersistentInit)] ?? SERIALIZERS.any!;
 
   const read = (): T => {
     const raw = storage.getItem(key);

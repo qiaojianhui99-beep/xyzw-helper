@@ -25,11 +25,12 @@
     "db:reset": "docker compose -f backend/docker-compose.dev.yml down -v && docker compose -f backend/docker-compose.dev.yml up -d",
     "check:arch": "node scripts/check-architecture.mjs",
     "update:arch": "node scripts/check-architecture.mjs --update",
-    "verify": "node scripts/check-architecture.mjs --strict && npm run lint && npm test",
+    "verify": "node scripts/check-architecture.mjs --strict && npm run lint && npm run typecheck && npm test",
     "verify:backend": "npm run test:backend",
-    "verify:full": "node scripts/check-architecture.mjs --strict && npm run lint && npm test && npm run build && npm run check:bundle",
+    "verify:full": "node scripts/check-architecture.mjs --strict && npm run lint && npm run typecheck && npm test && npm run build && npm run check:bundle",
     "check:arch:strict": "node scripts/check-architecture.mjs --strict",
-    "verify:all": "node scripts/verify-all.mjs"
+    "verify:all": "node scripts/verify-all.mjs",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit"
   },
   "dependencies": {
     "@arco-design/web-vue": "^2.57.0",

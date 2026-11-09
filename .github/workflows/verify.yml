@@ -50,6 +50,10 @@ jobs:
       - name: Lint（零警告，含 backend/）
         run: pnpm run lint
 
+      # 类型检查此前完全没跑过：117 个错误躺在 tokenStore/cache/token.ts 里没人知道
+      - name: 类型检查
+        run: pnpm run typecheck
+
       # 含存储单通道门禁（storageChannel）与前后端协议一致性（protocolParity）
       - name: 单测
         run: pnpm test

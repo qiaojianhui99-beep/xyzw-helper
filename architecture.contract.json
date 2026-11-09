@@ -427,6 +427,7 @@
     "test:no-alias",
     "testd",
     "testr",
+    "typecheck",
     "update:arch",
     "verify",
     "verify:all",

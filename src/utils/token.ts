@@ -8,7 +8,9 @@ import { g_utils } from "@/utils/bonProtocol";
  * @returns {string} Hexadecimal digest used as the stable local token key.
  */
 export const getTokenId = (token: string | ArrayBuffer | Uint8Array) => {
-  const binHash = MD5(lib.WordArray.create(token)).toString(enc.Hex);
+  // crypto-js 的 WordArray.create 签名只接受 word 数组；这里沿用既有运行时行为，
+  // 仅补类型断言（历史调用会直接传 string/ArrayBuffer）
+  const binHash = MD5(lib.WordArray.create(token as unknown as number[])).toString(enc.Hex);
   return binHash;
 };
 
@@ -44,7 +46,7 @@ class RateLimiter {
       return;
     }
 
-    const oldestRequest = this.requests[0];
+    const oldestRequest = this.requests[0] ?? 0;
     const waitTime = oldestRequest + this.windowMs - Date.now();
 
     if (waitTime > 0) {
@@ -136,7 +138,7 @@ export const transformToken = async (arrayBuffer: ArrayBuffer) => {
     const connId = currentTime + Math.floor(Math.random() * 10);
 
     return JSON.stringify({
-      ...data,
+      ...(data as Record<string, unknown>),
       sessId,
       connId,
       isRestore: 0,
@@ -168,6 +170,7 @@ export const getServerList = async (arrayBuffer: ArrayBuffer) => {
   const data = msg.getData();
   console.log("数据内容:", data);
   return JSON.stringify({
-    ...data.roles,
+    // data.roles 可能缺失：展开 undefined 在 JS 里等价于什么都不加
+    ...((data as { roles?: Record<string, unknown> }).roles ?? {}),
   });
 };

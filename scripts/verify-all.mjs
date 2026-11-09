@@ -47,6 +47,7 @@ steps.push({
   args: ["scripts/check-architecture.mjs", "--strict"],
 });
 steps.push({ name: "Lint（零警告，含 backend/）", command: "npm", args: ["run", "lint"] });
+steps.push({ name: "类型检查（tsc --noEmit）", command: "npm", args: ["run", "typecheck"] });
 steps.push({ name: "前端单测", command: "npm", args: ["test"] });
 
 if (!FAST) {
