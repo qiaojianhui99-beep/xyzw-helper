@@ -100,7 +100,11 @@ jobs:
           node-version: 24
           cache: pnpm
 
-      # backend/ 已在 pnpm-workspace.yaml 内，根 install 会一并装好
+      # backend/ 已在 pnpm-workspace.yaml 内，根目录一次 install 装好两边。
+      # 注意：两个 job 是独立 runner，前端 job 的 install 不会传导到这里 ——
+      # CI 首次真实运行就是因为漏了这步而失败（node_modules missing）。
+      - name: 安装依赖（workspace）
+        run: pnpm install --frozen-lockfile
 
       - name: 建表
         run: |
