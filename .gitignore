@@ -70,6 +70,8 @@ pids
 config.local.*
 deploy/*.local.*
 deploy/.env*
+# 模板必须入库：deploy/.env.example 是后端 stack 的配置说明，不含真实值
+!deploy/.env.example
 
 # ---------------------------------------------------------------- 敏感数据（Token / bin / 抓包）
 # 游戏 Token、伏羲 bin、抓包数据一律不上传

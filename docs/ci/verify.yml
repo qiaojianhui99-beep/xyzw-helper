@@ -1,0 +1,119 @@
+# .github/workflows/verify.yml
+#
+# ⚠️ 这个文件刻意放在 docs/ci/ 而不是 .github/workflows/。
+#    原因：推送 .github/workflows/** 需要 token 具备 `workflow` scope，
+#    当前凭证只有 gist / read:org / repo，GitHub 会直接拒绝整个 push。
+#
+#    启用方式（任选其一）：
+#      1. gh auth refresh -s workflow
+#         然后   mkdir -p .github/workflows && cp docs/ci/verify.yml .github/workflows/
+#                git add .github/workflows/verify.yml && git commit && git push
+#      2. 或在 GitHub 网页上 Actions → New workflow 直接粘贴本文件内容
+#
+# 分两个 job：
+#   frontend —— 架构契约 + lint(零警告) + 单测 + 生产构建（不需要数据库）
+#   backend  —— 起 Postgres service，跑 API/加密/执行器/存储同步测试
+#
+# 之所以拆开：前端 job 必须永远快且稳定；后端 job 依赖数据库，
+# 失败时能立刻看出是「契约/lint」的问题还是「后端逻辑」的问题。
+
+name: verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend:
+    name: 契约 + lint + 单测 + 构建
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.19.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: 安装依赖
+        run: pnpm install --frozen-lockfile
+
+      - name: 架构契约
+        run: pnpm run check:arch
+
+      - name: Lint（零警告）
+        run: pnpm run lint
+
+      - name: 单测
+        run: pnpm test
+
+      - name: 生产构建
+        run: pnpm run build
+
+      - name: 产物体积基线
+        run: pnpm run check:bundle
+
+  backend:
+    name: 后端测试（含 Postgres）
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: xyzw
+          POSTGRES_PASSWORD: xyzw_dev_pw
+          POSTGRES_DB: xyzw
+          TZ: Asia/Shanghai
+        ports:
+          - 55432:5432
+        options: >-
+          --health-cmd "pg_isready -U xyzw -d xyzw"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://xyzw:xyzw_dev_pw@127.0.0.1:55432/xyzw
+      API_KEY: dev-api-key
+      # 固定测试密钥，仅用于 CI；生产请用 KMS 或独立 secret
+      TOKEN_MASTER_KEY: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE=
+      TOKEN_KEY_ID: test-k1
+      MAX_CONCURRENT_TOKENS: "2"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.19.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: 安装后端依赖
+        run: pnpm --dir backend install --frozen-lockfile=false
+
+      - name: 建表
+        run: |
+          for f in backend/sql/*.sql; do
+            echo "applying $f"
+            psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f "$f"
+          done
+        env:
+          PGPASSWORD: xyzw_dev_pw
+
+      - name: 后端单测
+        run: pnpm run test:backend

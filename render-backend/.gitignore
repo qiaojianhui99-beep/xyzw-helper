@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+*.log
+coverage/
+# 该子项目只是对拍基准，依赖由根 pnpm install 管理；
+# 本地 install 生成的 lock 不纳入版本控制（根目录的 pnpm-lock.yaml 仍然保留）。
+pnpm-lock.yaml
