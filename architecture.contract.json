@@ -325,6 +325,7 @@
   ],
   "storageKeys": [
     "activeConnections",
+    "apiKey",
     "batchSettings",
     "bin_file_list",
     "changelog_subscribed",
@@ -364,6 +365,7 @@
   "scripts": [
     "build",
     "check:arch",
+    "check:bundle",
     "dev",
     "format",
     "format:check",

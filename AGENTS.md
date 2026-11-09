@@ -55,6 +55,13 @@ npm run verify:full    # 再加生产构建
 | 服务端推送 | `src/stores/events/xxx.ts` + `index.ts` 注册 |
 | 新状态 | `useLocalStorage("newKey", 默认值)`，键名带业务前缀 |
 | 登录代理 | `vite.config.js` `proxy` 追加前缀 |
+| **后端路由** | `backend/src/api/routes/Xxx.js` + 在 `backend/src/api/app.js` 的 `/api` 作用域内 `register` |
+| **后端领域逻辑** | `backend/src/domain/`（纯逻辑，不碰 HTTP/DB 细节） |
+| **任务字典** | `backend/src/protocol/taskDefinitions.js`（对外契约：只许新增 key，不许改名） |
+| **前端存储访问** | 一律经 `@/api/storage` 的 `storage.getItem/setItem/removeItem`，**不要再直调 `localStorage`** |
+
+> 后端结构、API 清单、加密设计与对拍机制：见 [`docs/BACKEND.md`](docs/BACKEND.md)。
+> 后端测试：`pnpm run test:backend`（需先 `pnpm run db:up`）。改后端同样要跑 `pnpm verify`。
 
 每加一项，配一条测试。测试断言**行为**（发出的报文、状态流转、错误处理），不断言实现细节。
 

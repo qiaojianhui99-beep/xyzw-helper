@@ -26,7 +26,7 @@
 |---|---|
 | 包名 / 版本 | `xyzw-token-manager` · `2.0.0` |
 | 形态 | 单页应用（SPA），Vue Router history 模式 |
-| 后端 | **没有业务后端**。Token、角色数据全在 `localStorage` / `IndexedDB` |
+| 后端 | **可选后端**（`backend/`）：Fastify 5 + Postgres，托管定时任务与多设备数据同步。**不启动后端时前端与改造前完全一致**（Token、角色数据仍在 `localStorage` / `IndexedDB`） |
 | 身份 | 没有账号密码体系，**Token 就是身份** |
 | 仓库 | <https://github.com/qiaojianhui99-beep/xyzw-helper> |
 
@@ -119,6 +119,9 @@ pnpm preview
 | `pnpm update:arch` | 把**新增**能力并入契约基线（不允许顺手删） |
 | `pnpm verify` | **提交前必跑**：契约 → lint → 单测 |
 | `pnpm verify:full` | 再加生产构建（改构建/依赖时用） |
+| `pnpm test:backend` | 后端 73 个测试（需先 `pnpm db:up`） |
+| `pnpm db:up` / `db:down` / `db:reset` | 本地 Postgres（端口 55432） |
+| `pnpm dev:api` / `dev:worker` | 后端的 API 进程 / worker 进程 |
 | `pnpm testr` / `pnpm testd` | 手工调试脚本：角色 Token / Token 解析 |
 
 ---
@@ -159,7 +162,13 @@ xyzw_web_helper/
 ├── design-system/             视觉基准 MASTER.md + 页面级覆盖
 ├── deploy/                    Dockerfile / nginx.conf / compose / 一键部署脚本 / 代理服务
 ├── server/                    Python Flask 版 Token URL 服务（可选）
-├── render-backend/            可选 Express + Supabase 服务（前端不依赖）
+├── backend/                   Fastify + Postgres 后端（可选，见 docs/BACKEND.md）
+│   ├── src/api/               Fastify 装配与路由
+│   ├── src/worker/            cron 调度与任务执行（独立进程）
+│   ├── src/infra/             db / crypto / logger / sql
+│   ├── sql/                   建表脚本（001 表结构 / 002 Token 密文列 / 003 存储镜像）
+│   └── test/                  73 个后端测试（含与改造前的对拍基准）
+├── render-backend/            旧版 Express + Supabase 半成品（已被 backend/ 取代，仅保留作对拍基准）
 └── edge-functions/            腾讯 EdgeOne Pages 边缘函数
 ```
 

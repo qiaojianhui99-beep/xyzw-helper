@@ -250,7 +250,7 @@ export async function collectFacts(root = DEFAULT_ROOT) {
 
   const storageKeys = new Set();
   const STORAGE_RE =
-    /(?:useLocalStorage\(\s*|localStorage\.(?:getItem|setItem|removeItem)\(\s*)["']([^"']+)["']/g;
+    /(?:useLocalStorage\(\s*|localStorage\.(?:getItem|setItem|removeItem)\(\s*|storage\.(?:getItem|setItem|removeItem)\(\s*)["']([^"']+)["']/g;
   for (const file of allFiles) {
     if (!/\.(js|ts|vue)$/.test(file)) continue;
     const src = await readText(root, file);
