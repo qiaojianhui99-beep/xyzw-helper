@@ -12,9 +12,14 @@
  *   - 默认参数值变了      -> 违规
  *
  * 用法：
- *   node scripts/check-architecture.mjs                     # 只校验
+ *   node scripts/check-architecture.mjs                     # 只校验（新增项仅提示）
+ *   node scripts/check-architecture.mjs --strict            # 新增项也算违规（CI 用这个）
  *   node scripts/check-architecture.mjs --update            # 并入新增项（拒绝删除）
  *   node scripts/check-architecture.mjs --update --allow-removals   # 显式确认删除项
+ *
+ * 为什么要有 --strict：默认模式只拦「删除/改名」，新增永远静默通过，
+ * 于是基线会一路落后于代码（2026-11 实测落后 5 条代理前缀）。
+ * CI 用 --strict，强制「新增能力必须显式固化进基线」。
  *
  * 被 `npm run check:arch`、`npm run verify` 和
  * `test/architectureContract.test.js` 复用，所以 `npm test` 也会跑它。
@@ -77,7 +82,18 @@ const CURATED_FILES = [
   "src/utils/batch/blackMarketConfig.js",
   "src/utils/batch/cronUtils.js",
   "src/composables/useTheme.js",
+  "src/composables/usePersistentRef.ts",
   "src/api/index.js",
+  "src/api/storage.js",
+  "src/api/storageSync.js",
+  "backend/package.json",
+  "backend/src/api/app.js",
+  "backend/src/config.js",
+  "backend/src/domain/tokenService.js",
+  "backend/src/infra/crypto.js",
+  "backend/src/worker/main.js",
+  "backend/sql/001_init.sql",
+  "deploy/docker-compose.stack.yml",
   "public/game/index.html",
   "public/game/multi-game.html",
   "public/game/multi-game-storage-bridge.js",
@@ -106,6 +122,9 @@ const EXPORT_MODULES = [
   "src/stores/cache.ts",
   "src/stores/common.ts",
   "src/stores/events/index.ts",
+  "src/api/storage.js",
+  "src/api/storageSync.js",
+  "src/composables/usePersistentRef.ts",
 ];
 
 /** 必须存在的 npm 脚本（删掉就跑不了工程） */
@@ -249,8 +268,10 @@ export async function collectFacts(root = DEFAULT_ROOT) {
     .sort();
 
   const storageKeys = new Set();
+  // 四条通道都要扫：VueUse（历史）、直调 localStorage（历史）、facade、usePersistentRef。
+  // 少扫一条，切换到新通道时契约会误报「存储键丢失」。
   const STORAGE_RE =
-    /(?:useLocalStorage\(\s*|localStorage\.(?:getItem|setItem|removeItem)\(\s*|storage\.(?:getItem|setItem|removeItem)\(\s*)["']([^"']+)["']/g;
+    /(?:useLocalStorage\s*(?:<[^>]*>)?\(\s*|usePersistentRef\s*(?:<[^>]*>)?\(\s*|localStorage\.(?:getItem|setItem|removeItem)\(\s*|storage\.(?:getItem|setItem|removeItem)\(\s*)["']([^"']+)["']/g;
   for (const file of allFiles) {
     if (!/\.(js|ts|vue)$/.test(file)) continue;
     const src = await readText(root, file);
@@ -334,11 +355,13 @@ export function compare(contract, facts) {
   compareList("localStorage 键", contract.storageKeys ?? [], facts.storageKeys);
   compareList("代理前缀", contract.proxyPrefixes ?? [], facts.proxyPrefixes);
 
-  for (const script of contract.scripts ?? []) {
-    if (!facts.scripts.includes(script))
-      violations.push(`npm 脚本缺失：${script}`);
-  }
-
+  // 脚本与依赖也走双向比对：新增同样是「契约面变化」，--strict 下必须显式固化
+  compareList("npm 脚本", contract.scripts ?? [], facts.scripts);
+  compareList(
+    "依赖",
+    Object.keys(contract.dependencies ?? {}),
+    Object.keys(facts.dependencies),
+  );
   for (const [name, version] of Object.entries(contract.dependencies ?? {})) {
     if (!(name in facts.dependencies)) {
       violations.push(`依赖被移除：${name}@${version}`);
@@ -411,6 +434,7 @@ export async function checkArchitecture(options = {}) {
     root = DEFAULT_ROOT,
     update = false,
     allowRemovals = false,
+    strict = false,
   } = options;
 
   const contractPath = path.join(root, CONTRACT_FILE);
@@ -465,7 +489,9 @@ export async function checkArchitecture(options = {}) {
     };
   }
 
-  return { ok: violations.length === 0, violations, additions, updated: false, facts, contract };
+  // --strict：新增能力也必须先进基线，否则基线迟早落后于代码
+  const blocking = strict ? [...violations, ...additions.map((a) => `未固化进基线：${a}`)] : violations;
+  return { ok: blocking.length === 0, violations: blocking, additions, updated: false, facts, contract };
 }
 
 const isMain =
@@ -474,7 +500,8 @@ const isMain =
 if (isMain) {
   const update = process.argv.includes("--update");
   const allowRemovals = process.argv.includes("--allow-removals");
-  const result = await checkArchitecture({ update, allowRemovals });
+  const strict = process.argv.includes("--strict");
+  const result = await checkArchitecture({ update, allowRemovals, strict });
 
   if (result.updated) {
     console.log("✅ 契约基线已更新：architecture.contract.json");
@@ -486,13 +513,16 @@ if (isMain) {
   }
 
   if (!result.ok) {
-    console.error("❌ 架构契约校验未通过 —— 有既有能力被删除或改变：\n");
+    console.error("❌ 架构契约校验未通过 —— 有既有能力被删除/改变，或有新增未固化：\n");
     for (const item of result.violations) console.error(`   - ${item}`);
     console.error(
       "\n如果这是有意的破坏性变更，请：\n" +
         "  1) 在 docs/OPEN-CLOSED-RULES.md 记录变更原因；\n" +
         "  2) 先补/改测试，再跑 `node scripts/check-architecture.mjs --update --allow-removals`；\n" +
         "  3) 跑 `npm run verify` 确认全绿。",
+    );
+    console.error(
+      "\n新增项若属有意扩展，跑 `node scripts/check-architecture.mjs --update` 固化即可。",
     );
     process.exit(1);
   }

@@ -2,7 +2,7 @@
  * 通用存储同步端点。
  *
  * 配合前端 src/api/storage.js：
- *   GET  /api/storage/all    → `{ key: value }`，登录后 boot 时全量拉取
+ *   GET  /api/storage/all    → `{ key: { value, updatedAt } }`，登录后 boot 时全量拉取
  *   POST /api/storage/patch  → `{ patch: { key: value|null } }`，写穿同步
  *
  * value 为 null 表示删除该键。
@@ -38,10 +38,21 @@ const MAX_PATCH_KEYS = 200;
  */
 export async function storageRoutes(app) {
   app.get("/storage/all", async () => {
-    const rows = await many("SELECT key, value FROM user_storage WHERE value IS NOT NULL");
-    /** @type {Record<string, string>} */
+    const rows = await many(
+      "SELECT key, value, updated_at FROM user_storage WHERE value IS NOT NULL",
+    );
+    /**
+     * updatedAt 是合并的关键：没有它，前端只能二选一（无条件覆盖 = 丢本地写入，
+     * 或无条件保留 = 永远收不到其他设备的更新）。带上时间戳，两端才能判「谁更新」。
+     * @type {Record<string, { value: string, updatedAt: string }>}
+     */
     const out = {};
-    for (const r of rows) out[r.key] = r.value;
+    for (const r of rows) {
+      out[r.key] = {
+        value: r.value,
+        updatedAt: new Date(r.updated_at).toISOString(),
+      };
+    }
     return out;
   });
 
@@ -86,8 +97,15 @@ export async function storageRoutes(app) {
   });
 
   app.get("/storage/:key", async (req, reply) => {
-    const rows = await many("SELECT value FROM user_storage WHERE key = $1", [req.params.key]);
+    const rows = await many(
+      "SELECT value, updated_at FROM user_storage WHERE key = $1",
+      [req.params.key],
+    );
     if (rows.length === 0) return reply.code(404).send({ error: "Not Found" });
-    return { key: req.params.key, value: rows[0].value };
+    return {
+      key: req.params.key,
+      value: rows[0].value,
+      updatedAt: new Date(rows[0].updated_at).toISOString(),
+    };
   });
 }

@@ -117,11 +117,24 @@ describe("boot 与镜像", () => {
     assert.equal(storage.getItem("gameTokens"), "[]");
   });
 
-  it("云端拉取成功时覆盖本地同名键", async () => {
+  it("云端拉取只采纳云端独有键，本地同名键保留并回传", async () => {
     globalThis.localStorage.setItem("theme", "light");
-    await boot({ cloud: true, fetchAll: async () => ({ theme: "dark" }) });
+    const pushed = [];
+    setCloudPusher(async (patch) => {
+      pushed.push(patch);
+    });
+    await boot({
+      cloud: true,
+      fetchAll: async () => ({ theme: "dark", locale: "zh" }),
+    });
     assert.equal(isCloudMode(), true);
-    assert.equal(storage.getItem("theme"), "dark");
+    assert.equal(storage.getItem("theme"), "light", "本地是活数据，不被旧云端值覆盖");
+    assert.equal(storage.getItem("locale"), "zh", "云端独有的键要采纳");
+    await flush();
+    assert.ok(
+      pushed.some((p) => p.theme === "light"),
+      "冲突键应回传云端，避免两端永久分叉",
+    );
   });
 
   it("云端拉取失败时退回本地模式，不阻断启动", async () => {

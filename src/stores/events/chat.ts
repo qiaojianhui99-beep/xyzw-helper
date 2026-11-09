@@ -1,8 +1,9 @@
 import type { EVM, XyzwSession } from ".";
-import { useLocalStorage } from "@vueuse/core";
+import { usePersistentRef } from "@/composables/usePersistentRef";
 import { gameLogger } from "@/utils/logger";
 
-const chatMsgList = useLocalStorage<Array<any>>("xyzw_chat_msg_list", []);
+// 高频写入的实时缓存：只落本机镜像，不上云（见 api/storage.js 的 NEVER_SYNC）
+const chatMsgList = usePersistentRef<Array<any>>("xyzw_chat_msg_list", []);
 
 // 处理聊天消息事件，保存最新的聊天记录
 export const ChatPlugin = ({ onSome }: EVM) => {
