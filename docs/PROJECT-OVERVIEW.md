@@ -206,6 +206,26 @@ interface TokenData {
 
 **坑**：`store_setpurchase`、`fight_level` 这类命令必须走 BON 编码体（`rawBody: true` 用于发送已编码对象），传普通 JS 对象会被服务端拒绝。详见 `docs/feature-protocol-dev-guide.md`。
 
+### 4.4b 存储门面与唯一写入者（2026-11 收口）
+
+```
+业务代码 → storage.setItem/getItem   （src/api/storage.js，与 localStorage 同签名）
+                ├─ 内存镜像（同步读，永不阻塞）
+                ├─ window.localStorage（断网可用）
+                └─ 云端（可选，800ms 防抖推送 /api/storage/patch）
+响应式层 → usePersistentRef(key, default)   （src/composables/usePersistentRef.ts）
+                └─ 订阅 facade 广播：本端写入、云端拉取都会同步进 ref
+```
+
+- **唯一写入者**：`useLocalStorage` 已全部移除（历史遗留仅 `src/utils/gameLauncher.js` 4 处直调）。
+  两条通道并存时镜像读不到直写，云同步会静默失效。
+- **启动合并**：`boot()` 不以云端为准无条件覆盖。云端带 `updatedAt` 时按时间戳判「谁更新」；
+  旧后端不带时间戳则保留本地并回传，绝不静默丢本地写入。
+- **内部键**：`__storageLastWriteAt` 记录本机写入时间，属于元数据，
+  不出现在 `snapshot()` / `key()` / `length`，且不上云。
+- **NEVER_SYNC 语义**：只表示「不推云端」，这些键**仍然进镜像**，
+  否则 `storage.getItem` 会与 `localStorage` 不一致。
+
 ### 4.5 命令注册表（`CommandRegistry`）
 
 所有游戏命令必须先在 `registerDefaultCommands(reg)` 里 `register(cmd, defaultBody, { rawBody? })`，否则 `build()` 抛 `Unknown cmd`。覆盖范围：角色/系统、任务、招募、商店/黑市、军团/盐场、营地挑战、邮件、学习问答、战斗、怪异咸将塔、瓶子机器人、钓鱼（`artifact_*`）、灯神、礼包、爬塔、队伍/武将养成、升星等 **100+ 条**。
@@ -271,14 +291,16 @@ interface TokenData {
 
 ---
 
-## 8. 当前基线（2026-10-25 实测）
+## 8. 当前基线（2026-11-09 实测）
 
 | 项目 | 结果 |
 |---|---|
-| `npm test` | 120 通过（新增契约测试后 124） |
-| `npm run lint` | 0 error / 0 warning（修掉了一处 JSDoc `@param` 不匹配） |
-| `npm run build` | 成功，14 s 左右；主 chunk ≈ 4.7 MB（gzip 1.27 MB），`GameFeatures` ≈ 1 MB |
-| 开发服务器 | 3000 端口启动约 1 s，页面与模块转换全部 200 |
+| `npm test` | **220 通过**（含存储单通道 23 例、协议一致性 24 例、契约自检） |
+| `npm run lint` | 0 error / 0 warning，范围已含 `backend/`（零警告硬门禁） |
+| `npm run test:backend` | **73 通过**（需 Postgres :55432） |
+| `npm run build` | 成功；产物已按 vendor / 页面分包，最大单文件 0.8 MB（`vendor-naive`、`GameFeatures`） |
+| `node scripts/check-architecture.mjs --strict` | 通过（18 路由 / 22 页面 / 33 存储键 / 12 批量任务 / 9 条代理前缀） |
+| `pnpm install` | workspace 模式，一次装 `.` 与 `backend` 两个包 |
 | 可选插件 | `@vitejs/plugin-basic-ssl`、`vite-plugin-vue-devtools` 未安装，走 safeImport 降级 |
 
 **已知告警（不影响功能）**：chunk 体积警告；生产构建不再自动开 HTTPS。

@@ -117,6 +117,11 @@
 |---|---|---|---|---|
 | 2026-10-25 | 新增 `scripts/check-architecture.mjs`、`test/architectureContract.test.js`、`check:arch`/`update:arch`/`verify`/`verify:full` 脚本 | 建立回归护栏 | 只增不改，运行时行为零变化 | `npm run verify` 全绿；`npm run build` 成功 |
 | 2026-10-25 | 修正 `tokenStore.ts` 两处 JSDoc（`waitForLiveConnection` / `sendMessageWithPromise`） | lint `--max-warnings 0` 因 `@param` 不匹配而失败 | 纯注释，无逻辑变化 | `npm run lint` 0 warning；`npm test` 120 通过 |
+| 2026-11-09 | 存储单通道：`tokenStore.ts` 的 6 个键、`stores/common.ts`、`stores/events/chat.ts` 全部从 `useLocalStorage` 迁到 `usePersistentRef`（新文件 `src/composables/usePersistentRef.ts`）；`src/api/storage.js` 增加订阅广播、按 `updatedAt` 的合并、内部写入时间戳键 `__storageLastWriteAt` | 两套写入通道导致镜像读不到 VueUse 直写，云同步在最核心的键（`gameTokens`）上静默失效 | 键名与序列化格式不变，存量数据无需迁移；`storage.length/key/snapshot` 不再暴露内部元数据键 | `test/storageChannel.test.js` 23 例、`test/storage.test.js` 全绿；`npm run verify` 220 测试通过 |
+| 2026-11-09 | 协议单源门禁：新增 `test/protocolParity.test.js`（明文字节一致 + 三通道密文互通 + 记录后端副本缺失 `ProtoMsgLegion`/`GameMessages`） | 后端协议层是 `render-backend/lib/bonProtocol.js` 的原样拷贝（MD5 相同），已落后前端 254 行，无任何测试能发现 | 只增测试，不改实现 | 24 例全绿 |
+| 2026-11-09 | 契约校验升级：`check-architecture.mjs` 新增 `--strict`（新增项也算失败）、`CURATED_FILES`/`EXPORT_MODULES` 纳入 `src/api/*`、`usePersistentRef.ts` 与后端关键文件、`storageKeys` 扫描补 `usePersistentRef`；基线固化 7 项（2 个存储键 + 5 条 `/api/*` 代理） | 默认模式只拦删除，新增永远静默通过，基线一路落后于代码（实测落后 5 条代理前缀） | 校验更严；`npm run verify` 已切到 `--strict` | `node scripts/check-architecture.mjs --strict` 通过 |
+| 2026-11-09 | 后端迁入工作区：新增 `pnpm-workspace.yaml`（`.` + `backend`），删除 `backend/pnpm-lock.yaml`；`lint`/`format` 覆盖 `backend/`；新增 `scripts/verify-all.mjs` 与 `.github/workflows/verify.yml` | 后端 5936 行新增代码完全在闸门之外；CI 文件放在 `docs/ci/` 导致**从未真正运行** | 安装入口统一为根 `pnpm install`；`backend/` 开始接受零警告 lint | `pnpm install`（2 projects）、`npm run test:backend` 73 通过、`npm run lint` 通过 |
+| 2026-11-09 | `backend` 的 `/api/storage/all` 与 `/api/storage/:key` 响应改为 `{ value, updatedAt }` | 没有时间戳，前端只能二选一（覆盖=丢本地写入，保留=永远收不到别的设备更新） | 前端已兼容新旧两种形状；后端测试断言同步更新 | 后端 73 测试通过 |
 
 ---
 
@@ -186,3 +191,44 @@ npm run verify:full   # 再加生产构建
 - [ ] 手测清单里对应的行过了一遍（见 `docs/REGRESSION-CHECKLIST.md`）？
 - [ ] 没有新增 `eslint-disable`、没有 `test.skip`？
 - [ ] 没有改动 `src/xyzw/**`、`public/game/**`？
+
+---
+
+## 9. 目录职责（2026-11 收口）
+
+新增代码按这张表对号入座；放错目录视为规范问题，评审时直接打回。
+
+| 目录 | 职责 | 不该出现 |
+|---|---|---|
+| `src/api/` | 后端 HTTP 客户端、存储门面与同步逻辑 | 业务状态、组件 |
+| `src/utils/` | 无状态纯逻辑（协议、计算、格式化） | 直接读写持久化、UI 依赖 |
+| `src/stores/` | Pinia 状态与跨组件协调 | 直接调 `fetch` |
+| `src/composables/` | 可复用的响应式组合函数 | 协议编解码 |
+| `src/components/` | 业务组件（按域分目录） | 全局单例 |
+| `backend/src/api/` | Fastify 装配与路由 | 领域逻辑、SQL 拼接 |
+| `backend/src/domain/` | 领域服务（唯一拿到 Token 明文的地方） | HTTP/DB 细节 |
+| `backend/src/infra/` | db / crypto / logger / SQL 白名单 | 业务判断 |
+| `backend/src/worker/` | cron 调度与任务编排 | 路由 |
+
+### 9.1 三条新增红线
+
+1. **持久化只能经 `src/api/storage.js` 写入**。新增 `useLocalStorage` 或
+   `window.localStorage` 直调 = 红色（会让云同步静默失效）。响应式场景用
+   `usePersistentRef`。门禁：`test/storageChannel.test.js`。
+2. **改 BON 协议必须两侧同步**。`src/utils/bonProtocol.js` 与
+   `backend/src/protocol/bonProtocol.js` 是两份实现，改一侧不改另一侧 = 红色。
+   门禁：`test/protocolParity.test.js`。
+3. **新增契约项必须 `--update` 固化**。`--strict` 下「新增未固化」也算失败，
+   这是故意的：基线不能靠人记得更新。
+
+## 10. 提交闸门现状（2026-11-09）
+
+| 闸门 | 命令 | 覆盖 |
+|---|---|---|
+| 契约 | `node scripts/check-architecture.mjs --strict` | 路由/页面/存储键/导出/代理/脚本/依赖/默认参数 |
+| Lint | `npm run lint` | `src` + `backend` + `render-backend` + `test`，零警告 |
+| 前端单测 | `npm test` | 220 例（含存储单通道、协议一致性、契约自检） |
+| 后端单测 | `npm run test:backend` | 73 例（需 Postgres :55432） |
+| 构建 | `npm run build` + `npm run check:bundle` | 产物与体积预算 |
+| 本地等价 CI | `node scripts/verify-all.mjs` | 以上全部；无数据库时显式 SKIP |
+| CI | `.github/workflows/verify.yml` | 同上，两个 job |

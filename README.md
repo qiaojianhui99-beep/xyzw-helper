@@ -116,9 +116,11 @@ pnpm preview
 | `pnpm format` / `pnpm format:check` | Prettier 写入 / 校验 |
 | `pnpm test` | `node --test test/*.test.js` |
 | `pnpm check:arch` | 架构契约校验（路由 / 存储键 / 导出 / 默认参数 / 依赖） |
+| `pnpm check:arch:strict` | 同上，但**新增未固化**也算失败（CI 与 `verify` 用这个） |
 | `pnpm update:arch` | 把**新增**能力并入契约基线（不允许顺手删） |
-| `pnpm verify` | **提交前必跑**：契约 → lint → 单测 |
-| `pnpm verify:full` | 再加生产构建（改构建/依赖时用） |
+| `pnpm verify` | **提交前必跑**：契约(`--strict`) → lint（含 `backend/`）→ 单测 |
+| `pnpm verify:full` | 再加生产构建与产物体积预算（改构建/依赖时用） |
+| `node scripts/verify-all.mjs` | **本地等价 CI**：上面全部 + 后端 73 测试（无数据库会显式标 SKIP） |
 | `pnpm test:backend` | 后端 73 个测试（需先 `pnpm db:up`） |
 | `pnpm db:up` / `db:down` / `db:reset` | 本地 Postgres（端口 55432） |
 | `pnpm dev:api` / `dev:worker` | 后端的 API 进程 / worker 进程 |
@@ -136,6 +138,8 @@ xyzw_web_helper/
 ├── wrangler.toml              Cloudflare Pages 构建配置
 ├── staticwebapp.config.json   Azure Static Web Apps 回退配置
 ├── architecture.contract.json 架构契约基线（路由/存储键/导出/默认参数的“不可悄悄改”清单）
+├── pnpm-workspace.yaml        工作区：根包 + backend（一次 install 装好两边）
+├── .github/workflows/         CI 提交闸门（verify：前端 + 后端两个 job）
 │
 ├── src/
 │   ├── main.js                createApp + Pinia + Router + Naive UI + 主题落地
@@ -144,6 +148,8 @@ xyzw_web_helper/
 │   ├── layout/                DefaultLayout.vue（/admin/* 的外壳）
 │   ├── router/                手写路由（auto-routes 兜底）
 │   ├── stores/                Pinia：tokenStore.ts（核心）、gameRoles、localTokenManager、events/
+│   ├── composables/           useTheme.js、usePersistentRef.ts（持久化 ref，替代 useLocalStorage）
+│   ├── api/                   storage.js（存储门面，唯一写入者）、storageSync.js（云同步）、index.js
 │   ├── utils/                 bonProtocol.js、xyzwWebSocket.js、dailyTaskRunner.js、batch/、tokenDb.js、logger.js …
 │   ├── components/            按业务分目录：Apex / Club / Common / Daily / Setting / Team / Test / Tower / cards
 │   ├── composables/           useTheme.js 等
@@ -156,8 +162,8 @@ xyzw_web_helper/
 │   ├── box/ fish/ team/ icons/ 业务图标资源
 │   └── xiaoyugan.png          项目 Logo
 │
-├── test/                      node:test 单测（含契约测试）
-├── scripts/                   架构契约校验脚本等
+├── test/                      node:test 单测（含存储单通道、协议一致性、契约测试）
+├── scripts/                   架构契约校验、verify-all（本地等价 CI）、产物体积基线
 ├── docs/                      项目文档（部署、契约、回归清单、协议指南）
 ├── design-system/             视觉基准 MASTER.md + 页面级覆盖
 ├── deploy/                    Dockerfile / nginx.conf / compose / 一键部署脚本 / 代理服务
@@ -308,8 +314,19 @@ python app.py                 # 0.0.0.0:5000，首次启动生成 server/config.
 **三条规矩**
 
 1. **只许加，不许悄悄改**：新增页面/组件/命令 = 新文件 + 新注册项；既有路由 path、存储键、方法名、导出名、默认参数都是对外契约。
-2. **提交前 `pnpm verify` 全绿**（契约 → lint 零警告 → 单测）；涉及构建/依赖跑 `pnpm verify:full`。
+2. **提交前 `pnpm verify` 全绿**（契约 strict → lint 零警告 → 单测）；涉及构建/依赖跑 `pnpm verify:full`。
 3. **不碰第三方产物**：`src/xyzw/**`、`public/game/**`、`public/{box,fish,team,icons}/**`。
+
+**2026-11 收口新增的三条红线**
+
+| 红线 | 说明 | 门禁 |
+|---|---|---|
+| 持久化只能经 `src/api/storage.js` | 响应式场景用 `usePersistentRef`；禁止新增 `useLocalStorage` 或 `localStorage` 直调（两条通道会让云同步静默失效） | `test/storageChannel.test.js` |
+| BON 协议改一侧必须改另一侧 | 前端 `src/utils/bonProtocol.js` 与后端 `backend/src/protocol/bonProtocol.js` 是两份实现 | `test/protocolParity.test.js` |
+| 新增契约项必须固化 | `--strict` 下「新增未固化」也算失败，跑 `pnpm update:arch` | `pnpm check:arch:strict` |
+
+> 提交闸门：`.github/workflows/verify.yml`（前端 job + 起 Postgres 的后端 job）。
+> 本地等价命令 `node scripts/verify-all.mjs`；没有数据库时会显式标注 SKIP，不会假装通过。
 
 新增功能落点速查：
 

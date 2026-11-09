@@ -55,6 +55,12 @@ backend/
 
 ## 本地开发
 
+`backend/` 已在根 `pnpm-workspace.yaml` 里，**依赖由根目录一次安装**（不再有独立锁文件）：
+
+```bash
+pnpm install            # 一次装好前端 + backend
+```
+
 ```bash
 # 1. 起数据库（首次会自动执行 sql/001、002、003）
 pnpm run db:up
@@ -101,9 +107,13 @@ node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 | GET | `/api/logs?limit=N` | 进程内存日志 |
 | GET | `/api/logs/db?limit=N` | `task_logs` 表，按时间倒序 |
 | GET | `/api/task-definitions` | 17 个任务字典 |
-| GET | `/api/storage/all` | 前端存储的云端全量快照 |
+| GET | `/api/storage/all` | 前端存储的云端全量快照：`{ key: { value, updatedAt } }` |
 | POST | `/api/storage/patch` | `{ patch: { key: value\|null } }` 写穿同步 |
-| GET | `/api/storage/:key` | 单键读取 |
+| GET | `/api/storage/:key` | 单键读取：`{ key, value, updatedAt }` |
+
+> `updatedAt` 是合并的关键。前端 `boot()` 用它判断「云端更新还是本地更新」：
+> 云端更新则采纳，本地更新则保留并回传。没有它，前端只能二选一
+> （无条件覆盖 = 丢本地写入；无条件保留 = 永远收不到别的设备更新）。
 
 ## 数据模型
 
@@ -136,18 +146,18 @@ pnpm run verify:full         # 再加生产构建
 
 ### CI
 
-配置在 `docs/ci/verify.yml`，**不在** `.github/workflows/`。
+唯一权威文件是 `.github/workflows/verify.yml`（2026-11 起已落位，此前为规避
+token 的 `workflow` scope 而放在 `docs/ci/`，导致 **CI 从未真正运行**）。
+说明见 `docs/ci/README.md`。
 
-原因是推送 `.github/workflows/**` 需要 token 具备 `workflow` scope，而当前凭证没有。启用方式：
+推送若仍被 GitHub 拒绝，先补 scope 或网页端粘贴：
 
 ```bash
 gh auth refresh -s workflow
-mkdir -p .github/workflows
-cp docs/ci/verify.yml .github/workflows/verify.yml
 git add .github/workflows/verify.yml && git commit -m "ci: 启用 verify workflow" && git push
 ```
 
-或在 GitHub 网页上 Actions → New workflow 直接粘贴该文件内容。
+本地等价：`node scripts/verify-all.mjs`（含后端测试；无数据库时显式标 SKIP）。
 
 两个 job 刻意拆开：`frontend`（契约 + lint + 173 单测 + 构建，不需要数据库）与 `backend`（Postgres service + 73 后端测试）。这样失败时能立刻分辨是「契约/lint 问题」还是「后端逻辑问题」。
 
