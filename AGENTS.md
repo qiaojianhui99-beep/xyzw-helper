@@ -10,8 +10,8 @@
 3. `docs/REGRESSION-CHECKLIST.md` — 改完要验什么
 4. 具体协议细节：`docs/feature-protocol-dev-guide.md`
 
-`CLAUDE.md` 里有若干**过期 API**（如 `connectWebSocket`、`queuedTokens`、`maxActive=10`），
-与上方文档冲突时以上方文档和代码为准。勘误表在 `PROJECT-OVERVIEW.md` 第 9 节。
+`CLAUDE.md` 自 2026-11 起只是**导航指针**（不再维护 API 清单），过期描述已移除；
+需要历史勘误时看 `PROJECT-OVERVIEW.md` 第 9 节。
 
 ## 1. 三条硬规则
 
@@ -26,10 +26,12 @@
 npm run dev            # 开发服务器，http://localhost:3000
 npm test               # node --test test/*.test.js
 npm run lint           # ESLint，--max-warnings 0（警告即失败）
-npm run check:arch     # 架构契约校验
-npm run update:arch    # 把「新增」并入基线（不允许顺手删）
-npm run verify         # 契约 + lint + 单测 ← 提交前必跑
-npm run verify:full    # 再加生产构建
+npm run check:arch        # 架构契约校验（新增项只提示）
+npm run check:arch:strict # 同上，但新增项也算失败（CI / verify 用这个）
+npm run update:arch       # 把「新增」并入基线（不允许顺手删）
+npm run verify            # 契约(--strict) + lint + 单测 ← 提交前必跑
+npm run verify:full       # 再加生产构建与产物预算
+node scripts/verify-all.mjs  # 本地等价 CI（额外含后端测试）
 ```
 
 ## 3. 护栏怎么工作
@@ -53,7 +55,7 @@ npm run verify:full    # 再加生产构建
 | 单账号任务 | `src/utils/dailyTaskRunner.js` 独立步骤 / 新 `*Runner.js` |
 | 批量任务 | `src/utils/batch/tasksXxx.js` + 注册表 + `defaultTemplate` |
 | 服务端推送 | `src/stores/events/xxx.ts` + `index.ts` 注册 |
-| 新状态 | `useLocalStorage("newKey", 默认值)`，键名带业务前缀 |
+| 新状态 | `usePersistentRef("newKey", 默认值)`（`@/composables/usePersistentRef`），键名带业务前缀 |
 | 登录代理 | `vite.config.js` `proxy` 追加前缀 |
 | **后端路由** | `backend/src/api/routes/Xxx.js` + 在 `backend/src/api/app.js` 的 `/api` 作用域内 `register` |
 | **后端领域逻辑** | `backend/src/domain/`（纯逻辑，不碰 HTTP/DB 细节） |
@@ -102,3 +104,33 @@ python3 "$HOME/.dsh/skills/ui-ux-pro-max/scripts/search.py" "composition api" --
 页面级差异写 `design-system/xyzw-console/pages/<page>.md` 覆盖，不要去改 Master 的全局规则。
 不要对 Master 跑 `--force`。
 
+
+
+## 8. 2026-11 收口新增的四条（同样不可协商）
+
+1. **存储单通道**：持久化只经 `src/api/storage.js`；响应式用
+   `src/composables/usePersistentRef.ts`。禁止新增 `useLocalStorage` 或
+   `window.localStorage` 直调（历史遗留：`src/utils/gameLauncher.js` 的 4 处例外，
+   改动它时要顺手收口）。门禁测试：`test/storageChannel.test.js`。
+2. **协议单源**：`src/utils/bonProtocol.js` 为主实现，
+   `backend/src/protocol/bonProtocol.js` 是历史副本（落后 254 行，缺
+   `ProtoMsgLegion` / `GameMessages`）。改任一侧必须让
+   `test/protocolParity.test.js` 全绿。长期目标：抽共享包，删副本。
+3. **契约 strict**：`node scripts/check-architecture.mjs --strict` 把「新增未固化」
+   也算失败。加功能后跑一次 `--update` 固化，再跑 `--strict` 确认。
+4. **后端进闸门**：`npm run lint` 已覆盖 `backend/`；`node scripts/verify-all.mjs`
+   本地等价 CI（含后端测试，探测不到 Postgres 会显式标 SKIP 而不是假装通过）。
+
+## 9. 目录职责（新增代码请对号入座）
+
+| 目录 | 职责 | 不该出现 |
+|---|---|---|
+| `src/api/` | 后端 HTTP 客户端、存储门面与同步逻辑 | 业务状态、组件 |
+| `src/utils/` | 无状态纯逻辑（协议、计算、格式化） | 直接读写持久化、UI 依赖 |
+| `src/stores/` | Pinia 状态与跨组件协调 | 直接调 `fetch` |
+| `src/composables/` | 可复用的响应式组合函数 | 协议编解码 |
+| `src/components/` | 业务组件（按域分目录） | 全局单例 |
+| `backend/src/api/` | Fastify 装配与路由 | 领域逻辑、SQL 拼接 |
+| `backend/src/domain/` | 领域服务（唯一拿 Token 明文的地方） | HTTP/DB 细节 |
+| `backend/src/infra/` | db / crypto / logger / sql 白名单 | 业务判断 |
+| `backend/src/worker/` | cron 调度与任务编排 | 路由 |

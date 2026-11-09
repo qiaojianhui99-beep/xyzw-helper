@@ -8,16 +8,28 @@
 ## L0 · 自动闸门（每次提交必跑）
 
 ```bash
-npm run verify        # 架构契约 → lint(0 warning) → 全部单测
-npm run verify:full   # 上面 + 生产构建（改了 vite.config / 依赖 / 入口时必跑）
+node scripts/verify-all.mjs      # 本地等价 CI：契约 → lint → 前端单测 → 构建 → 产物预算 → 后端单测
+node scripts/verify-all.mjs --fast   # 只做契约 + lint + 前端单测
+npm run verify                   # 契约(--strict) + lint + 前端单测（快速门）
+npm run verify:full              # 再加生产构建与产物预算
 ```
 
 | 检查 | 命令 | 通过标准 |
 |---|---|---|
-| 架构契约 | `npm run check:arch` | 打印 `✅ 架构契约校验通过`，无 `丢失/被改动` 项 |
-| 代码规范 | `npm run lint` | 退出码 0，零警告 |
-| 单元测试 | `npm test` | `fail 0`（当前基线 124 项） |
+| 架构契约 | `npm run check:arch:strict` | 打印 `✅ 架构契约校验通过`，且**无新增未固化**项 |
+| 代码规范 | `npm run lint` | 退出码 0，零警告（范围含 `backend/`） |
+| 前端单测 | `npm test` | `fail 0`（当前基线 **220** 项） |
+| 后端单测 | `npm run test:backend` | `fail 0`（当前基线 **73** 项；需 `npm run db:up`） |
 | 生产构建 | `npm run build` | `✓ built in …`，`dist/_worker.js` 已生成 |
+| 产物体积 | `npm run check:bundle` | 未超预算 |
+
+**三条新增门禁（2026-11）**，改到对应区域时必跑：
+
+| 门禁 | 测试 | 守什么 |
+|---|---|---|
+| 存储单通道 | `node --test test/storageChannel.test.js` | 镜像与 localStorage 不分叉；云合并按 `updatedAt` |
+| 协议一致性 | `node --test test/protocolParity.test.js` | 前后端 BON 编码逐字节一致、三通道密文互通 |
+| 契约 strict | `npm run check:arch:strict` | 新增路由/存储键/导出/代理/脚本也必须固化进基线 |
 
 **红灯处理**：先看是不是自己删/改了契约项。是 → 按 `docs/OPEN-CLOSED-RULES.md` 第 5 节走变更流程；不是 → 修代码，别改基线。
 

@@ -1,5 +1,62 @@
 # 更新日志
 
+## [Unreleased] - 2026-11-09 · 工程规范化
+
+> 主题：把「可选后端」纳入既有工程纪律。功能行为不变，改变的是**边界、单源与闸门**。
+
+### 🔒 存储单通道（破坏性收敛）
+
+- 新增 `src/composables/usePersistentRef.ts`，`tokenStore.ts` 的 6 个键
+  （`gameTokens` / `selectedTokenId` / `selectedRoleInfo` / `activeConnections` /
+  `tokenGroups` / `ws_connection_*`）、`stores/common.ts`、`stores/events/chat.ts`
+  **全部从 VueUse `useLocalStorage` 迁出**。
+  原因：两条写入通道并存时，facade 的内存镜像读不到直写，云同步在最核心的
+  `gameTokens` 上**静默失效**。
+- `src/api/storage.js`：新增订阅广播 `subscribe()`、按 `updatedAt` 的启动合并、
+  内部写入时间戳键 `__storageLastWriteAt`（不上云、不出现在 `snapshot/key/length`）。
+- 多开流程（`TokenImport.vue` / `GameMultiPlayer.vue`）改用 facade 写入；
+  `multi-game:*` 进「不推云端但入镜像」名单。
+- 迁移零成本：键名、序列化格式与存量数据完全兼容。
+
+### 🔗 协议单源门禁
+
+- 新增 `test/protocolParity.test.js`：前后端 BON **明文字节逐字节一致**、
+  `lx/x/xtm` 三通道密文互通、并显式记录后端副本缺失
+  `ProtoMsgLegion` / `GameMessages`（后端副本与 `render-backend/lib/bonProtocol.js`
+  的 MD5 相同，已落后前端 254 行）。
+- 长期目标：抽共享包后删副本；在此之前该测试就是唯一一致性证据。
+
+### 🚦 闸门补齐
+
+- 契约校验新增 `--strict`（**新增未固化也算失败**）、`CURATED_FILES`/`EXPORT_MODULES`
+  纳入 `src/api/*` 与后端关键文件、存储键扫描补 `usePersistentRef`、脚本与依赖改双向比对。
+- `npm run lint` 覆盖 `backend/`（恢复 49 个先前无人检查的问题，零警告通过）。
+- 新增 `scripts/verify-all.mjs`（本地等价 CI）与 `.github/workflows/verify.yml`
+  （此前 CI 文件放在 `docs/ci/` 规避 token scope，**从未真正运行**）。
+- `pnpm-workspace.yaml`（根 + `backend`），删除 `backend/pnpm-lock.yaml`，一次 `pnpm install` 装两边。
+
+### 🐛 修复
+
+- 云端合并不再无条件覆盖本地：带 `updatedAt` 时按时间先后判定，
+  旧后端不带时间戳则保留本地并回传，**不再静默丢本地写入**。
+- `/api/storage/all` 与 `/api/storage/:key` 返回 `{ value, updatedAt }`，
+  前端据此判断「另一台设备是否更新过」。
+- `NEVER_SYNC` 语义澄清：只表示不推云端，这些键**仍然进镜像**，
+  避免 `storage.getItem` 与 `localStorage` 不一致。
+- 删除死代码：`storage.js` 未使用的 `PREFIX`、`supabase-shim.js` 未使用的 `OPS` 表。
+
+### 📚 文档
+
+- `CLAUDE.md` 从 33KB 收敛为导航指针（原有过期 API 已移除），
+  `AGENTS.md` 增补「四条新约定 + 目录职责」，`docs/OPEN-CLOSED-RULES.md`
+  记录 6 条变更与三条新红线，`PROJECT-OVERVIEW` / `BACKEND` / `REGRESSION-CHECKLIST` 同步基线。
+- `render-backend/README.md` 标明已废弃、仅作对拍基准。
+
+### ✅ 验证
+
+`node scripts/verify-all.mjs` → 契约(strict) / lint(含 backend) / 前端单测 220 /
+构建 / 产物预算 / 后端单测 73，全部通过。
+
 ## [2.0.0] - 2024-01-20
 
 ### 🎉 重大更新 - Token管理系统重构
