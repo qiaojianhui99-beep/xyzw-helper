@@ -142,9 +142,9 @@
 </template>
 
 <script setup>
-import { useDialog, useMessage } from "naive-ui";
-import { onMounted, reactive, ref } from "vue";
+import { useDialog, useMessage } from "naive-ui";import { onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
+import { storage } from "@/api/storage";
 import { useAuthStore } from "@/stores/auth";
 
 useRouter();
@@ -221,7 +221,7 @@ const changePassword = async () => {
 
 const updateTheme = (theme) => {
   preferences.theme = theme;
-  localStorage.setItem("theme", theme);
+  storage.setItem("theme", theme);
   if (theme === "dark") {
     document.documentElement.setAttribute("data-theme", "dark");
   } else if (theme === "light") {
@@ -268,7 +268,7 @@ onMounted(() => {
   }
 
   // 加载用户偏好
-  const savedPreferences = localStorage.getItem("userPreferences");
+  const savedPreferences = storage.getItem("userPreferences");
   if (savedPreferences) {
     try {
       Object.assign(preferences, JSON.parse(savedPreferences));

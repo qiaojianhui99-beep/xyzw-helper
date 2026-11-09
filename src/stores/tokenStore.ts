@@ -1,8 +1,9 @@
 import type { ProtoMsg } from "@/utils/bonProtocol";
 import { useLocalStorage } from "@vueuse/core";
 import { defineStore } from "pinia";
-
 import { computed, ref } from "vue";
+
+import { storage } from "@/api/storage";
 import useIndexedDB from "@/hooks/useIndexedDB";
 import router from "@/router";
 import { g_utils } from "@/utils/bonProtocol";
@@ -719,7 +720,7 @@ export const useTokenStore = defineStore("tokens", () => {
   const checkCrossTabConnection = (tokenId: string) => {
     const storageKey = `ws_connection_${tokenId}`;
     try {
-      const stored = localStorage.getItem(storageKey);
+      const stored = storage.getItem(storageKey);
       if (stored) {
         const state = JSON.parse(stored);
         const isRecent = Date.now() - state.timestamp < 30000; // 30秒内的状态认为是活跃的
@@ -837,7 +838,7 @@ export const useTokenStore = defineStore("tokens", () => {
         }
         updateCrossTabConnectionState(tokenId, "connected");
         releaseConnectionLock(tokenId, "connect");
-        localStorage.removeItem("xyzw_chat_msg_list");
+        storage.removeItem("xyzw_chat_msg_list");
         try {
           wsClient.send("role_getroleinfo");
         } catch (error) {
@@ -1448,7 +1449,7 @@ export const useTokenStore = defineStore("tokens", () => {
           if (now - state.timestamp > 300000) {
             wsLogger.debug(`清理过期跨标签页状态: ${tokenId}`);
             delete activeConnections.value[tokenId];
-            localStorage.removeItem(`ws_connection_${tokenId}`);
+            storage.removeItem(`ws_connection_${tokenId}`);
           }
         });
       }, 10000); // 每10秒检查一次
@@ -1503,7 +1504,7 @@ export const useTokenStore = defineStore("tokens", () => {
       // 清理localStorage中的跨标签页状态
       Object.keys(localStorage).forEach((key) => {
         if (key.startsWith("ws_connection_")) {
-          localStorage.removeItem(key);
+          storage.removeItem(key);
         }
       });
 
@@ -1548,8 +1549,8 @@ export const useTokenStore = defineStore("tokens", () => {
   // 初始化
   const initTokenStore = () => {
     // // 恢复数据
-    // const savedTokens = localStorage.getItem('gameTokens')
-    // const savedSelectedId = localStorage.getItem('selectedTokenId')
+    // const savedTokens = storage.getItem('gameTokens')
+    // const savedSelectedId = storage.getItem('selectedTokenId')
 
     // if (savedTokens) {
     //   try {

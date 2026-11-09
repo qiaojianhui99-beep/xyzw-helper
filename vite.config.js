@@ -1,11 +1,18 @@
 import fs from "node:fs";
 import path from "node:path";
+import process from "node:process";
 import { fileURLToPath } from "node:url";
 import zlib from "node:zlib";
 import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vite";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+/**
+ * 自建后端地址（backend/，Fastify）。只在 dev 下用于反向代理业务 API。
+ * 改端口时可用 VITE_BACKEND_URL 覆盖，无需改文件。
+ */
+const BACKEND_URL = process.env.VITE_BACKEND_URL || "http://127.0.0.1:3002";
 
 async function safeImport(moduleName, humanName) {
   try {
@@ -410,6 +417,18 @@ export default defineConfig(async () => {
             Referer: "https://open.weixin.qq.com/",
           },
         },
+        // ------------------------------------------------------------------
+        // 自建后端（backend/，Fastify）—— 只在 pnpm dev 下生效。
+        // 生产由 nginx 的 location /api/ 承接（见 deploy/nginx.conf）。
+        //
+        // 必须逐条列出而不是笼统写 "/api"：上面四条登录代理是更长的前缀，
+        // 但 http-proxy 按注册顺序匹配，笼统的 "/api" 会抢在前面把它们吞掉。
+        // ------------------------------------------------------------------
+        "/api/storage": { target: BACKEND_URL, changeOrigin: true },
+        "/api/tokens": { target: BACKEND_URL, changeOrigin: true },
+        "/api/tasks": { target: BACKEND_URL, changeOrigin: true },
+        "/api/logs": { target: BACKEND_URL, changeOrigin: true },
+        "/api/task-definitions": { target: BACKEND_URL, changeOrigin: true },
       },
     },
     css: {

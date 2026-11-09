@@ -1,3 +1,4 @@
+import { storage } from "@/api/storage";
 /**
  * 智能日志管理系统
  * 支持日志级别控制和开发/生产环境区分
@@ -18,7 +19,7 @@ class Logger {
     this.isDev = import.meta.env.DEV;
 
     // 初始化 enableVerbose
-    const savedVerbose = localStorage.getItem("ws_debug_verbose");
+    const savedVerbose = storage.getItem("ws_debug_verbose");
     if (savedVerbose !== null) {
       this.enableVerbose = savedVerbose === "true";
     } else {
@@ -36,7 +37,7 @@ class Logger {
     }
 
     // 开发环境根据localStorage配置决定
-    const saved = localStorage.getItem("ws_debug_level");
+    const saved = storage.getItem("ws_debug_level");
     if (saved) {
       return Number.parseInt(saved, 10);
     }
@@ -46,12 +47,12 @@ class Logger {
 
   setLevel(level) {
     this.level = level;
-    localStorage.setItem("ws_debug_level", level.toString());
+    storage.setItem("ws_debug_level", level.toString());
   }
 
   setVerbose(enabled) {
     this.enableVerbose = enabled;
-    localStorage.setItem("ws_debug_verbose", enabled.toString());
+    storage.setItem("ws_debug_verbose", enabled.toString());
   }
 
   formatMessage(level, message, ...args) {

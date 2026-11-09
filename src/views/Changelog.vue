@@ -100,7 +100,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";import { storage } from "@/api/storage";
 import ChangelogCard from "@/components/ChangelogCard.vue";
 import { useChangelogStore } from "@/stores/changelogStore";
 
@@ -145,18 +145,18 @@ const stats = computed(() => ({
 const handleSubscribe = () => {
   isSubscribed.value = !isSubscribed.value;
   if (isSubscribed.value) {
-    localStorage.setItem("changelog_subscribed", "true");
+    storage.setItem("changelog_subscribed", "true");
     // eslint-disable-next-line no-alert -- Preserve the existing native notification or confirmation flow.
     alert("已成功订阅更新通知！");
   } else {
-    localStorage.removeItem("changelog_subscribed");
+    storage.removeItem("changelog_subscribed");
     // eslint-disable-next-line no-alert -- Preserve the existing native notification or confirmation flow.
     alert("已取消订阅");
   }
 };
 
 onMounted(() => {
-  isSubscribed.value = localStorage.getItem("changelog_subscribed") === "true";
+  isSubscribed.value = storage.getItem("changelog_subscribed") === "true";
 });
 </script>
 

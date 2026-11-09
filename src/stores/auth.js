@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
+import { storage } from "@/api/storage";
 import { useLocalTokenStore } from "./localTokenManager";
 
 export const useAuthStore = defineStore("auth", () => {
   // 状态
   const user = ref(null);
-  const token = ref(localStorage.getItem("token") || null);
+  const token = ref(storage.getItem("token") || null);
   const isLoading = ref(false);
 
   const localTokenStore = useLocalTokenStore();
@@ -36,8 +37,8 @@ export const useAuthStore = defineStore("auth", () => {
       user.value = mockUser;
 
       // 保存到本地存储
-      localStorage.setItem("token", token.value);
-      localStorage.setItem("user", JSON.stringify(user.value));
+      storage.setItem("token", token.value);
+      storage.setItem("user", JSON.stringify(user.value));
 
       // 同时保存到token管理器
       localTokenStore.setUserToken(mockToken);
@@ -58,7 +59,7 @@ export const useAuthStore = defineStore("auth", () => {
 
       // 检查用户名是否已存在（简单的本地检查）
       const existingUsers = JSON.parse(
-        localStorage.getItem("registeredUsers") || "[]",
+        storage.getItem("registeredUsers") || "[]",
       );
       const userExists = existingUsers.some(
         (u) => u.username === userInfo.username,
@@ -76,7 +77,7 @@ export const useAuthStore = defineStore("auth", () => {
       };
 
       existingUsers.push(newUser);
-      localStorage.setItem("registeredUsers", JSON.stringify(existingUsers));
+      storage.setItem("registeredUsers", JSON.stringify(existingUsers));
 
       return { success: true, message: "注册成功，请登录" };
     } catch (error) {
@@ -93,9 +94,9 @@ export const useAuthStore = defineStore("auth", () => {
     token.value = null;
 
     // 清除本地存储
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    localStorage.removeItem("gameRoles");
+    storage.removeItem("token");
+    storage.removeItem("user");
+    storage.removeItem("gameRoles");
 
     // 清除token管理器中的数据
     localTokenStore.clearUserToken();
@@ -108,7 +109,7 @@ export const useAuthStore = defineStore("auth", () => {
       if (!token.value) return false;
 
       // 从本地存储获取用户信息
-      const savedUser = localStorage.getItem("user");
+      const savedUser = storage.getItem("user");
       if (savedUser) {
         try {
           user.value = JSON.parse(savedUser);
@@ -131,7 +132,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   // 初始化认证状态 - 移除API验证，使用本地验证
   const initAuth = async () => {
-    const savedUser = localStorage.getItem("user");
+    const savedUser = storage.getItem("user");
     if (token.value && savedUser) {
       try {
         user.value = JSON.parse(savedUser);

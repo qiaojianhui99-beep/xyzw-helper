@@ -722,9 +722,8 @@
 </template>
 
 <script setup>
-import { Copy, DocumentText, Refresh } from "@vicons/ionicons5";
+import { Copy, DocumentText, Refresh } from "@vicons/ionicons5";import html2canvas from "html2canvas";
 
-import html2canvas from "html2canvas";
 import {
   NCheckbox,
   NCheckboxGroup,
@@ -733,6 +732,7 @@ import {
   useMessage,
 } from "naive-ui";
 import { computed, onMounted, ref, watch } from "vue";
+import { storage } from "@/api/storage";
 import { useTokenStore } from "@/stores/tokenStore";
 import {
   formatBattleRecordsForExport,
@@ -742,11 +742,11 @@ import { isSameGameValue } from "@/utils/gameValue.js";
 import { downloadCanvasAsImage } from "@/utils/imageExport";
 
 const currentStyle = ref(
-  localStorage.getItem("club_battle_records_style") || "style1",
+  storage.getItem("club_battle_records_style") || "style1",
 );
 
 watch(currentStyle, (newStyle) => {
-  localStorage.setItem("club_battle_records_style", newStyle);
+  storage.setItem("club_battle_records_style", newStyle);
 });
 
 const exportmethod = ref(["2"]);

@@ -1,3 +1,4 @@
+import { storage } from "@/api/storage";
 /**
  * 逐鹿盐山（APEX）请求限流。
  *
@@ -76,7 +77,7 @@ const loadEst = () => {
     if (typeof localStorage === "undefined") {
       return est;
     }
-    const saved = JSON.parse(localStorage.getItem(STORE_KEY) || "{}");
+    const saved = JSON.parse(storage.getItem(STORE_KEY) || "{}");
     for (const key of Object.keys(est)) {
       if (Number.isFinite(saved[key])) {
         est[key] = clampEst(key, saved[key]);
@@ -91,7 +92,7 @@ const loadEst = () => {
 const persistEst = () => {
   try {
     if (typeof localStorage !== "undefined") {
-      localStorage.setItem(STORE_KEY, JSON.stringify({ ...est }));
+      storage.setItem(STORE_KEY, JSON.stringify({ ...est }));
     }
   } catch {
     /* ignore */

@@ -287,8 +287,7 @@ import {
   EllipseOutline,
   Refresh,
   Settings,
-} from "@vicons/ionicons5";
-import { useMessage } from "naive-ui";
+} from "@vicons/ionicons5";import { useMessage } from "naive-ui";
 import {
   computed,
   nextTick,
@@ -298,6 +297,7 @@ import {
   ref,
   watch,
 } from "vue";
+import { storage } from "@/api/storage";
 import { useTokenStore } from "@/stores/tokenStore";
 import { DailyTaskRunner } from "@/utils/dailyTaskRunner";
 import {
@@ -545,7 +545,7 @@ const handleRefreshTaskStatus = async () => {
 
 const loadSettings = (roleId) => {
   try {
-    const raw = localStorage.getItem(`daily-settings:${roleId}`);
+    const raw = storage.getItem(`daily-settings:${roleId}`);
     return raw ? JSON.parse(raw) : null;
   } catch (error) {
     console.error("Failed to load settings:", error);
@@ -555,7 +555,7 @@ const loadSettings = (roleId) => {
 
 const saveSettings = (roleId, s) => {
   try {
-    localStorage.setItem(`daily-settings:${roleId}`, JSON.stringify(s));
+    storage.setItem(`daily-settings:${roleId}`, JSON.stringify(s));
   } catch (error) {
     console.error("Failed to save settings:", error);
   }
