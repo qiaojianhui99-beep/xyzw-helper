@@ -164,6 +164,7 @@ import {
   ref,
 } from "vue";
 import { useRouter } from "vue-router";
+import { storage } from "@/api/storage";
 import {
   buildMultiGameFrameSrc,
   closeMultiGameSession,
@@ -398,7 +399,7 @@ function closeFrame(frame) {
   try {
     const updatedLaunch = closeMultiGameSession({
       scopeId: frame.scopeId,
-      localStorage: window.localStorage,
+      localStorage: storage,
       sessionStorage: window.sessionStorage,
     });
     clearFrameTimeout(frame.scopeId);

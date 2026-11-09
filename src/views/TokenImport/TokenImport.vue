@@ -1804,7 +1804,9 @@ async function openSelectedGames() {
     const { launch, failures } = await prepareMultiGameLaunch({
       tokens: tokensToOpen,
       getArrayBuffer,
-      localStorage: window.localStorage,
+      // 走 storage 门面：它双写 localStorage（iframe 里第三方游戏读得到），
+      // 同时维护内存镜像与「不上云」判定（multi-game:* 在 NEVER_SYNC 里）
+      localStorage: storage,
       sessionStorage: window.sessionStorage,
     });
 

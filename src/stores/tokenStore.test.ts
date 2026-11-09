@@ -1,12 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { ref } from 'vue'
 import { useTokenStore } from '@/stores/tokenStore'
 
 // 模拟模块
-vi.mock('@vueuse/core', () => ({
-  useLocalStorage: vi.fn((key, defaultValue) => {
-    if (key === 'gameTokens') return { value: [] }
-    if (key === 'selectedTokenId') return { value: '' }
-    return { value: defaultValue }
+vi.mock('@/composables/usePersistentRef', () => ({
+  usePersistentRef: vi.fn((key, defaultValue) => {
+    if (key === 'gameTokens') return ref([])
+    if (key === 'selectedTokenId') return ref('')
+    return ref(defaultValue)
   }),
 }))
 

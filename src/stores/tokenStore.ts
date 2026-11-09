@@ -1,9 +1,9 @@
 import type { ProtoMsg } from "@/utils/bonProtocol";
-import { useLocalStorage } from "@vueuse/core";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
 import { storage } from "@/api/storage";
+import { usePersistentRef } from "@/composables/usePersistentRef";
 import useIndexedDB from "@/hooks/useIndexedDB";
 import router from "@/router";
 import { g_utils } from "@/utils/bonProtocol";
@@ -79,19 +79,19 @@ declare interface TokenGroup {
   updatedAt?: string;
 }
 
-export const gameTokens = useLocalStorage<TokenData[]>("gameTokens", []);
+export const gameTokens = usePersistentRef<TokenData[]>("gameTokens", []);
 export const hasTokens = computed(() => gameTokens.value.length > 0);
-export const selectedTokenId = useLocalStorage("selectedTokenId", "");
+export const selectedTokenId = usePersistentRef("selectedTokenId", "");
 export const selectedToken = computed(() => {
   return gameTokens.value?.find((token) => token.id === selectedTokenId.value);
 });
-export const selectedRoleInfo = useLocalStorage<any>("selectedRoleInfo", null);
+export const selectedRoleInfo = usePersistentRef<any>("selectedRoleInfo", null);
 
 // 跨标签页连接协调
-const activeConnections = useLocalStorage("activeConnections", {});
+const activeConnections = usePersistentRef("activeConnections", {});
 
 // Token分组管理
-export const tokenGroups = useLocalStorage<TokenGroup[]>("tokenGroups", []);
+export const tokenGroups = usePersistentRef<TokenGroup[]>("tokenGroups", []);
 
 /**
  * 重构后的Token管理存储
@@ -704,7 +704,7 @@ export const useTokenStore = defineStore("tokens", () => {
     action: string,
     sessionId: string = currentSessionId,
   ) => {
-    const state = useLocalStorage(`ws_connection_${tokenId}`, {
+    const state = usePersistentRef(`ws_connection_${tokenId}`, {
       action, // 'connecting', 'connected', 'disconnecting', 'disconnected'
       sessionId,
       timestamp: Date.now(),

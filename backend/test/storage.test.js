@@ -7,8 +7,8 @@
  */
 
 import assert from "node:assert/strict";
-import { after, before, beforeEach, describe, it } from "node:test";
 import process from "node:process";
+import { after, before, beforeEach, describe, it } from "node:test";
 import { buildApp } from "../src/api/app.js";
 import { closePool, pool } from "../src/infra/db.js";
 
@@ -49,7 +49,15 @@ describe("GET /api/storage/all", () => {
   it("返回已写入的键值", async () => {
     await patch({ patch: { theme: "dark", tokenViewMode: "card" } });
     const res = await app.inject(auth({ method: "GET", url: "/api/storage/all" }));
-    assert.deepEqual(JSON.parse(res.body), { theme: "dark", tokenViewMode: "card" });
+    const body = JSON.parse(res.body);
+    assert.deepEqual(
+      Object.fromEntries(Object.entries(body).map(([k, v]) => [k, v.value])),
+      { theme: "dark", tokenViewMode: "card" },
+    );
+    for (const entry of Object.values(body)) {
+      assert.equal(typeof entry.updatedAt, "string", "必须带 updatedAt，前端靠它判谁更新");
+      assert.ok(!Number.isNaN(Date.parse(entry.updatedAt)));
+    }
   });
 
   it("需要鉴权", async () => {
@@ -72,7 +80,8 @@ describe("POST /api/storage/patch", () => {
     await patch({ patch: { theme: "dark" } });
     await patch({ patch: { theme: "light" } });
     const res = await app.inject(auth({ method: "GET", url: "/api/storage/all" }));
-    assert.deepEqual(JSON.parse(res.body), { theme: "light" });
+    const body = JSON.parse(res.body);
+    assert.equal(body.theme.value, "light", "重复写入应 upsert 成最新值");
   });
 
   it("null 表示删除", async () => {
@@ -86,7 +95,7 @@ describe("POST /api/storage/patch", () => {
     const json = JSON.stringify([{ id: "a", n: 1 }]);
     await patch({ patch: { gameTokens: json } });
     const res = await app.inject(auth({ method: "GET", url: "/api/storage/all" }));
-    assert.equal(JSON.parse(res.body).gameTokens, json);
+    assert.equal(JSON.parse(res.body).gameTokens.value, json);
   });
 
   it("进程级键被拒绝并回显在 skipped", async () => {
@@ -133,7 +142,10 @@ describe("GET /api/storage/:key", () => {
   it("存在则返回单键", async () => {
     await patch({ patch: { theme: "dark" } });
     const res = await app.inject(auth({ method: "GET", url: "/api/storage/theme" }));
-    assert.deepEqual(JSON.parse(res.body), { key: "theme", value: "dark" });
+    const body = JSON.parse(res.body);
+    assert.equal(body.key, "theme");
+    assert.equal(body.value, "dark");
+    assert.ok(!Number.isNaN(Date.parse(body.updatedAt)), "单键也要带 updatedAt");
   });
 
   it("不存在 → 404", async () => {
