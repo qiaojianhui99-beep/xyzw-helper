@@ -130,8 +130,7 @@ import {
   CloudUpload,
   LogInOutline,
   SendOutline,
-} from "@vicons/ionicons5";
-import {
+} from "@vicons/ionicons5";import {
   NButton,
   NCheckbox,
   NForm,
@@ -141,6 +140,7 @@ import {
   useMessage,
 } from "naive-ui";
 import { onUnmounted, reactive, ref } from "vue";
+import { storage } from "@/api/storage";
 import useIndexedDB from "@/hooks/useIndexedDB";
 import { useTokenStore } from "@/stores/tokenStore";
 import {
@@ -215,7 +215,7 @@ const createRandomHex = (byteLength: number) => {
 const getDeviceProfile = (): DeviceProfile => {
   try {
     const saved = JSON.parse(
-      localStorage.getItem(DEVICE_STORAGE_KEY) || "null",
+      storage.getItem(DEVICE_STORAGE_KEY) || "null",
     );
     if (saved?.androidId && saved?.distinctId) return saved;
   } catch {
@@ -229,7 +229,7 @@ const getDeviceProfile = (): DeviceProfile => {
         ? `DID-${crypto.randomUUID()}`
         : `DID-${createRandomHex(16)}`,
   };
-  localStorage.setItem(DEVICE_STORAGE_KEY, JSON.stringify(profile));
+  storage.setItem(DEVICE_STORAGE_KEY, JSON.stringify(profile));
   return profile;
 };
 

@@ -1,4 +1,5 @@
 import { onMounted, onUnmounted, ref } from "vue";
+import { storage } from "@/api/storage";
 import { listenForThemeChanges } from "@/utils/themeListener.js";
 
 // 全局响应式主题状态
@@ -27,7 +28,7 @@ export function useTheme() {
 
   // 初始化主题
   const initTheme = () => {
-    const savedTheme = localStorage.getItem("theme");
+    const savedTheme = storage.getItem("theme");
     const prefersDark = window.matchMedia(
       "(prefers-color-scheme: dark)",
     ).matches;
@@ -48,7 +49,7 @@ export function useTheme() {
     document.documentElement.setAttribute("data-theme", "dark");
     document.body.classList.add("dark");
     document.body.setAttribute("data-theme", "dark");
-    localStorage.setItem("theme", "dark");
+    storage.setItem("theme", "dark");
 
     // 立即更新响应式状态
     isDark.value = true;
@@ -65,7 +66,7 @@ export function useTheme() {
     document.documentElement.removeAttribute("data-theme");
     document.body.classList.remove("dark");
     document.body.removeAttribute("data-theme");
-    localStorage.setItem("theme", "light");
+    storage.setItem("theme", "light");
 
     // 立即更新响应式状态
     isDark.value = false;
@@ -91,7 +92,7 @@ export function useTheme() {
     removeSystemThemeListener?.();
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const onChange = () => {
-      if (!localStorage.getItem("theme")) initTheme();
+      if (!storage.getItem("theme")) initTheme();
     };
     removeSystemThemeListener = listenForThemeChanges(mediaQuery, onChange);
   };

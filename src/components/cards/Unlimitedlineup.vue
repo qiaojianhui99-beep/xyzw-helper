@@ -566,8 +566,8 @@
 </template>
 
 <script setup>
-import { NInput, useDialog, useMessage } from "naive-ui";
-import { computed, h, onMounted, ref, watch } from "vue";
+import { NInput, useDialog, useMessage } from "naive-ui";import { computed, h, onMounted, ref, watch } from "vue";
+import { storage } from "@/api/storage";
 import { useTokenStore } from "@/stores/tokenStore";
 import {
   color,
@@ -1269,7 +1269,7 @@ const loadSavedLineups = () => {
     const token = tokenStore.selectedToken;
     if (!token) return;
     const key = `${STORAGE_KEY}_${token.id}`;
-    const data = localStorage.getItem(key);
+    const data = storage.getItem(key);
     if (data) {
       savedLineups.value = JSON.parse(data);
     } else {
@@ -1286,7 +1286,7 @@ const saveLineupsToStorage = () => {
     const token = tokenStore.selectedToken;
     if (!token) return;
     const key = `${STORAGE_KEY}_${token.id}`;
-    localStorage.setItem(key, JSON.stringify(savedLineups.value));
+    storage.setItem(key, JSON.stringify(savedLineups.value));
   } catch (e) {
     console.error("保存阵容到缓存失败:", e);
     message.error("保存阵容失败");

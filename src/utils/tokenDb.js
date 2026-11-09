@@ -1,3 +1,4 @@
+import { storage } from "@/api/storage";
 // Lightweight IndexedDB wrapper for token persistence
 
 const DB_NAME = "xyzw_token_db";
@@ -118,8 +119,8 @@ export async function migrateFromLocalStorageIfNeeded() {
     if (hasAny || hasUser) return { migrated: false };
 
     // Try migrate from localStorage
-    const lsUser = localStorage.getItem("userToken");
-    const lsGameTokensRaw = localStorage.getItem("gameTokens");
+    const lsUser = storage.getItem("userToken");
+    const lsGameTokensRaw = storage.getItem("gameTokens");
     let lsGameTokens = {};
     try {
       lsGameTokens = lsGameTokensRaw ? JSON.parse(lsGameTokensRaw) : {};

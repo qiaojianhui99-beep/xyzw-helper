@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { storage } from "@/api/storage";
 import { useLocalTokenStore } from "./localTokenManager";
 
 export const useGameRolesStore = defineStore("gameRoles", () => {
@@ -16,7 +17,7 @@ export const useGameRolesStore = defineStore("gameRoles", () => {
       isLoading.value = true;
 
       // 从本地存储获取角色数据
-      const savedRoles = localStorage.getItem("gameRoles");
+      const savedRoles = storage.getItem("gameRoles");
       if (savedRoles) {
         try {
           gameRoles.value = JSON.parse(savedRoles);
@@ -61,7 +62,7 @@ export const useGameRolesStore = defineStore("gameRoles", () => {
 
       // 添加到角色列表
       gameRoles.value.push(newRole);
-      localStorage.setItem("gameRoles", JSON.stringify(gameRoles.value));
+      storage.setItem("gameRoles", JSON.stringify(gameRoles.value));
 
       // 生成并保存游戏token
       const tokenData = {
@@ -97,7 +98,7 @@ export const useGameRolesStore = defineStore("gameRoles", () => {
           ...roleData,
           updatedAt: new Date().toISOString(),
         };
-        localStorage.setItem("gameRoles", JSON.stringify(gameRoles.value));
+        storage.setItem("gameRoles", JSON.stringify(gameRoles.value));
 
         // 更新对应的token信息
         const existingToken = localTokenStore.getGameToken(roleId);
@@ -126,7 +127,7 @@ export const useGameRolesStore = defineStore("gameRoles", () => {
       isLoading.value = true;
 
       gameRoles.value = gameRoles.value.filter((role) => role.id !== roleId);
-      localStorage.setItem("gameRoles", JSON.stringify(gameRoles.value));
+      storage.setItem("gameRoles", JSON.stringify(gameRoles.value));
 
       // 删除对应的token和WebSocket连接
       localTokenStore.removeGameToken(roleId);
@@ -134,7 +135,7 @@ export const useGameRolesStore = defineStore("gameRoles", () => {
       // 如果删除的是当前选中角色，清除选中状态
       if (selectedRole.value && selectedRole.value.id === roleId) {
         selectedRole.value = null;
-        localStorage.removeItem("selectedRole");
+        storage.removeItem("selectedRole");
       }
 
       return { success: true, message: "删除角色成功，已清理相关token" };
@@ -149,7 +150,7 @@ export const useGameRolesStore = defineStore("gameRoles", () => {
   // 选择角色 - 添加WebSocket连接功能
   const selectRole = (role) => {
     selectedRole.value = role;
-    localStorage.setItem("selectedRole", JSON.stringify(role));
+    storage.setItem("selectedRole", JSON.stringify(role));
 
     // 自动建立WebSocket连接
     const tokenData = localTokenStore.getGameToken(role.id);
@@ -169,8 +170,8 @@ export const useGameRolesStore = defineStore("gameRoles", () => {
 
   // 初始化数据
   const initGameRoles = () => {
-    const cachedRoles = localStorage.getItem("gameRoles");
-    const cachedSelectedRole = localStorage.getItem("selectedRole");
+    const cachedRoles = storage.getItem("gameRoles");
+    const cachedSelectedRole = storage.getItem("selectedRole");
 
     if (cachedRoles) {
       try {

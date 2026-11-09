@@ -3043,9 +3043,8 @@
 </template>
 
 <script setup>
-import { Settings } from "@vicons/ionicons5";
+import { Settings } from "@vicons/ionicons5";import { useMessage } from "naive-ui";
 
-import { useMessage } from "naive-ui";
 // Import required dependencies
 import {
   computed,
@@ -3057,6 +3056,7 @@ import {
   ref,
   watch,
 } from "vue";
+import { storage } from "@/api/storage";
 import { $emit } from "@/stores/events/index.ts";
 import { gameTokens, tokenGroups, useTokenStore } from "@/stores/tokenStore";
 // Import batch task modules
@@ -3110,7 +3110,7 @@ const message = useMessage();
 const weirdTowerMaxClimb = ref(DEFAULT_WEIRD_TOWER_MAX_CLIMB);
 
 // 排序配置（从localStorage读取，与TokenImport共享）
-const savedSortConfig = localStorage.getItem("tokenSortConfig");
+const savedSortConfig = storage.getItem("tokenSortConfig");
 const sortConfig = ref(
   savedSortConfig
     ? JSON.parse(savedSortConfig)
@@ -3174,7 +3174,7 @@ const toggleSort = (field) => {
   }
 
   // 保存排序设置到localStorage
-  localStorage.setItem("tokenSortConfig", JSON.stringify(sortConfig.value));
+  storage.setItem("tokenSortConfig", JSON.stringify(sortConfig.value));
 };
 
 // 获取排序图标
@@ -3686,7 +3686,7 @@ const batchSettings = reactive({
 // Load batch settings from localStorage
 const loadBatchSettings = () => {
   try {
-    const saved = localStorage.getItem("batchSettings");
+    const saved = storage.getItem("batchSettings");
     if (saved) {
       const parsed = JSON.parse(saved);
       Object.assign(batchSettings, parsed);
@@ -3706,7 +3706,7 @@ const loadBatchSettings = () => {
 // Save batch settings to localStorage
 const saveBatchSettings = () => {
   try {
-    localStorage.setItem("batchSettings", JSON.stringify(batchSettings));
+    storage.setItem("batchSettings", JSON.stringify(batchSettings));
     message.success("定时批量任务设置已保存");
     showBatchSettingsModal.value = false;
   } catch (error) {
@@ -3892,7 +3892,7 @@ const manualExecuteTask = async (task) => {
 // Load scheduled tasks from localStorage
 const loadScheduledTasks = () => {
   try {
-    const saved = localStorage.getItem("scheduledTasks");
+    const saved = storage.getItem("scheduledTasks");
 
     if (saved) {
       const parsed = JSON.parse(saved);
@@ -3913,9 +3913,9 @@ const saveScheduledTasks = () => {
   try {
     const dataToSave = JSON.stringify(scheduledTasks.value);
 
-    localStorage.setItem("scheduledTasks", dataToSave);
+    storage.setItem("scheduledTasks", dataToSave);
     // Verify save was successful
-    localStorage.getItem("scheduledTasks");
+    storage.getItem("scheduledTasks");
   } catch (error) {
     console.error("Failed to save scheduled tasks:", error);
   }
@@ -4180,7 +4180,7 @@ const exportConfig = () => {
     // Gather token settings
     const tokenSettings = [];
     tokens.value.forEach((token) => {
-      const settings = localStorage.getItem(`daily-settings:${token.id}`);
+      const settings = storage.getItem(`daily-settings:${token.id}`);
       if (settings) {
         try {
           tokenSettings.push({
@@ -4331,7 +4331,7 @@ const importConfig = async ({ file }) => {
         if (Array.isArray(importData.tokenSettings)) {
           importData.tokenSettings.forEach((item) => {
             if (item.tokenId && item.settings) {
-              localStorage.setItem(
+              storage.setItem(
                 `daily-settings:${item.tokenId}`,
                 JSON.stringify(item.settings),
               );
@@ -4573,13 +4573,13 @@ const startScheduler = () => {
         if (shouldRun) {
           // Check if the task was already executed in the last minute to avoid duplicate execution
           const taskExecutionKey = `${task.id}_${now.getDate()}_${now.getHours()}_${now.getMinutes()}`;
-          const lastExecutionKey = localStorage.getItem(
+          const lastExecutionKey = storage.getItem(
             `lastTaskExecution_${task.id}`,
           );
 
           if (lastExecutionKey !== taskExecutionKey) {
             // Update last execution time
-            localStorage.setItem(
+            storage.setItem(
               `lastTaskExecution_${task.id}`,
               taskExecutionKey,
             );
@@ -4736,8 +4736,8 @@ const verifyTaskDependencies = async (task) => {
 
   // Verify localStorage is available
   try {
-    localStorage.setItem("test", "test");
-    localStorage.removeItem("test");
+    storage.setItem("test", "test");
+    storage.removeItem("test");
     addLog({
       time: new Date().toLocaleTimeString(),
       message: "✅ localStorage可用",
@@ -5228,7 +5228,7 @@ const openRedeemCodeModal = () => {
 const saveRedeemCodeConfig = () => {
   batchSettings.cdkCodes = batchSettings.cdkCodes || "";
   batchSettings.cdkPlatformType = batchSettings.cdkPlatformType || "h5";
-  localStorage.setItem("batchSettings", JSON.stringify(batchSettings));
+  storage.setItem("batchSettings", JSON.stringify(batchSettings));
   message.success("兑换码配置已保存");
 };
 
@@ -5356,7 +5356,7 @@ const clearAllItems = () => {
 
 const loadSettings = (tokenId) => {
   try {
-    const raw = localStorage.getItem(`daily-settings:${tokenId}`);
+    const raw = storage.getItem(`daily-settings:${tokenId}`);
     const defaultSettings = {
       arenaFormation: 1,
       towerFormation: 1,
@@ -5387,7 +5387,7 @@ const openSettings = (token) => {
 
 const saveSettings = () => {
   if (currentSettingsTokenId.value) {
-    localStorage.setItem(
+    storage.setItem(
       `daily-settings:${currentSettingsTokenId.value}`,
       JSON.stringify(currentSettings),
     );
@@ -5399,7 +5399,7 @@ const saveSettings = () => {
 // Task Template Functions
 
 const loadTaskTemplates = () => {
-  const templates = localStorage.getItem("task-templates");
+  const templates = storage.getItem("task-templates");
   const parsed = templates ? JSON.parse(templates) : [];
   taskTemplates.value = parsed;
   return parsed;
@@ -5444,7 +5444,7 @@ const applyTemplate = () => {
       ...template.settings,
       templateId: template.id, // 记录模板ID
     };
-    localStorage.setItem(
+    storage.setItem(
       `daily-settings:${tokenId}`,
       JSON.stringify(accountSettings),
     );
@@ -5497,7 +5497,7 @@ const updateTaskTemplate = () => {
   };
 
   // 保存模板到localStorage
-  localStorage.setItem("task-templates", JSON.stringify(templates));
+  storage.setItem("task-templates", JSON.stringify(templates));
 
   // 更新模板列表
   taskTemplates.value = templates;
@@ -5518,7 +5518,7 @@ const deleteTaskTemplate = (templateId) => {
     const filteredTemplates = templates.filter((t) => t.id !== templateId);
 
     // 保存模板到localStorage
-    localStorage.setItem("task-templates", JSON.stringify(filteredTemplates));
+    storage.setItem("task-templates", JSON.stringify(filteredTemplates));
 
     // 更新模板列表
     taskTemplates.value = filteredTemplates;
@@ -5557,7 +5557,7 @@ const loadAccountTemplateReferences = () => {
 
   // 遍历所有账号，获取其模板引用
   sortedTokens.value.forEach((token) => {
-    const settingsStr = localStorage.getItem(`daily-settings:${token.id}`);
+    const settingsStr = storage.getItem(`daily-settings:${token.id}`);
     if (settingsStr) {
       try {
         const settings = JSON.parse(settingsStr);
@@ -5629,7 +5629,7 @@ const saveTaskTemplate = () => {
 
     // 添加新模板
     templates.push(template);
-    localStorage.setItem("task-templates", JSON.stringify(templates));
+    storage.setItem("task-templates", JSON.stringify(templates));
 
     // 更新模板列表
     taskTemplates.value = templates;

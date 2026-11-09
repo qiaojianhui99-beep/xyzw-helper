@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
+import { storage } from "@/api/storage";
 
 /**
  * 更新日志数据存储
@@ -207,7 +208,7 @@ export const useChangelogStore = defineStore("changelog", () => {
    */
   const saveToLocalStorage = () => {
     try {
-      localStorage.setItem("changelogs", JSON.stringify(changelogs.value));
+      storage.setItem("changelogs", JSON.stringify(changelogs.value));
     } catch (error) {
       console.error("保存更新日志到本地存储失败:", error);
     }
@@ -218,7 +219,7 @@ export const useChangelogStore = defineStore("changelog", () => {
    */
   const loadFromLocalStorage = () => {
     try {
-      const stored = localStorage.getItem("changelogs");
+      const stored = storage.getItem("changelogs");
       if (stored) {
         changelogs.value = JSON.parse(stored);
       }
@@ -268,7 +269,7 @@ export const useChangelogStore = defineStore("changelog", () => {
    */
   const getUnreadChangelogs = () => {
     try {
-      const lastReadVersion = localStorage.getItem(
+      const lastReadVersion = storage.getItem(
         "last_read_changelog_version",
       );
       if (!lastReadVersion) return changelogs.value;
@@ -292,7 +293,7 @@ export const useChangelogStore = defineStore("changelog", () => {
    */
   const markAsRead = (version) => {
     try {
-      localStorage.setItem("last_read_changelog_version", version);
+      storage.setItem("last_read_changelog_version", version);
     } catch (error) {
       console.error("标记更新日志为已读失败:", error);
     }

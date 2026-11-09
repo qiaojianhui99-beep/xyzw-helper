@@ -144,10 +144,10 @@
 </template>
 
 <script setup>
-import { ChevronDown, Cube, Refresh, Search } from "@vicons/ionicons5";
-import { useDialog, useMessage } from "naive-ui";
+import { ChevronDown, Cube, Refresh, Search } from "@vicons/ionicons5";import { useDialog, useMessage } from "naive-ui";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
+import { storage } from "@/api/storage";
 import DailyTaskCard from "@/components/Daily/DailyTaskCard.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useGameRolesStore } from "@/stores/gameRoles";
@@ -330,7 +330,7 @@ const refreshTasks = async () => {
     tasks.value = mockTasks;
 
     // 缓存到本地存储
-    localStorage.setItem(
+    storage.setItem(
       `dailyTasks_${selectedRoleId.value}`,
       JSON.stringify(mockTasks),
     );
@@ -490,7 +490,7 @@ const executeTask = async (taskId) => {
       });
 
       // 保存到本地存储
-      localStorage.setItem(
+      storage.setItem(
         `dailyTasks_${selectedRoleId.value}`,
         JSON.stringify(tasks.value),
       );
@@ -643,7 +643,7 @@ onMounted(async () => {
   if (gameRolesStore.selectedRole) {
     selectedRoleId.value = gameRolesStore.selectedRole.id;
     // 尝试从本地存储加载任务数据
-    const savedTasks = localStorage.getItem(
+    const savedTasks = storage.getItem(
       `dailyTasks_${selectedRoleId.value}`,
     );
     if (savedTasks) {

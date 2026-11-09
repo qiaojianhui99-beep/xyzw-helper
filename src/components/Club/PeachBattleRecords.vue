@@ -1275,11 +1275,11 @@
 </template>
 
 <script setup>
-import { Copy, DocumentText, Refresh } from "@vicons/ionicons5";
+import { Copy, DocumentText, Refresh } from "@vicons/ionicons5";import html2canvas from "html2canvas";
 
-import html2canvas from "html2canvas";
 import { NRadioButton, NRadioGroup, useMessage } from "naive-ui";
 import { onMounted, ref, watch } from "vue";
+import { storage } from "@/api/storage";
 import { useTokenStore } from "@/stores/tokenStore";
 import { isSameGameValue } from "@/utils/gameValue.js";
 
@@ -1318,11 +1318,11 @@ const getLastSunday = () => {
 };
 
 const currentStyle = ref(
-  localStorage.getItem("peach_battle_records_style") || "default",
+  storage.getItem("peach_battle_records_style") || "default",
 );
 
 watch(currentStyle, (newStyle) => {
-  localStorage.setItem("peach_battle_records_style", newStyle);
+  storage.setItem("peach_battle_records_style", newStyle);
 });
 
 const exportDom = ref(null);

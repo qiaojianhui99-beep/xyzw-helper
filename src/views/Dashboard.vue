@@ -59,11 +59,11 @@ import {
   Cloud,
   Cube,
   GameController,
-} from "@vicons/ionicons5";
-import lz4 from "lz4js";
+} from "@vicons/ionicons5";import lz4 from "lz4js";
 import { useMessage } from "naive-ui";
 import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import { storage } from "@/api/storage";
 import useIndexedDB from "@/hooks/useIndexedDB";
 import { useTokenStore } from "@/stores/tokenStore";
 
@@ -147,11 +147,11 @@ const openGame = async () => {
   const hex = Array.from(converted)
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
-  localStorage.setItem(`bin_data_${token.id}`, hex);
-  localStorage.setItem("current_bin_id", token.id);
+  storage.setItem(`bin_data_${token.id}`, hex);
+  storage.setItem("current_bin_id", token.id);
   let binList = [];
   try {
-    binList = JSON.parse(localStorage.getItem("bin_file_list") || "[]");
+    binList = JSON.parse(storage.getItem("bin_file_list") || "[]");
   } catch (e) {}
   if (!binList.find((i) => i.id === token.id)) {
     binList.push({
@@ -161,7 +161,7 @@ const openGame = async () => {
       size: `${(binData.byteLength / 1024).toFixed(1)} KB`,
       order: binList.length,
     });
-    localStorage.setItem("bin_file_list", JSON.stringify(binList));
+    storage.setItem("bin_file_list", JSON.stringify(binList));
   }
   router.push("/game");
 };

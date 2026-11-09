@@ -366,8 +366,8 @@
 </template>
 
 <script setup>
-import { useMessage } from "naive-ui";
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { useMessage } from "naive-ui";import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { storage } from "@/api/storage";
 import { useTokenStore } from "@/stores/tokenStore";
 
 import ApexChallenge from "./Apex/ApexChallenge.vue";
@@ -422,15 +422,15 @@ const rankSubTab = ref("serverrank");
 
 // 盐场匹配信息详情 / 蟠桃园信息 界面样式选择（style1=原有样式，style2=移植样式）
 const warrankStyle = ref(
-  localStorage.getItem("club_warrank_style") || "style1",
+  storage.getItem("club_warrank_style") || "style1",
 );
-const peachStyle = ref(localStorage.getItem("peach_info_style") || "style1");
+const peachStyle = ref(storage.getItem("peach_info_style") || "style1");
 
 watch(warrankStyle, (newStyle) => {
-  localStorage.setItem("club_warrank_style", newStyle);
+  storage.setItem("club_warrank_style", newStyle);
 });
 watch(peachStyle, (newStyle) => {
-  localStorage.setItem("peach_info_style", newStyle);
+  storage.setItem("peach_info_style", newStyle);
 });
 
 // 活动开放时间：仅周一到周三可参与

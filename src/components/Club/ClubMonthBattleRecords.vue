@@ -861,10 +861,10 @@
 </template>
 
 <script setup>
-import { Copy, DocumentText, Refresh } from "@vicons/ionicons5";
-import html2canvas from "html2canvas";
+import { Copy, DocumentText, Refresh } from "@vicons/ionicons5";import html2canvas from "html2canvas";
 import { NRadioButton, NRadioGroup, useMessage } from "naive-ui";
 import { computed, onMounted, ref, watch } from "vue";
+import { storage } from "@/api/storage";
 import { useTokenStore } from "@/stores/tokenStore";
 
 import { downloadCanvasAsImage } from "@/utils/imageExport";
@@ -1064,11 +1064,11 @@ const sortedMembers = computed(() => {
 
 // Style 1 & 2 Support Logic
 const currentStyle = ref(
-  localStorage.getItem("club_month_battle_records_style") || "default",
+  storage.getItem("club_month_battle_records_style") || "default",
 );
 
 watch(currentStyle, (newStyle) => {
-  localStorage.setItem("club_month_battle_records_style", newStyle);
+  storage.setItem("club_month_battle_records_style", newStyle);
 });
 
 const club = computed(() => {

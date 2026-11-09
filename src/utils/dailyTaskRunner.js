@@ -1,3 +1,4 @@
+import { storage } from "@/api/storage";
 import {
   fillHangUpTime,
   getClaimablePointRewards,
@@ -227,7 +228,7 @@ export class DailyTaskRunner {
 
   loadSettings(roleId) {
     try {
-      const raw = localStorage.getItem(`daily-settings:${roleId}`);
+      const raw = storage.getItem(`daily-settings:${roleId}`);
       const defaultSettings = {
         arenaFormation: 1,
         bossFormation: 1,

@@ -732,11 +732,11 @@ import {
   Star,
   SyncCircle,
   TrashBin,
-} from "@vicons/ionicons5";
-import lz4 from "lz4js";
+} from "@vicons/ionicons5";import lz4 from "lz4js";
 import { NAlert, NIcon, useDialog, useMessage } from "naive-ui";
 import { computed, h, onMounted, onUnmounted, reactive, ref, watch } from "vue";
 import { useRouter } from "vue-router";
+import { storage } from "@/api/storage";
 import useIndexedDB from "@/hooks/useIndexedDB";
 
 import { $emit } from "@/stores/events/index.ts";
@@ -796,7 +796,7 @@ const importMethod = ref("manual");
 const refreshingTokens = ref(new Set());
 const connectingTokens = ref(new Set());
 // 从localStorage读取上次的视图模式，默认为列表视图
-const viewMode = ref(localStorage.getItem("tokenViewMode") || "list");
+const viewMode = ref(storage.getItem("tokenViewMode") || "list");
 const dragIndex = ref(null);
 const multiGameSelectedTokenIds = ref(new Set());
 const isOpeningMultiGame = ref(false);
@@ -807,11 +807,11 @@ const tempRemarks = ref({}); // 临时保存编辑中的备注内容
 
 // 监听视图模式变化，保存到localStorage
 watch(viewMode, (newViewMode) => {
-  localStorage.setItem("tokenViewMode", newViewMode);
+  storage.setItem("tokenViewMode", newViewMode);
 });
 
 // 排序状态管理 - 从localStorage读取上次的排序设置
-const savedSortConfig = localStorage.getItem("tokenSortConfig");
+const savedSortConfig = storage.getItem("tokenSortConfig");
 const sortConfig = ref(
   savedSortConfig
     ? JSON.parse(savedSortConfig)
@@ -914,7 +914,7 @@ const toggleSort = (field) => {
   }
 
   // 保存排序设置到localStorage
-  localStorage.setItem("tokenSortConfig", JSON.stringify(sortConfig.value));
+  storage.setItem("tokenSortConfig", JSON.stringify(sortConfig.value));
 };
 
 // 获取排序图标
@@ -953,7 +953,7 @@ const handleDrop = (index, event) => {
   // 切换到手动排序模式，防止自动排序打乱顺序
   sortConfig.value.field = "manual";
   // 保存排序设置
-  localStorage.setItem("tokenSortConfig", JSON.stringify(sortConfig.value));
+  storage.setItem("tokenSortConfig", JSON.stringify(sortConfig.value));
 
   dragIndex.value = null;
   message.success("Token 顺序已更新");
@@ -1842,11 +1842,11 @@ const openGame = async () => {
   const hex = Array.from(converted)
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
-  localStorage.setItem(`bin_data_${token.id}`, hex);
-  localStorage.setItem("current_bin_id", token.id);
+  storage.setItem(`bin_data_${token.id}`, hex);
+  storage.setItem("current_bin_id", token.id);
   let binList = [];
   try {
-    binList = JSON.parse(localStorage.getItem("bin_file_list") || "[]");
+    binList = JSON.parse(storage.getItem("bin_file_list") || "[]");
   } catch (e) {}
   if (!binList.find((i) => i.id === token.id)) {
     binList.push({
@@ -1856,7 +1856,7 @@ const openGame = async () => {
       size: `${(binData.byteLength / 1024).toFixed(1)} KB`,
       order: binList.length,
     });
-    localStorage.setItem("bin_file_list", JSON.stringify(binList));
+    storage.setItem("bin_file_list", JSON.stringify(binList));
   }
   router.push("/game");
 };
