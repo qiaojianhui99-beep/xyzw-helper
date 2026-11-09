@@ -11,9 +11,9 @@
 
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { fileURLToPath } from "node:url";
-import { describe, it } from "node:test";
 import process from "node:process";
+import { describe, it } from "node:test";
+import { fileURLToPath } from "node:url";
 import { diffResults, runAll } from "../scripts/parity-core.mjs";
 
 const BASELINE_PATH = fileURLToPath(new URL("./fixtures/baseline.original.json", import.meta.url));

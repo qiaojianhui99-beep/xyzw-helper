@@ -5,10 +5,17 @@
 #
 # 分两阶段：deps 装依赖，runtime 只带生产依赖与源码。
 
+# 注意：backend 已并入根 `pnpm-workspace.yaml`，**没有独立的 pnpm-lock.yaml**
+# （锁文件统一在仓库根）。本镜像的 context 是 backend/，拿不到根 lockfile，
+# 因此这里按 package.json 清单解析依赖。
+#   - 好处：镜像可独立构建，不需要仓库根上下文
+#   - 代价：依赖版本不锁死；要严格可复现时，请用仓库根作为 context 并
+#           `pnpm install --frozen-lockfile --filter xyzw-backend...`
 FROM node:24-alpine AS deps
 WORKDIR /app
-COPY package.json pnpm-lock.yaml* ./
-RUN corepack enable && pnpm install --prod --frozen-lockfile=false
+COPY package.json ./
+RUN corepack enable && corepack prepare pnpm@10.19.0 --activate \
+ && pnpm install --prod --no-lockfile
 
 FROM node:24-alpine AS runtime
 WORKDIR /app

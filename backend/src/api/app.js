@@ -11,18 +11,18 @@
  *   默认错误处理                 → 统一 `{ error }`，并记录日志
  */
 
-import Fastify from "fastify";
-import cors from "@fastify/cors";
-import { pathToFileURL } from "node:url";
 import process from "node:process";
+import { pathToFileURL } from "node:url";
+import cors from "@fastify/cors";
+import Fastify from "fastify";
 import { config } from "../config.js";
-import { logger } from "../infra/logger.js";
 import { mapPgError } from "../infra/db.js";
+import { logger } from "../infra/logger.js";
 import { authGuard } from "./plugins/authGuard.js";
-import { tokenRoutes } from "./routes/tokens.js";
-import { taskRoutes } from "./routes/tasks.js";
-import { logRoutes, metaRoutes, healthRoute } from "./routes/logs.js";
+import { healthRoute, logRoutes, metaRoutes } from "./routes/logs.js";
 import { storageRoutes } from "./routes/storage.js";
+import { taskRoutes } from "./routes/tasks.js";
+import { tokenRoutes } from "./routes/tokens.js";
 
 /** express.json() 默认 100kb；保持一致，避免超限行为差异。 */
 const BODY_LIMIT = 100 * 1024;

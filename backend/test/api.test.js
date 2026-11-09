@@ -9,8 +9,8 @@
  */
 
 import assert from "node:assert/strict";
-import { after, before, beforeEach, describe, it } from "node:test";
 import process from "node:process";
+import { after, before, beforeEach, describe, it } from "node:test";
 import { buildApp } from "../src/api/app.js";
 import { closePool, pool } from "../src/infra/db.js";
 import { clearLogs } from "../src/infra/logger.js";

@@ -1,21 +1,16 @@
 # .github/workflows/verify.yml
 #
-# ⚠️ 这个文件刻意放在 docs/ci/ 而不是 .github/workflows/。
-#    原因：推送 .github/workflows/** 需要 token 具备 `workflow` scope，
-#    当前凭证只有 gist / read:org / repo，GitHub 会直接拒绝整个 push。
-#
-#    启用方式（任选其一）：
-#      1. gh auth refresh -s workflow
-#         然后   mkdir -p .github/workflows && cp docs/ci/verify.yml .github/workflows/
-#                git add .github/workflows/verify.yml && git commit && git push
-#      2. 或在 GitHub 网页上 Actions → New workflow 直接粘贴本文件内容
-#
-# 分两个 job：
-#   frontend —— 架构契约 + lint(零警告) + 单测 + 生产构建（不需要数据库）
+# 提交闸门。两个 job：
+#   frontend —— 架构契约(--strict) + lint(零警告) + 单测 + 生产构建 + 产物预算
 #   backend  —— 起 Postgres service，跑 API/加密/执行器/存储同步测试
 #
-# 之所以拆开：前端 job 必须永远快且稳定；后端 job 依赖数据库，
+# 拆开的原因：前端 job 必须永远快且稳定；后端 job 依赖数据库，
 # 失败时能立刻看出是「契约/lint」的问题还是「后端逻辑」的问题。
+#
+# 注意：推送 .github/workflows/** 需要 token 具备 `workflow` scope。
+# 若 push 被 GitHub 拒绝（refusing to allow a Personal Access Token to create or update
+# workflow files），先 `gh auth refresh -s workflow`，或在 GitHub 网页端粘贴本文件。
+# 本地等价命令：`node scripts/verify-all.mjs`（见 scripts/verify-all.mjs）。
 
 name: verify
 
@@ -48,12 +43,14 @@ jobs:
       - name: 安装依赖
         run: pnpm install --frozen-lockfile
 
+      # --strict：新增能力也必须先进基线，否则基线会一路落后于代码
       - name: 架构契约
-        run: pnpm run check:arch
+        run: pnpm run check:arch:strict
 
-      - name: Lint（零警告）
+      - name: Lint（零警告，含 backend/）
         run: pnpm run lint
 
+      # 含存储单通道门禁（storageChannel）与前后端协议一致性（protocolParity）
       - name: 单测
         run: pnpm test
 
@@ -103,8 +100,7 @@ jobs:
           node-version: 24
           cache: pnpm
 
-      - name: 安装后端依赖
-        run: pnpm --dir backend install --frozen-lockfile=false
+      # backend/ 已在 pnpm-workspace.yaml 内，根 install 会一并装好
 
       - name: 建表
         run: |

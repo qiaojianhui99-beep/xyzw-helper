@@ -1,0 +1,11 @@
+# 两个包：前端（仓库根）+ 后端（backend/）。
+#
+# 为什么不用 workspace 之前也能跑：两边各有一份 lockfile，装依赖要跑两次，
+# 且依赖版本会各自漂移（同一份 lz4js 在两处可能是两个版本）。
+# 纳入 workspace 后：
+#   - 根目录一次 pnpm install 装全部
+#   - 只有一份 pnpm-lock.yaml（backend/pnpm-lock.yaml 已删除）
+#   - backend 仍是独立 package（独立 scripts / 独立 engines），不参与前端构建
+packages:
+  - "."
+  - "backend"

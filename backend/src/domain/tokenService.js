@@ -7,10 +7,10 @@
  *   3. 读取给执行器时解密 —— 全库唯一拿明文的地方
  */
 
-import { many, one, query } from "../infra/db.js";
 import { isSealed, mask, open, seal } from "../infra/crypto.js";
-import { buildUpdate, id, toDbValue } from "../infra/sql.js";
+import { many, one, query } from "../infra/db.js";
 import { logger } from "../infra/logger.js";
+import { buildUpdate, id, toDbValue } from "../infra/sql.js";
 
 /**
  * 允许写入的列。`token_enc` / `token_masked` 由本模块计算，不接受外部传入。

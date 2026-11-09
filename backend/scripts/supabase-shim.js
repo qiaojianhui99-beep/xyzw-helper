@@ -46,17 +46,6 @@ function toDbValue(v) {
   return v;
 }
 
-const OPS = {
-  eq: "=",
-  neq: "<>",
-  gt: ">",
-  gte: ">=",
-  lt: "<",
-  lte: "<=",
-  like: "LIKE",
-  ilike: "ILIKE",
-};
-
 class QueryBuilder {
   constructor(pool, table) {
     this.pool = pool;

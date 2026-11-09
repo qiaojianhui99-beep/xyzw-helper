@@ -14,8 +14,12 @@ FROM node:24-alpine AS build
 
 WORKDIR /app
 
-# 先只拷贝依赖清单，命中缓存
-COPY package.json pnpm-lock.yaml ./
+# 先只拷贝依赖清单，命中缓存。
+# 注意：仓库是 pnpm workspace（根 + backend），根 lockfile 含 backend 的 importer，
+# 因此必须把 pnpm-workspace.yaml 与 backend/package.json 一起拷进来，否则
+# `--frozen-lockfile` 会因为「清单缺失 / lockfile 与工作区不匹配」直接失败。
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY backend/package.json ./backend/package.json
 RUN corepack enable && corepack prepare pnpm@10.19.0 --activate \
  && pnpm install --frozen-lockfile
 

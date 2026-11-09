@@ -16,11 +16,11 @@
  */
 
 import { config } from "../config.js";
+import { resolveCredentials } from "../domain/tokenService.js";
 import { many, one, query } from "../infra/db.js";
 import { logger } from "../infra/logger.js";
 import { GameClient } from "../protocol/gameClient.js";
 import { expandCommands } from "../protocol/taskDefinitions.js";
-import { getTokenRowForExecution, resolveCredentials } from "../domain/tokenService.js";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
