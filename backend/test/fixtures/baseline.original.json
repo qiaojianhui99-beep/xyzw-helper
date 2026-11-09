@@ -1,0 +1,486 @@
+{
+  "base": "http://127.0.0.1:3100",
+  "capturedAt": "2026-11-09T05:46:57.802Z",
+  "caseCount": 17,
+  "results": [
+    {
+      "request": "GET /health",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "activeCrons": "number",
+        "logsInMemory": "number",
+        "status": "string",
+        "time": "string"
+      }
+    },
+    {
+      "request": "GET /api/tokens",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "connId": "C1",
+          "created_at": "<ISO>",
+          "enabled": true,
+          "id": "<UUID>",
+          "isRestore": true,
+          "name": "alpha",
+          "roleId": "R1",
+          "sessId": "S1",
+          "token": "tok-alpha",
+          "ws_url": "ws://127.0.0.1:1"
+        },
+        {
+          "connId": "C2",
+          "created_at": "<ISO>",
+          "enabled": false,
+          "id": "<UUID>",
+          "isRestore": false,
+          "name": "beta",
+          "roleId": "R2",
+          "sessId": "S2",
+          "token": "tok-beta",
+          "ws_url": "ws://127.0.0.1:1"
+        }
+      ]
+    },
+    {
+      "request": "POST /api/tokens",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "connId": null,
+          "created_at": "<ISO>",
+          "enabled": true,
+          "id": "<UUID>",
+          "isRestore": null,
+          "name": "gamma",
+          "roleId": "R3",
+          "sessId": null,
+          "token": "tok-gamma",
+          "ws_url": null
+        }
+      ]
+    },
+    {
+      "request": "GET /api/tokens",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "connId": "C1",
+          "created_at": "<ISO>",
+          "enabled": true,
+          "id": "<UUID>",
+          "isRestore": true,
+          "name": "alpha",
+          "roleId": "R1",
+          "sessId": "S1",
+          "token": "tok-alpha",
+          "ws_url": "ws://127.0.0.1:1"
+        },
+        {
+          "connId": "C2",
+          "created_at": "<ISO>",
+          "enabled": false,
+          "id": "<UUID>",
+          "isRestore": false,
+          "name": "beta",
+          "roleId": "R2",
+          "sessId": "S2",
+          "token": "tok-beta",
+          "ws_url": "ws://127.0.0.1:1"
+        },
+        {
+          "connId": null,
+          "created_at": "<ISO>",
+          "enabled": true,
+          "id": "<UUID>",
+          "isRestore": null,
+          "name": "gamma",
+          "roleId": "R3",
+          "sessId": null,
+          "token": "tok-gamma",
+          "ws_url": null
+        }
+      ]
+    },
+    {
+      "request": "GET /api/tokens",
+      "status": 401,
+      "contentType": "application/json",
+      "body": {
+        "error": "Unauthorized"
+      }
+    },
+    {
+      "request": "GET /api/tasks",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "created_at": "<ISO>",
+          "cron_expr": "0 3 * * *",
+          "cron_expression": null,
+          "enabled": true,
+          "id": "<UUID>",
+          "last_run_at": null,
+          "name": "nightly",
+          "selected_tasks": [
+            "signIn"
+          ],
+          "selected_tokens": [
+            "<UUID>"
+          ],
+          "task_type": null,
+          "token_ids": []
+        }
+      ]
+    },
+    {
+      "request": "POST /api/tasks",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "created_at": "<ISO>",
+          "cron_expr": "30 4 * * *",
+          "cron_expression": null,
+          "enabled": true,
+          "id": "<UUID>",
+          "last_run_at": null,
+          "name": "daily",
+          "selected_tasks": [
+            "signIn",
+            "climbTower"
+          ],
+          "selected_tokens": [
+            "<UUID>"
+          ],
+          "task_type": null,
+          "token_ids": []
+        }
+      ]
+    },
+    {
+      "request": "GET /api/tasks",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "created_at": "<ISO>",
+          "cron_expr": "0 3 * * *",
+          "cron_expression": null,
+          "enabled": true,
+          "id": "<UUID>",
+          "last_run_at": null,
+          "name": "nightly",
+          "selected_tasks": [
+            "signIn"
+          ],
+          "selected_tokens": [
+            "<UUID>"
+          ],
+          "task_type": null,
+          "token_ids": []
+        },
+        {
+          "created_at": "<ISO>",
+          "cron_expr": "30 4 * * *",
+          "cron_expression": null,
+          "enabled": true,
+          "id": "<UUID>",
+          "last_run_at": null,
+          "name": "daily",
+          "selected_tasks": [
+            "signIn",
+            "climbTower"
+          ],
+          "selected_tokens": [
+            "<UUID>"
+          ],
+          "task_type": null,
+          "token_ids": []
+        }
+      ]
+    },
+    {
+      "request": "PATCH /api/tasks/33333333-3333-3333-3333-333333333333",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "created_at": "<ISO>",
+          "cron_expr": "0 3 * * *",
+          "cron_expression": null,
+          "enabled": false,
+          "id": "<UUID>",
+          "last_run_at": null,
+          "name": "nightly",
+          "selected_tasks": [
+            "signIn"
+          ],
+          "selected_tokens": [
+            "<UUID>"
+          ],
+          "task_type": null,
+          "token_ids": []
+        }
+      ]
+    },
+    {
+      "request": "DELETE /api/tasks/33333333-3333-3333-3333-333333333333",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "ok": true
+      }
+    },
+    {
+      "request": "GET /api/tasks",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "created_at": "<ISO>",
+          "cron_expr": "30 4 * * *",
+          "cron_expression": null,
+          "enabled": true,
+          "id": "<UUID>",
+          "last_run_at": null,
+          "name": "daily",
+          "selected_tasks": [
+            "signIn",
+            "climbTower"
+          ],
+          "selected_tokens": [
+            "<UUID>"
+          ],
+          "task_type": null,
+          "token_ids": []
+        }
+      ]
+    },
+    {
+      "request": "GET /api/task-definitions",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "commands": [
+            "system_signinreward"
+          ],
+          "key": "signIn",
+          "name": "签到"
+        },
+        {
+          "commands": [
+            "system_claimhangupreward"
+          ],
+          "key": "claimHangup",
+          "name": "领取挂机奖励"
+        },
+        {
+          "commands": [
+            "task_claimdailyreward"
+          ],
+          "key": "claimDaily",
+          "name": "领取日常奖励"
+        },
+        {
+          "commands": [
+            "task_claimdailypoint"
+          ],
+          "key": "claimDailyPoint",
+          "name": "领取每日积分"
+        },
+        {
+          "commands": [
+            "tower_getinfo",
+            "tower_claimreward"
+          ],
+          "key": "climbTower",
+          "name": "爬塔领奖励"
+        },
+        {
+          "commands": [
+            "evotower_getinfo",
+            "evotower_claimreward"
+          ],
+          "key": "climbWeirdTower",
+          "name": "怪异塔"
+        },
+        {
+          "commands": [
+            "arena_startarea",
+            "arena_getareatarget"
+          ],
+          "key": "arenaFight",
+          "name": "竞技场"
+        },
+        {
+          "commands": [
+            "mail_claimallattachment"
+          ],
+          "key": "claimMail",
+          "name": "领取邮件附件"
+        },
+        {
+          "commands": [
+            "legacy_getinfo",
+            "legacy_claimhangup"
+          ],
+          "key": "legacyHangup",
+          "name": "功法挂机"
+        },
+        {
+          "commands": [
+            "hero_recruit"
+          ],
+          "key": "heroRecruit",
+          "name": "武将招募"
+        },
+        {
+          "commands": [
+            "study_startgame"
+          ],
+          "key": "studyGame",
+          "name": "学习问答"
+        },
+        {
+          "commands": [
+            "genie_sweep"
+          ],
+          "key": "genieSweep",
+          "name": "灯神"
+        },
+        {
+          "commands": [
+            "item_openbox"
+          ],
+          "key": "openBox",
+          "name": "开箱"
+        },
+        {
+          "commands": [
+            "legion_getinfo",
+            "legion_signin"
+          ],
+          "key": "legionSignIn",
+          "name": "军团签到"
+        },
+        {
+          "commands": [
+            "bosstower_getinfo",
+            "bosstower_startboss",
+            "bosstower_startbox"
+          ],
+          "key": "bossTower",
+          "name": "咸王宝库"
+        },
+        {
+          "commands": [
+            "mergebox_getinfo",
+            "mergebox_claimfreeenergy",
+            "mergebox_openbox"
+          ],
+          "key": "mergeBox",
+          "name": "合并魔盒"
+        },
+        {
+          "commands": [
+            "system_signinreward",
+            "system_claimhangupreward",
+            "task_claimdailyreward",
+            "tower_getinfo",
+            "tower_claimreward",
+            "mail_claimallattachment",
+            "legacy_getinfo",
+            "legacy_claimhangup"
+          ],
+          "key": "dailyBundle",
+          "name": "一键日常"
+        }
+      ]
+    },
+    {
+      "request": "GET /api/logs?limit=5",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "type": "array",
+        "of": {
+          "category": "string",
+          "level": "string",
+          "message": "string",
+          "ts": "string"
+        }
+      }
+    },
+    {
+      "request": "GET /api/logs/db?limit=5",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "created_at": "<ISO>",
+          "id": 1,
+          "message": null,
+          "status": "success",
+          "task_id": "<UUID>",
+          "task_type": "signIn",
+          "token_name": "alpha"
+        }
+      ]
+    },
+    {
+      "request": "POST /api/tasks/does-not-exist/run",
+      "status": 404,
+      "contentType": "application/json",
+      "body": {
+        "error": "任务不存在"
+      }
+    },
+    {
+      "request": "DELETE /api/tokens/22222222-2222-2222-2222-222222222222",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "ok": true
+      }
+    },
+    {
+      "request": "GET /api/tokens",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "connId": "C1",
+          "created_at": "<ISO>",
+          "enabled": true,
+          "id": "<UUID>",
+          "isRestore": true,
+          "name": "alpha",
+          "roleId": "R1",
+          "sessId": "S1",
+          "token": "tok-alpha",
+          "ws_url": "ws://127.0.0.1:1"
+        },
+        {
+          "connId": null,
+          "created_at": "<ISO>",
+          "enabled": true,
+          "id": "<UUID>",
+          "isRestore": null,
+          "name": "gamma",
+          "roleId": "R3",
+          "sessId": null,
+          "token": "tok-gamma",
+          "ws_url": null
+        }
+      ]
+    }
+  ]
+}
