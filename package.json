@@ -34,7 +34,9 @@
     "check:size": "node scripts/check-file-size.mjs",
     "ui:check": "node scripts/ui-fingerprint.mjs",
     "ui:baseline": "node scripts/ui-fingerprint.mjs --update",
-    "check:docs": "node scripts/check-docs.mjs"
+    "check:docs": "node scripts/check-docs.mjs",
+    "coverage": "node --import ./test/helpers/register-alias.mjs --test --experimental-test-coverage test/*.test.js",
+    "coverage:backend": "node --test --test-concurrency=1 --experimental-test-coverage backend/test/*.test.js"
   },
   "dependencies": {
     "@arco-design/web-vue": "^2.57.0",

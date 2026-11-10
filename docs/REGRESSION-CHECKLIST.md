@@ -24,6 +24,16 @@ npm run verify:full              # 再加生产构建与产物预算
 | 产物体积 | `npm run check:bundle` | 未超预算 |
 | 文件规模 | `npm run check:size` | 无文件超预算 |
 | 文档一致性 | `npm run check:docs` | 命令 / 路径 / 失效标识全部对得上代码 |
+| 覆盖率（可选） | `npm run coverage` / `npm run coverage:backend` | 见下方「覆盖率怎么看」 |
+
+**覆盖率怎么看**：`node --test --experimental-test-coverage` 的 `all files` 只统计
+**被测试实际加载过的模块**。当前前端 80% / 后端 65% 是这批文件**内部**的覆盖度；
+分母覆盖不到 `views/`（28k 行）、`components/`（66k 行）、`stores/`（3.5k 行），
+按全项目行数折算的真实行覆盖率约 **4–5%**。不要把这个 80% 当成项目覆盖率。
+
+**后端测试必须串行**：`npm run test:backend` 带 `--test-concurrency=1`。
+直接 `node --test backend/test/*.test.js`（默认并发）会因多个测试文件同时读写同一个
+Postgres 库而偶发失败（实测 `.single()` 与 `dailyBundle` 两条会飘）。
 
 **三条新增门禁（2026-11）**，改到对应区域时必跑：
 

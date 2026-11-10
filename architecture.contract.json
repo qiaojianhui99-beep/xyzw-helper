@@ -416,6 +416,8 @@
     "check:bundle",
     "check:docs",
     "check:size",
+    "coverage",
+    "coverage:backend",
     "db:down",
     "db:reset",
     "db:up",
