@@ -36,7 +36,10 @@
     "ui:baseline": "node scripts/ui-fingerprint.mjs --update",
     "check:docs": "node scripts/check-docs.mjs",
     "coverage": "node --import ./test/helpers/register-alias.mjs --test --experimental-test-coverage test/*.test.js",
-    "coverage:backend": "node --test --test-concurrency=1 --experimental-test-coverage backend/test/*.test.js"
+    "coverage:backend": "node --test --test-concurrency=1 --experimental-test-coverage backend/test/*.test.js",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "coverage:unit": "vitest run --coverage"
   },
   "dependencies": {
     "@arco-design/web-vue": "^2.57.0",
@@ -65,10 +68,13 @@
     "@types/crypto-js": "^4.2.2",
     "@types/node": "^20.19.21",
     "@vitejs/plugin-vue": "^5.2.4",
+    "@vitest/coverage-v8": "^2.1.9",
+    "@vue/test-utils": "^2.5.1",
     "@vue/tsconfig": "^0.8.1",
     "eslint": "^9.39.3",
     "eslint-config-prettier": "^10.1.8",
     "jiti": "^2.6.1",
+    "jsdom": "^31.0.0",
     "prettier": "^3.9.9",
     "sass": "^1.93.2",
     "typescript": "^5.9.3",
@@ -76,7 +82,8 @@
     "unplugin-auto-import": "^19.3.0",
     "unplugin-vue-components": "^28.4.1",
     "unplugin-vue-router": "^0.8.8",
-    "vite": "^5.4.11"
+    "vite": "^5.4.11",
+    "vitest": "^2.1.9"
   },
   "keywords": [
     "vue",
