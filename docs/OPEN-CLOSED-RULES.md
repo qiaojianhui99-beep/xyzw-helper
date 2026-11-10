@@ -15,7 +15,7 @@
 | 1 | 路由 `path` / `name` | `src/router/index.js` | 书签、外链、`/tokens?token=` 回调、分享链接全失效 |
 | 2 | `views/*.vue` 文件 | 文件式路由自动扫描 | 页面 404 |
 | 3 | 受保护路由数量 | `meta.requiresToken: true` | 未登录也能进后台 |
-| 4 | `localStorage` 键名 | 30 个键 | 老用户 Token/设置全部丢失，等于清号 |
+| 4 | `localStorage` 键名 | 33 个键 | 老用户 Token/设置全部丢失，等于清号 |
 | 5 | `tokenStore` 公开方法 | `return { ... }` 出口 | 所有页面的调用点炸 |
 | 6 | utils 模块导出符号 | `export class/function/const` | 跨模块 import 失败 |
 | 7 | 游戏命令名 + 默认 body | `registerDefaultCommands` | 发出的报文变了，服端返回错误 |

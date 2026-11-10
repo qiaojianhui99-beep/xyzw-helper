@@ -414,6 +414,7 @@
     "check:arch",
     "check:arch:strict",
     "check:bundle",
+    "check:docs",
     "check:size",
     "db:down",
     "db:reset",

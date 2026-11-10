@@ -121,6 +121,7 @@ pnpm preview
 | `pnpm verify` | **提交前必跑**：契约(`--strict`) → lint（含 `backend/`）→ 单测 |
 | `pnpm verify:full` | 再加生产构建、产物体积预算与文件规模预算（改构建/依赖时用） |
 | `pnpm check:size` | 文件规模预算（巨型文件只许降不许升） |
+| `pnpm check:docs` | 文档一致性（命令/路径/失效 API 与代码对账） |
 | `node scripts/verify-all.mjs` | **本地等价 CI**：上面全部 + 后端 73 测试（无数据库会显式标 SKIP） |
 | `pnpm test:backend` | 后端 73 个测试（需先 `pnpm db:up`） |
 | `pnpm db:up` / `db:down` / `db:reset` | 本地 Postgres（端口 55432） |

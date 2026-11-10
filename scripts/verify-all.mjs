@@ -54,6 +54,7 @@ if (!FAST) {
   steps.push({ name: "生产构建", command: "npm", args: ["run", "build"] });
   steps.push({ name: "产物体积基线", command: "npm", args: ["run", "check:bundle"] });
   steps.push({ name: "文件规模预算", command: "npm", args: ["run", "check:size"] });
+  steps.push({ name: "文档一致性", command: "npm", args: ["run", "check:docs"] });
   steps.push({
     name: "后端单测",
     command: "npm",

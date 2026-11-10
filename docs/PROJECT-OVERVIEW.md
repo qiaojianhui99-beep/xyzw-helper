@@ -167,7 +167,7 @@ interface TokenData {
 
 ### 4.2 localStorage 键（用户数据兼容层）
 
-改键名 = 老用户数据全丢。当前 30 个键，核心几组：
+改键名 = 老用户数据全丢。当前 33 个键（以 `architecture.contract.json` 的 `storageKeys` 为准），核心几组：
 
 | 分组 | 键 |
 |---|---|
@@ -295,7 +295,7 @@ interface TokenData {
 
 | 项目 | 结果 |
 |---|---|
-| `npm test` | **220 通过**（含存储单通道 23 例、协议一致性 24 例、契约自检） |
+| `npm test` | **243 通过**（含存储单通道 23 例、协议一致性 27 例、活动窗口 17 例、事件插件 3 例、契约自检） |
 | `npm run lint` | 0 error / 0 warning，范围已含 `backend/`（零警告硬门禁） |
 | `npm run test:backend` | **73 通过**（需 Postgres :55432） |
 | `npm run build` | 成功；产物已按 vendor / 页面分包，最大单文件 0.8 MB（`vendor-naive`、`GameFeatures`） |

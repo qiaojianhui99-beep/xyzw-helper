@@ -27,13 +27,14 @@
     "update:arch": "node scripts/check-architecture.mjs --update",
     "verify": "node scripts/check-architecture.mjs --strict && npm run lint && npm run typecheck && npm test",
     "verify:backend": "npm run test:backend",
-    "verify:full": "node scripts/check-architecture.mjs --strict && npm run lint && npm run typecheck && npm test && npm run build && npm run check:bundle && npm run check:size",
+    "verify:full": "node scripts/check-architecture.mjs --strict && npm run lint && npm run typecheck && npm test && npm run build && npm run check:bundle && npm run check:size && npm run check:docs",
     "check:arch:strict": "node scripts/check-architecture.mjs --strict",
     "verify:all": "node scripts/verify-all.mjs",
     "typecheck": "tsc -p tsconfig.app.json --noEmit",
     "check:size": "node scripts/check-file-size.mjs",
     "ui:check": "node scripts/ui-fingerprint.mjs",
-    "ui:baseline": "node scripts/ui-fingerprint.mjs --update"
+    "ui:baseline": "node scripts/ui-fingerprint.mjs --update",
+    "check:docs": "node scripts/check-docs.mjs"
   },
   "dependencies": {
     "@arco-design/web-vue": "^2.57.0",

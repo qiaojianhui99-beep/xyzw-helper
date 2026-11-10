@@ -74,7 +74,8 @@ node scripts/verify-all.mjs  # 本地等价 CI（额外含后端测试）
 - 跨标签页：`localStorage.activeConnections` 做互斥；手改它会造出重复连接。
 - 路由大小写：`/admin/PushingLevels` 是历史大写，别顺手「规范」成小写。
 - lint 零容忍：新增 JSDoc 必须和函数签名一致，否则 `--max-warnings 0` 直接失败。
-- 构建体积：主 chunk ≈ 4.7 MB，`GameFeatures` ≈ 1 MB；加依赖前先想清楚是否值得。
+- 构建体积：已完成分包（`docs/BUILD-OPTIMIZATION.md`），**首屏 JS ≈ 356 kB**（预算 450 kB，`npm run check:bundle` 会拦），
+  懒加载后最大单文件约 0.8 MB；加依赖前先跑一次 `check:bundle` 看有没有破预算。
 - 可选插件（`@vitejs/plugin-basic-ssl`、`vite-plugin-vue-devtools`）缺失属正常，走 safeImport 降级。
 - 事件插件写了不等于生效：`src/stores/events/*.ts` 必须在 `index.ts` 里 `Xxx(evmInst)` 注册。
   `activity` / `clock` 目前**故意未装配**（会改变推送处理，属产品决策）；

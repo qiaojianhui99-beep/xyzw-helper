@@ -140,7 +140,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 
 ```bash
 pnpm run test:backend        # 73 个，需要数据库
-pnpm run verify              # 前端：契约 + lint + 173 单测
+pnpm run verify              # 前端：契约(--strict) + lint + typecheck + 243 单测
 pnpm run verify:full         # 再加生产构建
 ```
 
@@ -159,7 +159,7 @@ git add .github/workflows/verify.yml && git commit -m "ci: 启用 verify workflo
 
 本地等价：`node scripts/verify-all.mjs`（含后端测试；无数据库时显式标 SKIP）。
 
-两个 job 刻意拆开：`frontend`（契约 + lint + 173 单测 + 构建，不需要数据库）与 `backend`（Postgres service + 73 后端测试）。这样失败时能立刻分辨是「契约/lint 问题」还是「后端逻辑问题」。
+两个 job 刻意拆开：`frontend`（契约 + lint + typecheck + 243 单测 + 构建 + 产物与规模预算，不需要数据库）与 `backend`（Postgres service + 73 后端测试）。这样失败时能立刻分辨是「契约/lint 问题」还是「后端逻辑问题」。
 
 后端测试分布：
 
@@ -176,10 +176,10 @@ git add .github/workflows/verify.yml && git commit -m "ci: 启用 verify workflo
 
 `render-backend/server.js` 依赖 Supabase 的 PostgREST，没有真实项目就起不来。因此：
 
-1. `scripts/supabase-shim.js` 实现了 `.from().select/insert/update/delete + .eq/.order/.limit/.single` 到 `pg` 的映射；
-2. `scripts/loader.mjs` 用 module resolve hook 把 `@supabase/supabase-js` 重定向到 shim，**原版 545 行一行未改**就跑在本地 PG 上；
-3. `scripts/capture-baseline.mjs` 打 17 条用例，存成 `test/fixtures/baseline.original.json`；
-4. `test/parity.test.js` 打新服务，与基准逐字节比对（uuid/时间戳归一化）。
+1. `backend/scripts/supabase-shim.js` 实现了 `.from().select/insert/update/delete + .eq/.order/.limit/.single` 到 `pg` 的映射；
+2. `backend/scripts/loader.mjs` 用 module resolve hook 把 `@supabase/supabase-js` 重定向到 shim，**原版 545 行一行未改**就跑在本地 PG 上；
+3. `backend/scripts/capture-baseline.mjs` 打 17 条用例，存成 `backend/test/fixtures/baseline.original.json`；
+4. `backend/test/parity.test.js` 打新服务，与基准逐字节比对（uuid/时间戳归一化）。
 
 结果：**Fastify 版与原版 Express 17 条用例 0 差异**。该测试做过负向验证（故意改一个状态码 → 精确报出 `[#2 GET /api/tokens] status 基准: 418 实测: 200`），确保它不是「永远通过」。
 

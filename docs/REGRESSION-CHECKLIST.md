@@ -18,10 +18,12 @@ npm run verify:full              # 再加生产构建与产物预算
 |---|---|---|
 | 架构契约 | `npm run check:arch:strict` | 打印 `✅ 架构契约校验通过`，且**无新增未固化**项 |
 | 代码规范 | `npm run lint` | 退出码 0，零警告（范围含 `backend/`） |
-| 前端单测 | `npm test` | `fail 0`（当前基线 **220** 项） |
+| 前端单测 | `npm test` | `fail 0`（当前基线 **243** 项） |
 | 后端单测 | `npm run test:backend` | `fail 0`（当前基线 **73** 项；需 `npm run db:up`） |
 | 生产构建 | `npm run build` | `✓ built in …`，`dist/_worker.js` 已生成 |
 | 产物体积 | `npm run check:bundle` | 未超预算 |
+| 文件规模 | `npm run check:size` | 无文件超预算 |
+| 文档一致性 | `npm run check:docs` | 命令 / 路径 / 失效标识全部对得上代码 |
 
 **三条新增门禁（2026-11）**，改到对应区域时必跑：
 
