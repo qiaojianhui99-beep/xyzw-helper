@@ -1,4 +1,4 @@
-import type { EVM, XyzwSession } from "./index";
+import type { EVM, XyzwSession } from "./types.ts";
 import { gameLogger } from "@/utils/logger";
 
 // 处理_ack事件，通常用于确认收到某些重要消息

@@ -121,6 +121,15 @@
 | 2026-11-09 | 协议单源门禁：新增 `test/protocolParity.test.js`（明文字节一致 + 三通道密文互通 + 记录后端副本缺失 `ProtoMsgLegion`/`GameMessages`） | 后端协议层是 `render-backend/lib/bonProtocol.js` 的原样拷贝（MD5 相同），已落后前端 254 行，无任何测试能发现 | 只增测试，不改实现 | 24 例全绿 |
 | 2026-11-09 | 契约校验升级：`check-architecture.mjs` 新增 `--strict`（新增项也算失败）、`CURATED_FILES`/`EXPORT_MODULES` 纳入 `src/api/*`、`usePersistentRef.ts` 与后端关键文件、`storageKeys` 扫描补 `usePersistentRef`；基线固化 7 项（2 个存储键 + 5 条 `/api/*` 代理） | 默认模式只拦删除，新增永远静默通过，基线一路落后于代码（实测落后 5 条代理前缀） | 校验更严；`npm run verify` 已切到 `--strict` | `node scripts/check-architecture.mjs --strict` 通过 |
 | 2026-11-09 | 后端迁入工作区：新增 `pnpm-workspace.yaml`（`.` + `backend`），删除 `backend/pnpm-lock.yaml`；`lint`/`format` 覆盖 `backend/`；新增 `scripts/verify-all.mjs` 与 `.github/workflows/verify.yml` | 后端 5936 行新增代码完全在闸门之外；CI 文件放在 `docs/ci/` 导致**从未真正运行** | 安装入口统一为根 `pnpm install`；`backend/` 开始接受零警告 lint | `pnpm install`（2 projects）、`npm run test:backend` 73 通过、`npm run lint` 通过 |
+| 2026-11-09 | 类型闸门：新增 `npm run typecheck`，修复 117 个 tsc 错误（tokenStore 接口补齐、cache 类型重写、catch unknown 统一、3 处语义缺陷） | `tsconfig` 开着 strict 但从未有脚本跑过它 | 类型层为主；行为改动限于「选中态写空串」「过期判定显式化」「统计计数器初始化」 | `tsc --noEmit` 0 错误；verify 220 单测通过 |
+| 2026-11-09 | 循环解耦：`tokenStore` 不再 import router，改由 `main.js` 注入 `setCurrentPathResolver` | store → router → views → store 共 26 条循环链 | 路径读取改注入，行为不变 | 依赖扫描循环数 26 → 0 |
+| 2026-11-09 | `cache.ts` 实现移到 `src/utils/cache.ts`，旧路径保留显式 re-export；`xyzwWebSocket` 改从 utils 引入 | 它不是 Pinia store，却放在 stores/ 并造成 utils → stores 层次倒置 | 导出名与行为不变（兼容层保留） | typecheck / lint / 220 单测通过 |
+| 2026-11-09 | `events` 的类型（`XyzwSession` / `EVM`）拆到 `src/stores/events/types.ts`，index 再导出；9 个插件改从 types 取类型 | 消除 index ↔ 插件的类型层循环 | 对外 `from "./index"` 的导入方不受影响 | 依赖扫描无循环 |
+| 2026-11-09 | **删除零引用模块**：`src/api/index.js`、`src/utils/struckAnalyer.ts`、`src/utils/testStudyQuestions.js`、`src/stores/common.ts`、`src/utils/readable-xyzw-ws.js` | 全部 0 引用（`common.ts` 曾与 tokenStore 抢 `gameTokens` 键，是隐患） | 契约 `files` / `modules` 相应条目移除，已用 `--update --allow-removals` 固化 | 依赖扫描孤儿清零（除自动注册的 .vue 与兼容 shim） |
+| 2026-11-10 | 后端协议副本补齐 `ProtoMsgLegion` 与 `GameMessages`，`test/protocolParity.test.js` 增加「导出集合 / 模板集合 / 解析结果一致」四类断言 | 后端缺少这两项，军团战报文与预置模板在服务端构造不出来 | 只补能力，不改前端行为 | parity 27 例全绿（原 24） |
+| 2026-11-10 | 活动时间窗口从 `BatchDailyTasks.vue` 抽到 `src/utils/batch/activityWindows.js`（含 `formatPower`），新增 `test/activityWindows.test.js`（17 例） | 6 个 computed 全是纯日期计算，内联在 6000 行组件里无法测试 | 视图只留 `computed(() => pureFn())`，模板不变 | 17 例覆盖周五 12 点、第四周日、2026-03 特判 |
+| 2026-11-10 | 新增 `scripts/check-file-size.mjs`（`npm run check:size`），已超标文件登记上限、只降不升；默认单文件 3000 行、src 总量 136k 行 | 没有任何机制阻止巨型文件继续膨胀 | 只加门禁，不改代码 | `check:size` 通过；接入 `verify:full` 与 `verify-all` |
+| 2026-11-09 | 契约校验器认识 `export type { ... }` 再导出 | 旧正则只认 `export { ... }`，把类型再导出误判成「导出被删除」 | 只影响校验口径 | `check:arch --strict` 通过 |
 | 2026-11-09 | `backend` 的 `/api/storage/all` 与 `/api/storage/:key` 响应改为 `{ value, updatedAt }` | 没有时间戳，前端只能二选一（覆盖=丢本地写入，保留=永远收不到别的设备更新） | 前端已兼容新旧两种形状；后端测试断言同步更新 | 后端 73 测试通过 |
 
 ---

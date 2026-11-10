@@ -16,12 +16,19 @@ function getStorageModule() {
   return storageModulePromise;
 }
 
+/** 请求合并缓存（原 stores/cache，已移到 utils）。被测模块会 import 它。 */
+let cacheModulePromise = null;
+function getCacheModule() {
+  cacheModulePromise ??= import("../../src/utils/cache.ts");
+  return cacheModulePromise;
+}
+
 /**
  * Execute a real source module with isolated browser/network dependencies.
  *
  * 两点必要处理：
- *   1. `@/api/storage` 是项目内的别名路径，vm 的自定义 require 看不到它 ——
- *      这里直接注入真实的 storage 模块，避免每个测试都手写这个依赖。
+ *   1. `@/api/storage` 与 `@/utils/cache` 是项目内的别名路径，vm 的自定义 require
+ *      看不到它们 —— 这里直接注入真实模块，避免每个测试都手写这些依赖。
  *   2. storage 是进程级单例（内部有内存镜像）。每个测试用不同的 localStorage 替身，
  *      因此在加载前重置镜像，并把替身同步到 node 全局，让 facade 与测试看到同一份存储。
  *
@@ -32,6 +39,7 @@ function getStorageModule() {
  */
 export async function loadModule(url, dependencies = {}, globals = {}) {
   const storageModule = await getStorageModule();
+  const cacheModule = await getCacheModule();
 
   // 每个用例一份干净的镜像，避免上一个用例的数据泄漏进来
   storageModule.__resetForTest();
@@ -53,6 +61,7 @@ export async function loadModule(url, dependencies = {}, globals = {}) {
       require(name) {
         if (Object.hasOwn(dependencies, name)) return dependencies[name];
         if (name === "@/api/storage") return storageModule;
+        if (name === "@/utils/cache") return cacheModule;
         throw new Error(`Unexpected dependency: ${name}`);
       },
       console,

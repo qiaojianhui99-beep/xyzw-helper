@@ -5,7 +5,6 @@ import { computed, ref } from "vue";
 import { storage } from "@/api/storage";
 import { usePersistentRef } from "@/composables/usePersistentRef";
 import useIndexedDB from "@/hooks/useIndexedDB";
-import router from "@/router";
 import { g_utils } from "@/utils/bonProtocol";
 
 import { gameLogger, tokenLogger, wsLogger } from "@/utils/logger";
@@ -24,6 +23,23 @@ import { $emit, emitPlus } from "./events/index.js";
 
 const { getArrayBuffer, storeArrayBuffer, deleteArrayBuffer, clearAll } =
   useIndexedDB();
+
+/**
+ * 当前路由路径的取值器。
+ *
+ * store 需要知道用户停在哪个页面（决定刷新 Token 后是否自动重连），但**不能**
+ * 直接 import router：router 会 import 本 store，views 又会 import 两者，
+ * 形成 store → router → views → store 的运行时循环。改由入口注入。
+ */
+let resolveCurrentPath: () => string = () => "";
+
+/**
+ * 注册当前路径取值器（由 src/main.js 在创建 router 后调用）。
+ * @param getter 返回当前路由 path 的函数
+ */
+export function setCurrentPathResolver(getter: () => string): void {
+  resolveCurrentPath = getter;
+}
 
 /**
  * 从 unknown 异常里取可读信息。
@@ -483,7 +499,7 @@ export const useTokenStore = defineStore("tokens", () => {
     if (refreshSuccess) {
       wsLogger.info(`Token刷新成功 [${tokenId}]`);
 
-      const currentPath = router.currentRoute.value.path;
+      const currentPath = resolveCurrentPath();
       const shouldReconnect =
         forceReconnect ||
         currentPath === "/tokens" ||

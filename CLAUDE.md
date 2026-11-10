@@ -21,8 +21,8 @@
    需要响应式时用 `src/composables/usePersistentRef.ts`。**不要再用 VueUse 的
    `useLocalStorage`、也不要直调 `window.localStorage`** —— 两条通道并存时镜像读不到直写，
    云同步会静默失效（`test/storageChannel.test.js` 守这条）。
-2. **协议实现要单源**：`src/utils/bonProtocol.js` 是主实现，
-   `backend/src/protocol/bonProtocol.js` 是历史副本。改任何一侧都必须让
+2. **协议两块实现必须同步**：`src/utils/bonProtocol.js` 是主实现，
+   `backend/src/protocol/bonProtocol.js` 是副本（能力已对齐）。改任何一侧都必须让
    `test/protocolParity.test.js` 保持全绿；长期目标是抽共享包后删掉副本。
 3. **契约用 strict 跑**：提交与 CI 都跑 `node scripts/check-architecture.mjs --strict`。
    **新增**路由/存储键/导出/代理前缀也要先 `--update` 固化，否则闸门红。

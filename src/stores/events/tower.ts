@@ -1,4 +1,4 @@
-import type { EVM, XyzwSession } from ".";
+import type { EVM, XyzwSession } from "./types.ts";
 import { isSameGameValue } from "@/utils/gameValue.js";
 import { gameLogger } from "@/utils/logger";
 

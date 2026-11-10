@@ -3,7 +3,7 @@
  * 基于 readable-xyzw-ws.js 重构，适配本项目架构
  */
 
-import { $CacheManager } from "@/stores/cache";
+import { $CacheManager } from "@/utils/cache";
 import { g_utils } from "./bonProtocol.js";
 import { sleep } from "./helperTaskRunner.js";
 import { gameLogger, wsLogger } from "./logger.js";

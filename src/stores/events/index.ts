@@ -1,7 +1,7 @@
-import type { XyzwWebSocketClient } from "@/utils/xyzwWebSocket";
+import type { EVM, XyzwSession } from "./types.ts";
 import { EventEmitter } from "event-emitter3";
-import { gameLogger } from "@/utils/logger";
 
+import { gameLogger } from "@/utils/logger";
 import { AckPlugin } from "./ack.ts";
 import { ChatPlugin } from "./chat.ts";
 import { HangupPlugin } from "./hangup.ts";
@@ -10,6 +10,9 @@ import { RolePlugin } from "./role.ts";
 import { StudyPlugin } from "./study.ts";
 import { TeamPlugin } from "./team.ts";
 import { TowerPlugin } from "./tower.ts";
+
+// 类型从 types.ts 再导出，保持既有 `from "./index"` 的导入方不受影响
+export type { EVM, XyzwSession } from "./types.ts";
 
 export const $emit = new EventEmitter();
 export const events: Set<string> = new Set<string>();
@@ -35,22 +38,6 @@ export const emitPlus = (
   }
   return result;
 };
-
-export interface XyzwSession {
-  id: string;
-  tokenId: string;
-  cmd: string;
-  token: any;
-  body: any;
-  client: XyzwWebSocketClient | null;
-  gameData: any;
-}
-
-export interface EVM {
-  onSome: (event: string[], listener: (...args: any[]) => void) => void;
-  emitPlus: (event: string | symbol, ...args: Array<any>) => boolean;
-  $emit: EventEmitter;
-}
 
 const evmInst: EVM = {
   onSome,

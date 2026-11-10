@@ -1,4 +1,4 @@
-import type { EVM, XyzwSession } from ".";
+import type { EVM, XyzwSession } from "./types.ts";
 import { isInCurrentWeek, sleep } from "@/utils/base";
 import { gameLogger } from "@/utils/logger";
 import { findAnswer } from "@/utils/studyQuestionsFromJSON";

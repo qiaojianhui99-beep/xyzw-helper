@@ -18,7 +18,6 @@
     "render-backend/package.json",
     "render-backend/server.js",
     "src/App.vue",
-    "src/api/index.js",
     "src/api/storage.js",
     "src/api/storageSync.js",
     "src/composables/usePersistentRef.ts",
@@ -28,7 +27,6 @@
     "src/stores/auth.js",
     "src/stores/cache.ts",
     "src/stores/changelogStore.js",
-    "src/stores/common.ts",
     "src/stores/events/index.ts",
     "src/stores/gameRoles.js",
     "src/stores/legionWarStore.js",
@@ -57,7 +55,6 @@
     "src/utils/helperTaskRunner.js",
     "src/utils/imageExport.js",
     "src/utils/logger.js",
-    "src/utils/readable-xyzw-ws.js",
     "src/utils/tokenDb.js",
     "src/utils/towerClimbLimit.js",
     "src/utils/wsAgent.js",
@@ -234,6 +231,7 @@
       "selectedRoleInfo",
       "selectedToken",
       "selectedTokenId",
+      "setCurrentPathResolver",
       "tokenGroups",
       "useTokenStore"
     ],
@@ -244,12 +242,6 @@
       "Content",
       "install"
     ],
-    "src/stores/common.ts": [
-      "activeConnections",
-      "connectionLocks",
-      "gameTokens",
-      "wsConnections"
-    ],
     "src/stores/events/index.ts": [
       "$emit",
       "EVM",
@@ -257,6 +249,17 @@
       "emitPlus",
       "events",
       "onSome"
+    ],
+    "src/stores/events/types.ts": [
+      "EVM",
+      "XyzwSession"
+    ],
+    "src/utils/cache.ts": [
+      "$CacheManager",
+      "Cache",
+      "CacheManager",
+      "Content",
+      "install"
     ],
     "src/api/storage.js": [
       "__resetForTest",
@@ -411,6 +414,7 @@
     "check:arch",
     "check:arch:strict",
     "check:bundle",
+    "check:size",
     "db:down",
     "db:reset",
     "db:up",

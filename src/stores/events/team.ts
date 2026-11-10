@@ -1,4 +1,4 @@
-import type { EVM, XyzwSession } from ".";
+import type { EVM, XyzwSession } from "./types.ts";
 import { gameLogger } from "@/utils/logger";
 
 export const TeamPlugin = ({ onSome }: EVM) => {

@@ -122,11 +122,67 @@ describe("默认通道（passthrough → x）两端互通", () => {
   });
 });
 
-describe("已知能力差距（后端副本缺导出，必须显式记录）", () => {
-  it("后端协议层缺少 ProtoMsgLegion 与 GameMessages", () => {
-    assert.equal(typeof front.ProtoMsgLegion, "function", "前端应有 ProtoMsgLegion");
-    assert.equal(typeof front.GameMessages, "object", "前端应有 GameMessages");
-    assert.equal(back.ProtoMsgLegion, undefined, "后端当前缺失，见 docs/BACKEND.md 已知边界");
-    assert.equal(back.GameMessages, undefined, "后端当前缺失，见 docs/BACKEND.md 已知边界");
+/**
+ * 能力对齐：后端副本此前缺 ProtoMsgLegion / GameMessages，军团战报文与预置模板
+ * 在服务端无法构造。2026-11 已补齐，这里用「导出集合一致」把它锁住 ——
+ * 谁再只在一侧加导出，测试就红。
+ */
+describe("两端导出的协议能力一致", () => {
+  const CORE_EXPORTS = [
+    "BonDecoder",
+    "BonEncoder",
+    "DataReader",
+    "DataWriter",
+    "GameMessages",
+    "Int64",
+    "ProtoMsg",
+    "ProtoMsgLegion",
+    "bon",
+    "encode",
+    "g_utils",
+    "getEnc",
+    "parse",
+  ];
+
+  it("核心导出在两侧都存在", () => {
+    for (const name of CORE_EXPORTS) {
+      assert.notEqual(front[name], undefined, `前端缺少导出 ${name}`);
+      assert.notEqual(back[name], undefined, `后端缺少导出 ${name}`);
+    }
+  });
+
+  it("GameMessages 的报文模板集合完全一致", () => {
+    assert.deepEqual(
+      Object.keys(back.GameMessages).sort(),
+      Object.keys(front.GameMessages).sort(),
+    );
+  });
+
+  it("ProtoMsgLegion 对同一报文的解析结果一致", () => {
+    const raw = {
+      ack: 1,
+      cmd: "Legion_War_Enter",
+      code: 0,
+      seq: 7,
+      time: 1700000000000,
+      body: { warId: 3 },
+    };
+    const a = new front.ProtoMsgLegion(raw);
+    const b = new back.ProtoMsgLegion(raw);
+    assert.equal(b.cmd, a.cmd, "cmd 应统一小写");
+    assert.equal(b.seq, a.seq);
+    assert.equal(b.ack, a.ack);
+    assert.equal(b.code, a.code);
+    assert.deepEqual(b.body, a.body);
+  });
+
+  it("GameMessages 的同一模板产出相同报文", () => {
+    for (const name of Object.keys(front.GameMessages)) {
+      const a = front.GameMessages[name](1, 2, {});
+      const b = back.GameMessages[name](1, 2, {});
+      assert.equal(b.cmd, a.cmd, `${name} 的 cmd 不一致`);
+      assert.equal(b.seq, a.seq, `${name} 的 seq 不一致`);
+      assert.equal(b.ack, a.ack, `${name} 的 ack 不一致`);
+    }
   });
 });

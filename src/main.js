@@ -2,6 +2,7 @@ import { createPinia } from "pinia";
 import { createApp } from "vue";
 import { storage } from "@/api/storage";
 import { bootCloudStorage } from "@/api/storageSync";
+import { setCurrentPathResolver } from "@/stores/tokenStore";
 
 import App from "./App.vue";
 import router from "./router";
@@ -16,6 +17,10 @@ const app = createApp(App);
 // 不再 app.use(naive) 全量注册（那会打进整套组件库）。
 app.use(createPinia());
 app.use(router);
+
+// tokenStore 不直接依赖 router（否则形成 store → router → views → store 的循环），
+// 由入口把「当前路径」的能力注入进去
+setCurrentPathResolver(() => router.currentRoute.value.path);
 
 // 全局主题应用：从 localStorage 读取并设置 data-theme 属性
 const applyTheme = () => {

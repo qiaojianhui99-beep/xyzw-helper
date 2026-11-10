@@ -112,10 +112,11 @@ python3 "$HOME/.dsh/skills/ui-ux-pro-max/scripts/search.py" "composition api" --
    `src/composables/usePersistentRef.ts`。禁止新增 `useLocalStorage` 或
    `window.localStorage` 直调（历史遗留：`src/utils/gameLauncher.js` 的 4 处例外，
    改动它时要顺手收口）。门禁测试：`test/storageChannel.test.js`。
-2. **协议单源**：`src/utils/bonProtocol.js` 为主实现，
-   `backend/src/protocol/bonProtocol.js` 是历史副本（落后 254 行，缺
-   `ProtoMsgLegion` / `GameMessages`）。改任一侧必须让
-   `test/protocolParity.test.js` 全绿。长期目标：抽共享包，删副本。
+2. **协议两份实现必须同步**：`src/utils/bonProtocol.js` 为主实现，
+   `backend/src/protocol/bonProtocol.js` 是历史副本（2026-11-10 已补齐
+   `ProtoMsgLegion` / `GameMessages`，两端导出与报文模板集合一致）。
+   改任一侧必须让 `test/protocolParity.test.js` 全绿 —— 它会比对明文字节、
+   三通道密文互通、导出集合与模板集合。长期目标：抽共享包，删副本。
 3. **契约 strict**：`node scripts/check-architecture.mjs --strict` 把「新增未固化」
    也算失败。加功能后跑一次 `--update` 固化，再跑 `--strict` 确认。
 4. **后端进闸门**：`npm run lint` 已覆盖 `backend/`；`node scripts/verify-all.mjs`
@@ -127,6 +128,7 @@ python3 "$HOME/.dsh/skills/ui-ux-pro-max/scripts/search.py" "composition api" --
 |---|---|---|
 | `src/api/` | 后端 HTTP 客户端、存储门面与同步逻辑 | 业务状态、组件 |
 | `src/utils/` | 无状态纯逻辑（协议、计算、格式化） | 直接读写持久化、UI 依赖 |
+| `src/utils/batch/` | 批量任务的纯逻辑与任务工厂；`activityWindows.js` 是活动开放规则的唯一实现 | 视图内联重复的日期判断 |
 | `src/stores/` | Pinia 状态与跨组件协调 | 直接调 `fetch` |
 | `src/composables/` | 可复用的响应式组合函数 | 协议编解码 |
 | `src/components/` | 业务组件（按域分目录） | 全局单例 |

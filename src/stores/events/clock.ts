@@ -1,4 +1,4 @@
-import type { EVM, XyzwSession } from ".";
+import type { EVM, XyzwSession } from "./types.ts";
 
 export const ClockPlugin = ({ onSome }: EVM) => {
   onSome(

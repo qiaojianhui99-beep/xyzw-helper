@@ -119,7 +119,8 @@ pnpm preview
 | `pnpm check:arch:strict` | 同上，但**新增未固化**也算失败（CI 与 `verify` 用这个） |
 | `pnpm update:arch` | 把**新增**能力并入契约基线（不允许顺手删） |
 | `pnpm verify` | **提交前必跑**：契约(`--strict`) → lint（含 `backend/`）→ 单测 |
-| `pnpm verify:full` | 再加生产构建与产物体积预算（改构建/依赖时用） |
+| `pnpm verify:full` | 再加生产构建、产物体积预算与文件规模预算（改构建/依赖时用） |
+| `pnpm check:size` | 文件规模预算（巨型文件只许降不许升） |
 | `node scripts/verify-all.mjs` | **本地等价 CI**：上面全部 + 后端 73 测试（无数据库会显式标 SKIP） |
 | `pnpm test:backend` | 后端 73 个测试（需先 `pnpm db:up`） |
 | `pnpm db:up` / `db:down` / `db:reset` | 本地 Postgres（端口 55432） |

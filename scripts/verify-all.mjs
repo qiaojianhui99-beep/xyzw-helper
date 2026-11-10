@@ -53,6 +53,7 @@ steps.push({ name: "前端单测", command: "npm", args: ["test"] });
 if (!FAST) {
   steps.push({ name: "生产构建", command: "npm", args: ["run", "build"] });
   steps.push({ name: "产物体积基线", command: "npm", args: ["run", "check:bundle"] });
+  steps.push({ name: "文件规模预算", command: "npm", args: ["run", "check:size"] });
   steps.push({
     name: "后端单测",
     command: "npm",

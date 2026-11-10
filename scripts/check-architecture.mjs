@@ -49,7 +49,6 @@ const CURATED_FILES = [
   "src/stores/localTokenManager.js",
   "src/stores/changelogStore.js",
   "src/stores/cache.ts",
-  "src/stores/common.ts",
   "src/stores/legionWarStore.js",
   "src/stores/events/index.ts",
   "src/utils/bonProtocol.js",
@@ -70,7 +69,6 @@ const CURATED_FILES = [
   "src/utils/towerClimbLimit.js",
   "src/utils/clubBattleUtils.js",
   "src/utils/imageExport.js",
-  "src/utils/readable-xyzw-ws.js",
   "src/utils/batch/index.js",
   "src/utils/batch/constants.js",
   "src/utils/batch/connectionManager.js",
@@ -83,7 +81,6 @@ const CURATED_FILES = [
   "src/utils/batch/cronUtils.js",
   "src/composables/useTheme.js",
   "src/composables/usePersistentRef.ts",
-  "src/api/index.js",
   "src/api/storage.js",
   "src/api/storageSync.js",
   "backend/package.json",
@@ -120,8 +117,9 @@ const EXPORT_MODULES = [
   "src/utils/batch/cronUtils.js",
   "src/stores/tokenStore.ts",
   "src/stores/cache.ts",
-  "src/stores/common.ts",
   "src/stores/events/index.ts",
+  "src/stores/events/types.ts",
+  "src/utils/cache.ts",
   "src/api/storage.js",
   "src/api/storageSync.js",
   "src/composables/usePersistentRef.ts",
@@ -178,6 +176,14 @@ function extractExports(source) {
   ];
   for (const re of patterns) {
     for (const m of source.matchAll(re)) names.add(m[1]);
+  }
+  // `export type { A, B } from "..."` 同样是对外承诺，旧正则只认 `export { ... }`
+  for (const m of source.matchAll(/export\s+type\s*\{([^}]*)\}/g)) {
+    for (const raw of m[1].split(",")) {
+      const token = raw.trim();
+      if (!token) continue;
+      names.add(token.split(/\s+/)[0]);
+    }
   }
   for (const m of source.matchAll(/export\s*\{([^}]*)\}/g)) {
     for (const raw of m[1].split(",")) {
