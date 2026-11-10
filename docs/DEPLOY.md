@@ -1,8 +1,13 @@
 # 部署指南（XYZW Web Helper）
 
-本项目是**纯前端**（Vue 3 + Vite）应用：Token、角色数据全部存在浏览器
-localStorage / IndexedDB 里，没有业务后端，也没有数据库。所以「部署到服务器」
-= 把 `dist/` 静态文件托管起来 + 配好几条反向代理。
+本指南只讲**前端**部署：前端是 Vue 3 + Vite 的静态产物，Token 与角色数据存在浏览器
+localStorage / IndexedDB 里，只跑前端时不需要数据库。
+
+> 另有**可选后端** `backend/`（Fastify 5 + Postgres，托管定时任务与多设备同步），
+> 它的镜像、编排与环境变量见 [`docs/BACKEND.md`](docs/BACKEND.md) 的「部署」一节。
+> 不部署后端时，本文的步骤就够用了。
+
+所以「部署前端」= 把 `dist/` 静态文件托管起来 + 配好几条反向代理。
 
 真正需要留意的只有三件事：
 

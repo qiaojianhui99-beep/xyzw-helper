@@ -4,7 +4,7 @@
 
 ![XYZW Logo](public/xiaoyugan.png)
 
-**咸鱼（XYZW）游戏辅助 Web 控制台 —— 纯前端，Token 即身份，数据只存在你的浏览器里**
+**咸鱼（XYZW）游戏辅助 Web 控制台 —— 前端为主、后端可选；Token 即身份，数据默认只存在你的浏览器里**
 
 [![Vue](https://img.shields.io/badge/Vue-3.5-4FC08D?logo=vue.js&logoColor=white)](https://vuejs.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
@@ -20,7 +20,9 @@
 
 ## 📌 这是什么
 
-一个**纯前端的游戏自动化控制台**：把游戏 Token 导入浏览器 → 前端用 WebSocket（BON 二进制协议）直连游戏服 → 做角色查询、日常任务、批量托管、军团战、爬塔等操作。
+一个**以浏览器端为主的游戏自动化控制台**：把游戏 Token 导入浏览器 → 前端用 WebSocket（BON 二进制协议）直连游戏服 → 做角色查询、日常任务、批量托管、军团战、爬塔等操作。
+
+> 代码层面有**两块**：`src/` 是前端（唯一必选），`backend/` 是**可选后端**（Fastify 5 + Postgres，负责定时任务托管与多设备数据同步）。不部署后端时，前端行为与没有后端时完全一致。
 
 | 项目 | 说明 |
 |---|---|
@@ -30,7 +32,8 @@
 | 身份 | 没有账号密码体系，**Token 就是身份** |
 | 仓库 | <https://github.com/qiaojianhui99-beep/xyzw-helper> |
 
-> 也就是说：部署 = 把 `dist/` 静态文件托管出去 + 配好几条反向代理。没有数据库、没有登录接口、没有服务端会话。
+> 也就是说：**只跑前端**时，部署 = 把 `dist/` 静态文件托管出去 + 配好几条反向代理，没有数据库、没有登录接口、没有服务端会话。
+> 需要定时任务托管或多设备同步时，再按 [`docs/BACKEND.md`](docs/BACKEND.md) 起 `backend/`（api + worker + Postgres）。
 
 ---
 

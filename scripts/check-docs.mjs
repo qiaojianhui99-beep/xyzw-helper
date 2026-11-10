@@ -70,6 +70,27 @@ const HISTORICAL_MARKERS = /(已删除|已移除|历史|勘误|弃用|不再|曾
 /** 占位符路径，跳过（Xxx / <page> / [[default]] 这类不是真实文件名） */
 const PLACEHOLDER = /(Xxx|xxx|Name\.vue|<[^>]+>|…|\{|\}|\*|\(|\)|\[\[)/;
 
+/**
+ * 事实性断言：文档里对项目形态的描述，必须与仓库实际结构一致。
+ *
+ * 起因：README / AGENTS / PROJECT-OVERVIEW 长期写着「纯前端」，
+ * 但仓库早已有 backend/（Fastify + Postgres）。这类句子不含命令也
+ * 不含路径，前三条检查都抓不到，只能靠人眼看出来。
+ */
+const STATEMENT_RULES = [
+  {
+    re: /纯前端/,
+    // 讲历史、讲部署模式、或已注明「后端可选」的句子不算冲突
+    allow: /(原始|历史|改造前|可选|不含后端|纯静态部署|本指南只讲)/,
+    why: "仓库里已含 backend/（Fastify + Postgres），准确说法是「前端为主 + 后端可选」",
+  },
+  {
+    re: /没有业务后端|没有数据库/,
+    allow: /(只跑前端|只部署前端|可选|不含后端|原始|历史|没有数据库时|无数据库时|探测不到)/,
+    why: "backend/ 自带 Postgres；说「没有数据库」时必须限定为「只跑前端时」",
+  },
+];
+
 /** 同一行在讲「还没做」的事，路径本来就不该存在 */
 const PENDING_MARKERS = /(需要补|待补|尚未|计划补|将补|TODO)/;
 
@@ -126,7 +147,16 @@ for (const file of DOCS) {
       }
     }
 
-    // 3) 失效标识
+    // 3) 事实性断言（形态描述）
+    if (!HISTORICAL_MARKERS.test(line)) {
+      for (const rule of STATEMENT_RULES) {
+        if (rule.re.test(line) && !rule.allow.test(line)) {
+          problems.push({ file, line: no, kind: "断言", text: `${line.trim().slice(0, 40)}… —— ${rule.why}` });
+        }
+      }
+    }
+
+    // 4) 失效标识
     if (!HISTORICAL_MARKERS.test(line)) {
       for (const [dead, why] of Object.entries(DEAD_IDS)) {
         if (line.includes(dead)) {
