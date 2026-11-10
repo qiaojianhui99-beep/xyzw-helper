@@ -31,7 +31,9 @@
     "check:arch:strict": "node scripts/check-architecture.mjs --strict",
     "verify:all": "node scripts/verify-all.mjs",
     "typecheck": "tsc -p tsconfig.app.json --noEmit",
-    "check:size": "node scripts/check-file-size.mjs"
+    "check:size": "node scripts/check-file-size.mjs",
+    "ui:check": "node scripts/ui-fingerprint.mjs",
+    "ui:baseline": "node scripts/ui-fingerprint.mjs --update"
   },
   "dependencies": {
     "@arco-design/web-vue": "^2.57.0",

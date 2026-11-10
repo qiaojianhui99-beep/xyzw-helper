@@ -432,6 +432,8 @@
     "testd",
     "testr",
     "typecheck",
+    "ui:baseline",
+    "ui:check",
     "update:arch",
     "verify",
     "verify:all",

@@ -3057,6 +3057,7 @@ import {
   watch,
 } from "vue";
 import { storage } from "@/api/storage";
+import { useTokenSort } from "@/composables/useTokenSort";
 import { $emit } from "@/stores/events/index.ts";
 import { gameTokens, tokenGroups, useTokenStore } from "@/stores/tokenStore";
 // Import batch task modules
@@ -3106,10 +3107,10 @@ import {
   defaultBlackMarketPurchaseList,
   normalizeBlackMarketPurchaseList,
 } from "@/utils/batch/blackMarketConfig";
+
 import { DailyTaskRunner } from "@/utils/dailyTaskRunner";
 
 import { goldItemsConfig, merchantConfig } from "@/utils/dreamConstants";
-
 import { DEFAULT_WEIRD_TOWER_MAX_CLIMB } from "@/utils/towerClimbLimit.js";
 
 // Initialize token store, message service, and task runner
@@ -3117,79 +3118,11 @@ const tokenStore = useTokenStore();
 const message = useMessage();
 const weirdTowerMaxClimb = ref(DEFAULT_WEIRD_TOWER_MAX_CLIMB);
 
-// 排序配置（从localStorage读取，与TokenImport共享）
-const savedSortConfig = storage.getItem("tokenSortConfig");
-const sortConfig = ref(
-  savedSortConfig
-    ? JSON.parse(savedSortConfig)
-    : {
-        field: "createdAt", // 排序字段：name, server, createdAt, lastUsed
-        direction: "asc", // 排序方向：asc, desc
-      },
+// 账号列表排序（配置存 tokenSortConfig，与 TokenImport 共享）
+const { sortConfig, sortedTokens, toggleSort, getSortIcon } = useTokenSort(
+  // 传 getter：Pinia 会把 store 里的 ref 解包成数组，直接传值拿不到响应性
+  () => tokenStore.gameTokens,
 );
-
-// 计算属性 - 从gameData中获取塔相关信息
-
-// 排序后的游戏角色Token列表
-const sortedTokens = computed(() => {
-  return [...tokenStore.gameTokens].sort((tokenA, tokenB) => {
-    let valueA, valueB;
-
-    // 根据排序字段获取比较值
-    switch (sortConfig.value.field) {
-      case "name":
-        valueA = tokenA.name?.toLowerCase() || "";
-        valueB = tokenB.name?.toLowerCase() || "";
-        break;
-      case "server":
-        valueA = tokenA.server?.toLowerCase() || "";
-        valueB = tokenB.server?.toLowerCase() || "";
-        break;
-      case "createdAt":
-        valueA = new Date(tokenA.createdAt || 0).getTime();
-        valueB = new Date(tokenB.createdAt || 0).getTime();
-        break;
-      case "lastUsed":
-        valueA = new Date(tokenA.lastUsed || 0).getTime();
-        valueB = new Date(tokenB.lastUsed || 0).getTime();
-        break;
-      default:
-        valueA = tokenA.name?.toLowerCase() || "";
-        valueB = tokenB.name?.toLowerCase() || "";
-    }
-
-    // 根据排序方向比较值
-    if (valueA < valueB) {
-      return sortConfig.value.direction === "asc" ? -1 : 1;
-    }
-    if (valueA > valueB) {
-      return sortConfig.value.direction === "asc" ? 1 : -1;
-    }
-    return 0;
-  });
-});
-
-// 切换排序
-const toggleSort = (field) => {
-  if (sortConfig.value.field === field) {
-    // 如果点击的是当前排序字段，则切换排序方向
-    sortConfig.value.direction =
-      sortConfig.value.direction === "asc" ? "desc" : "asc";
-  } else {
-    // 如果点击的是新的排序字段，则默认升序
-    sortConfig.value.field = field;
-    sortConfig.value.direction = "asc";
-  }
-
-  // 保存排序设置到localStorage
-  storage.setItem("tokenSortConfig", JSON.stringify(sortConfig.value));
-};
-
-// 获取排序图标
-const getSortIcon = (field) => {
-  if (sortConfig.value.field !== field) return null;
-  return sortConfig.value.direction === "asc" ? "↑" : "↓";
-};
 
 const tokens = computed(() => tokenStore.gameTokens);
 // 活动时间窗口的规则在 utils/batch/activityWindows.js 里（纯函数，可单测）
