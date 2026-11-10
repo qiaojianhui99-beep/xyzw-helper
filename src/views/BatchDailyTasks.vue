@@ -3048,7 +3048,6 @@ import { Settings } from "@vicons/ionicons5";import { useMessage } from "naive-u
 // Import required dependencies
 import {
   computed,
-  h,
   nextTick,
   onBeforeUnmount,
   onMounted,
@@ -3057,7 +3056,9 @@ import {
   watch,
 } from "vue";
 import { storage } from "@/api/storage";
+import { useTokenGroups } from "@/composables/useTokenGroups";
 import { useTokenSort } from "@/composables/useTokenSort";
+import { useWarGuess } from "@/composables/useWarGuess";
 import { $emit } from "@/stores/events/index.ts";
 import { gameTokens, tokenGroups, useTokenStore } from "@/stores/tokenStore";
 // Import batch task modules
@@ -3095,7 +3096,6 @@ import {
 import {
   isWarGuessActivityOpen as checkWarGuessActivityOpen,
   isWeirdTowerActivityOpen as checkWeirdTowerActivityOpen,
-  formatPower,
   getWarGuessActivityTip,
   isArenaActivityOpen,
   isBaokuActivityOpen,
@@ -3145,168 +3145,8 @@ const shouldStop = ref(false);
 // =====================
 // Token分组管理状态
 // =====================
-const showGroupManageModal = ref(false);
+// 分组管理的状态与操作在 utils 层抽成了 useTokenGroups()（见 setup 末尾的装配）
 
-const selectedGroups = ref([]); // 选中的分组ID列表
-const newGroupName = ref("");
-const newGroupColor = ref("#1677ff");
-const newGroupSelectedTokens = ref([]); // 新建分组时选中的Token ID列表
-const editingGroupId = ref(null);
-const editingGroupName = ref("");
-const editingGroupColor = ref("");
-const taskScheduleSelectedGroupIds = ref([]); // 定时任务中通过分组按钮选中的分组ID列表
-const groupColors = [
-  "#1677ff", // 蓝色
-  "#52c41a", // 绿色
-  "#faad14", // 橙色
-  "#f5222d", // 红色
-  "#722ed1", // 紫色
-  "#13c2c2", // 青色
-  "#eb2f96", // 粉色
-  "#fa8c16", // 赤红色
-];
-
-// ======================
-// War Guess Feature
-// ======================
-const showWarGuessModal = ref(false);
-const warGuessList = ref([]);
-const warGuessLoading = ref(false);
-const warGuessCoin = ref(20);
-const selectedWarGuessLegionId = ref(null);
-
-// formatPower 来自 utils/batch/activityWindows.js（纯函数）
-
-const warGuessColumns = [
-  {
-    type: "selection",
-    multiple: false,
-  },
-  { title: "ID", key: "id", width: 100 },
-  {
-    title: "头像",
-    key: "logo",
-    render(row) {
-      return h("img", {
-        src: row.logo,
-        style: { width: "30px", height: "30px", borderRadius: "50%" },
-      });
-    },
-    width: 60,
-  },
-  { title: "区服", key: "serverId", width: 80 },
-  { title: "俱乐部", key: "name", width: 120 },
-  {
-    title: "战力",
-    key: "power",
-    render(row) {
-      return formatPower(row.power);
-    },
-    width: 100,
-  },
-  { title: "红淬", key: "quenchNum" },
-  { title: "已助威", key: "guessNum" },
-  {
-    title: "总热度",
-    key: "totalNum",
-    render(row) {
-      return formatPower(row.totalNum || 0);
-    },
-    width: 100,
-  },
-];
-
-const warGuessRowProps = (row) => {
-  return {
-    style: "cursor: pointer",
-    onClick: () => {
-      selectedWarGuessLegionId.value = row.id;
-    },
-  };
-};
-
-const openWarGuessModal = () => {
-  showWarGuessModal.value = true;
-  // Reset selection
-  selectedWarGuessLegionId.value = null;
-  warGuessList.value = [];
-
-  // Auto fetch if tokens selected
-  if (selectedTokens.value.length > 0) {
-    fetchWarGuessRank();
-  }
-};
-
-const fetchWarGuessRank = async () => {
-  if (selectedTokens.value.length === 0) {
-    message.warning("请先选择一个账号用于获取月赛助威数据");
-    return;
-  }
-
-  const tokenId = selectedTokens.value[0];
-  const token = tokens.value.find((t) => t.id === tokenId);
-
-  warGuessLoading.value = true;
-  try {
-    addLog({
-      time: new Date().toLocaleTimeString(),
-      message: `正在使用 ${token.name} 获取月赛助威数据...`,
-      type: "info",
-    });
-
-    // Ensure connection
-    const status = tokenStore.getWebSocketStatus(tokenId);
-    if (status !== "connected") {
-      tokenStore.createWebSocketConnection(tokenId, token.token, token.wsUrl);
-      await new Promise((r) => setTimeout(r, 2000)); // Wait for connection
-    }
-
-    // Fetch rank
-    const res = await tokenStore.sendMessageWithPromise(
-      tokenId,
-      "warguess_getrank",
-      { bfId: "" },
-      5000,
-    );
-
-    if (res && res.list) {
-      let list = [];
-      if (Array.isArray(res.list)) {
-        list = res.list;
-      } else {
-        list = Object.values(res.list);
-      }
-
-      // Sort by totalNum desc
-      warGuessList.value = list
-        .sort((a, b) => (b.totalNum || 0) - (a.totalNum || 0))
-        .slice(0, 20);
-    } else {
-      message.warning("获取月赛助威数据为空");
-    }
-  } catch (error) {
-    console.error("Fetch rank error:", error);
-    message.error(`获取月赛助威数据失败: ${error.message}`);
-    addLog({
-      time: new Date().toLocaleTimeString(),
-      message: `获取月赛助威数据失败: ${error.message}`,
-      type: "error",
-    });
-  } finally {
-    warGuessLoading.value = false;
-  }
-};
-
-const handleWarGuessCheer = async () => {
-  if (!selectedWarGuessLegionId.value) {
-    message.warning("请先选择一个俱乐部");
-    return;
-  }
-  // Close modal
-  showWarGuessModal.value = false;
-  // Call the batch function
-  await batchWarGuessCheer(selectedWarGuessLegionId.value, warGuessCoin.value);
-};
 
 // ======================
 // Batch Apply Legion Feature
@@ -5547,161 +5387,7 @@ const getStatusText = (tokenId) => {
 // Token分组管理相关方法
 // =====================
 
-/**
- * 创建新分组
- */
-const createNewGroup = () => {
-  if (!newGroupName.value.trim()) {
-    message.warning("请输入分组名称");
-    return;
-  }
-
-  const newGroup = tokenStore.createTokenGroup(
-    newGroupName.value.trim(),
-    newGroupColor.value,
-  );
-
-  // 添加选中的Token到新分组
-  if (newGroupSelectedTokens.value.length > 0) {
-    newGroupSelectedTokens.value.forEach((tokenId) => {
-      tokenStore.addTokenToGroup(newGroup.id, tokenId);
-    });
-  }
-
-  message.success("分组创建成功");
-  newGroupName.value = "";
-  newGroupColor.value = "#1677ff";
-  newGroupSelectedTokens.value = [];
-};
-
-const selectAllNewGroup = () => {
-  newGroupSelectedTokens.value = sortedTokens.value.map((t) => t.id);
-};
-
-const deselectAllNewGroup = () => {
-  newGroupSelectedTokens.value = [];
-};
-
-/**
- * 删除分组
- */
-const deleteGroup = (groupId) => {
-  // eslint-disable-next-line no-alert -- Preserve the existing native notification or confirmation flow.
-  if (confirm("确定要删除这个分组吗？分组中的token不会被删除。")) {
-    tokenStore.deleteTokenGroup(groupId);
-    message.success("分组已删除");
-  }
-};
-
-/**
- * 保存编辑的分组
- */
-const saveEditGroup = () => {
-  if (!editingGroupId.value) return;
-
-  if (!editingGroupName.value.trim()) {
-    message.warning("请输入分组名称");
-    return;
-  }
-
-  tokenStore.updateTokenGroup(editingGroupId.value, {
-    name: editingGroupName.value.trim(),
-    color: editingGroupColor.value,
-  });
-
-  message.success("分组已更新");
-  editingGroupId.value = null;
-  editingGroupName.value = "";
-  editingGroupColor.value = "";
-};
-
-/**
- * 开始编辑分组
- */
-const startEditGroup = (groupId) => {
-  const group = tokenGroups.value.find((g) => g.id === groupId);
-  if (group) {
-    editingGroupId.value = groupId;
-    editingGroupName.value = group.name;
-    editingGroupColor.value = group.color;
-  }
-};
-
-/**
- * 取消编辑分组
- */
-const cancelEditGroup = () => {
-  editingGroupId.value = null;
-  editingGroupName.value = "";
-  editingGroupColor.value = "";
-};
-
-/**
- * 切换分组选择状态
- */
-const toggleGroupSelection = (groupId) => {
-  const index = selectedGroups.value.indexOf(groupId);
-  if (index > -1) {
-    selectedGroups.value.splice(index, 1);
-  } else {
-    selectedGroups.value.push(groupId);
-  }
-
-  // 更新selectedTokens
-  updateSelectedTokensFromGroups();
-};
-
-/**
- * 判断分组是否被选中
- */
-const isGroupSelected = (groupId) => {
-  return selectedGroups.value.includes(groupId);
-};
-
-/**
- * 根据选中的分组更新selectedTokens
- */
-const updateSelectedTokensFromGroups = () => {
-  const tokenIds = new Set();
-
-  selectedGroups.value.forEach((groupId) => {
-    const validTokenIds = tokenStore.getValidGroupTokenIds(groupId);
-    validTokenIds.forEach((id) => tokenIds.add(id));
-  });
-
-  selectedTokens.value = Array.from(tokenIds);
-};
-
-/**
- * 一键清除所有分组选择
- */
-const clearAllGroupSelection = () => {
-  selectedGroups.value = [];
-  selectedTokens.value = [];
-};
-
-/**
- * 添加token到分组
- */
-const addTokenToSelectedGroup = (groupId, tokenId) => {
-  tokenStore.addTokenToGroup(groupId, tokenId);
-  message.success("已将token添加到分组");
-};
-
-/**
- * 从分组移除token
- */
-const removeTokenFromSelectedGroup = (groupId, tokenId) => {
-  tokenStore.removeTokenFromGroup(groupId, tokenId);
-  message.success("已将token从分组移除");
-};
-
-/**
- * 获取分组中有效的token ID列表（用于模板中展示）
- */
-const getValidGroupTokenIds = (groupId) => {
-  return tokenStore.getValidGroupTokenIds(groupId);
-};
+// 分组管理的函数统一由 useTokenGroups() 提供（见 setup 末尾的装配）
 
 /**
  * 获取分组中的token列表
@@ -6189,6 +5875,82 @@ const stopBatch = () => {
     type: "warning",
   });
 };
+// ======================
+// War Guess Feature
+// ======================
+// 注意：必须放在 addLog / batchWarGuessCheer / selectedTokens 定义之后 ——
+// 这仨是 const 声明，提前使用会触发 ReferenceError（TDZ），页面直接白屏。
+// ======================
+// War Guess Feature
+// ======================
+// 依赖显式注入：composable 不直接碰 store，避免 Pinia 解包带来的隐性 bug
+const {
+  showWarGuessModal,
+  warGuessList,
+  warGuessLoading,
+  warGuessCoin,
+  selectedWarGuessLegionId,
+  warGuessColumns,
+  warGuessRowProps,
+  openWarGuessModal,
+  fetchWarGuessRank,
+  handleWarGuessCheer,
+} = useWarGuess({
+  selectedTokens,
+  tokens,
+  getWebSocketStatus: (tokenId) => tokenStore.getWebSocketStatus(tokenId),
+  createWebSocketConnection: (tokenId, token, wsUrl) =>
+    tokenStore.createWebSocketConnection(tokenId, token, wsUrl),
+  sendMessageWithPromise: (tokenId, cmd, params, timeout) =>
+    tokenStore.sendMessageWithPromise(tokenId, cmd, params, timeout),
+  message,
+  addLog,
+  batchWarGuessCheer: (legionId, coin) => batchWarGuessCheer(legionId, coin),
+});
+
+// ======================
+// 分组管理装配
+// ======================
+const {
+  showGroupManageModal,
+  selectedGroups,
+  newGroupName,
+  newGroupColor,
+  newGroupSelectedTokens,
+  editingGroupId,
+  editingGroupName,
+  editingGroupColor,
+  taskScheduleSelectedGroupIds,
+  groupColors,
+  createNewGroup,
+  selectAllNewGroup,
+  deselectAllNewGroup,
+  deleteGroup,
+  saveEditGroup,
+  startEditGroup,
+  cancelEditGroup,
+  toggleGroupSelection,
+  isGroupSelected,
+  clearAllGroupSelection,
+  addTokenToSelectedGroup,
+  removeTokenFromSelectedGroup,
+  getValidGroupTokenIds,
+} = useTokenGroups({
+  tokenGroups,
+  selectedTokens,
+  sortedTokens,
+  message,
+  store: {
+    createTokenGroup: (name, color) => tokenStore.createTokenGroup(name, color),
+    updateTokenGroup: (id, patch) => tokenStore.updateTokenGroup(id, patch),
+    deleteTokenGroup: (id) => tokenStore.deleteTokenGroup(id),
+    addTokenToGroup: (id, tokenId) => tokenStore.addTokenToGroup(id, tokenId),
+    removeTokenFromGroup: (id, tokenId) =>
+      tokenStore.removeTokenFromGroup(id, tokenId),
+    getValidGroupTokenIds: (id) => tokenStore.getValidGroupTokenIds(id),
+  },
+});
+
 </script>
 
 <style scoped>
