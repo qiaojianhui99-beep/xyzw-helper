@@ -45,6 +45,15 @@ const evmInst: EVM = {
   $emit,
 };
 
+/**
+ * 已装配的插件。
+ *
+ * ⚠️ 未装配（文件存在、但**故意**没在这里注册）：
+ *   - `activity.ts`（ActivityPlugin）：活动信息推送日志
+ *   - `clock.ts`（ClockPlugin）：挂机奖励/分享回调后刷新角色信息
+ * 两者接入会改变运行时推送处理，属产品决策，故先留在仓库里不启用。
+ * `test/eventPlugins.test.js` 会核对「除白名单外，所有插件都已注册」。
+ */
 AckPlugin(evmInst);
 
 RolePlugin(evmInst);

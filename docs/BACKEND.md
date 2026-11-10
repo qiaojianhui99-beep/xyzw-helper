@@ -217,3 +217,27 @@ nginx 配置里 `/api/` 用变量 + `resolver` 反代到 `api:3002`。这样纯�
 - **游戏服会话有时效**。实测一个 `connId` 为 7 天前的 Token：WebSocket 能建立（64 ms），但服务端 30–100 ms 内以 1006 关闭，且**不发任何消息也会被断** —— 这是握手后鉴权失败，不是报文格式问题。真实链路验证需要当前有效的凭证。
 - **单 worker**。cron 不能多实例，advisory lock 是兜底；要横向扩 worker 需要先把调度改成「抢任务行锁」模型。
 - **`user_storage` 目前是全局单用户**。引入 `users` 表后要改成 `(user_id, key)` 复合主键并开 RLS。
+
+### 为什么协议还有两份实现（2026-11-10 决策）
+
+`backend/src/protocol/bonProtocol.js` 与前端 `src/utils/bonProtocol.js` 仍未合并成共享包。
+能力已经对齐（两端导出集合、`GameMessages` 模板集合、`ProtoMsgLegion` 解析结果一致，
+`test/protocolParity.test.js` 27 例守着），但**文件仍是两份**。
+
+没合并的原因是构建布局，不是懒：
+
+| 障碍 | 说明 |
+|---|---|
+| 后端镜像拿不到仓库根的 `src/` | `backend/Dockerfile` 的 build context 是 `backend/`；跨目录 re-export 在镜像里会指向不存在的路径 |
+| `lz4js` 模块解析 | 若把共享文件放镜像根 `/src/utils/`，Node 从那里向上找不到 `node_modules/lz4js`，需要额外拷贝或复刻目录结构 |
+| 前端引用后端实现的风险 | 反向（前端 re-export 后端文件）要处理默认导出缺失、`allowJs` 类型推断、vite 打包范围 |
+
+要真正合并，步骤如下（建议单独一轮做，改完必须 `docker build` 验证两个镜像）：
+
+1. 新建 `packages/protocol`（pnpm workspace 第三个包），实现只保留一份；
+2. 前端 `src/utils/bonProtocol.js` 与后端 `backend/src/protocol/bonProtocol.js` 都改成显式 re-export；
+3. `backend/Dockerfile` 的 build context 改为仓库根，或改用 `pnpm deploy --filter` 打包；
+4. `deploy/docker-compose.stack.yml` 里两个 build context 同步调整；
+5. `test/protocolParity.test.js` 从「比对两份实现」改为「断言只有一个实现 + 保留字节/通道测试」。
+
+在此之前，parity 测试是唯一的一致性证据，**改动任何一侧都必须跑它**。
